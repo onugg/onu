@@ -1,6 +1,6 @@
 {
   "name": "onu-logger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "cross-env": "5.0.5",
