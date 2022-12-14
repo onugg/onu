@@ -2,7 +2,7 @@ import { createTRPCProxyClient, createWSClient, httpBatchLink, splitLink, wsLink
 const { Client, GatewayIntentBits } = require('discord.js');
 import superjson from 'superjson';
 import { serverConfig } from '../../../../config';
-import type { AppRouter } from '../../../../services/server/src/router';
+import type { AppRouter } from '../../../server/src/router';
 import './polyfill';
 
 async function start() {

@@ -6,7 +6,7 @@ export const serverConfig: ServerOptions = {
   prefix: '/trpc',
 };
 
-import type { ShardManagerOptions } from './clients/discord-bot/src/shard-manager'
+import type { ShardManagerOptions } from './services/discord-bot/src/shard-manager'
 
 export const shardManagerOptions: ShardManagerOptions = {
   dev: false,
