@@ -4,14 +4,8 @@
     "packages/**/dist/**"
  ],
   "references": [
-   {
-      "path": "./packages/logger"
-   },
-   {
-      "path": "./packages/discord-bot"
-   },
-   {
-      "path": "./packages/server"
-   }
+   {"path": "./packages/logger"},
+   {"path": "./services/discord-bot"},
+   {"path": "./services/dashboard"}
  ]
  }
