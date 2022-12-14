@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.faint-grid {
+    background-image:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+      linear-gradient(to right, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-color: rgb(241, 240, 240);
+    z-index: -1;
+  }
