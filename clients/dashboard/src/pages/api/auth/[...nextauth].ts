@@ -1,39 +1,33 @@
-import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
-import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
+// Prisma adapter for NextAuth, optional and can be removed
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+
+import { env } from "../../../env/server.mjs";
+import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
-  providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-      authorization: {
-        params: {
-          scope:
-            "identify email guilds applications.commands.permissions.update",
-        },
-      },
-    }),
-  ],
+  // Include user.id on session
   callbacks: {
-    async jwt({ token, account}) {
-      if (account) {
-        token.accessToken = account.access_token;
-        token.tokenType = account.token_type;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session) {
-        session.accessToken = token.accessToken as string;
-        session.tokenType = token.tokenType as string;
+    session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
       }
       return session;
     },
   },
+  // Configure one or more authentication providers
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    DiscordProvider({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    // ...add more providers here
+  ],
   pages: {
     signIn: "/auth/signin",
   }
 };
+
 export default NextAuth(authOptions);
