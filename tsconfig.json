@@ -1,0 +1,17 @@
+{
+  "exclude": [
+    "packages/**/tests/**",
+    "packages/**/dist/**"
+ ],
+  "references": [
+   {
+      "path": "./packages/logger"
+   },
+   {
+      "path": "./packages/discord-bot"
+   },
+   {
+      "path": "./packages/server"
+   }
+ ]
+ }
