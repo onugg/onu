@@ -31,8 +31,6 @@ export function createShardManager(shardManagerOptions: ShardManagerOptions) {
     //l.info(`Launched shard ${shard.id}`)
   });
 
-  
-
   const spawnShards = async () => {
     manager.spawn();
   }
