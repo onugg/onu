@@ -1,4 +1,4 @@
-import { PrismaClient } from "database";
+import { PrismaClient } from "@onu/prisma";
 
 import { env } from "../../env/server.mjs";
 
