@@ -1,4 +1,5 @@
 const { Client, GatewayIntentBits } = require('discord.js');
+import { PrismaClient } from 'database'
 
 import './polyfill';
 
