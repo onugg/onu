@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "database": "*"
   },
   "devDependencies": {
 
@@ -17,7 +18,6 @@
     "eslint": "7.32.0",
     "eslint-config-custom": "*",
     "tsconfig": "*",
-    "database": "*",
     "@types/node": "^17.0.12",
     "typescript": "^4.5.3",
     "ts-node-dev": "^2.0.0"
