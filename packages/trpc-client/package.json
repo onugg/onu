@@ -1,5 +1,5 @@
 {
-  "name": "@onu/config",
+  "name": "@onu/trpcclient",
   "version": "0.0.0",
   "main": "./index.tsx",
   "types": "./index.tsx",
@@ -14,6 +14,6 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
-    
+
   }
 }
