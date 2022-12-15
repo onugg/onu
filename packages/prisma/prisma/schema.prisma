@@ -51,6 +51,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  communties    Member[]
 }
 
 model VerificationToken {
@@ -61,4 +62,41 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Community {
+  id            String    @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String
+  
+  members       Member[]
+  discordGuilds DiscordGuild[]
+}
+
+model Member {
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  communityId   String
+
+  role          String // valid values owner, admin, member
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, communityId])
+}
+
+model DiscordGuild {
+  id            String    @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  communityId   String
+
+  name          String?
+  discordId     String
+  image         String?
+
+  community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
 }
