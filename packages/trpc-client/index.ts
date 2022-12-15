@@ -24,6 +24,6 @@ const dashboardAppClient = createTRPCProxyClient<dashboardAppRouter>({
 })
 
 export const trpc = {
-  discord: discordBotClient,
-  user: dashboardAppClient
+  discord: discordBotClient,          // alias discordBot as discord
+  user: dashboardAppClient            // alias dashboardApp as user
 }
