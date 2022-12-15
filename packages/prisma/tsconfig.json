@@ -1,0 +1,5 @@
+{
+  "extends": "tsconfig/typescriptService.json.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

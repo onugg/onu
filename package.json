@@ -1,19 +1,25 @@
 {
-  "name": "packages",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "name": "onu-monorepo",
+  "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start:dev": "concurrently \"wsrun --parallel start:dev\""
-  },
   "workspaces": [
-    "packages/*",
-    "services/*",
-    "clients/*"
+    "apps/*",
+    "packages/*"
   ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
   "devDependencies": {
-    "concurrently": "^5.2.0",
-    "wsrun": "^5.2.0"
-  }
+    "eslint-config-custom": "*",
+    "prettier": "latest",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "packageManager": "yarn@1.22.19"
 }
