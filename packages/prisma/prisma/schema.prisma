@@ -3,13 +3,11 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["global", "auth"]
 }
 
 model Account {
@@ -31,8 +29,6 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-
-  @@schema("auth")
 }
 
 model Session {
@@ -43,8 +39,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@schema("auth")
 }
 
 model User {
@@ -57,8 +51,6 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-
-  @@schema("auth")
 }
 
 model VerificationToken {
@@ -69,5 +61,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@schema("auth")
 }
