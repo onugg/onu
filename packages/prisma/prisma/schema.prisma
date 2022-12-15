@@ -52,6 +52,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   communties    Member[]
+  discordUsers  DiscordUser[]
 }
 
 model VerificationToken {
@@ -89,14 +90,49 @@ model Member {
 }
 
 model DiscordGuild {
-  id            String    @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  communityId   String
+  id              String    @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  communityId     String
 
-  name          String?
-  discordId     String
-  image         String?
+  name            String?
+  discordId       String
+  image           String?
+
+  botInstallDate  DateTime?
+  botInstalled    Boolean @default(false)
+
+  members       DiscordMember[]
 
   community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+}
+
+model DiscordUser {
+  id            String          @id @default(cuid())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  userId        String
+  discordId     String
+  name          String
+  image         String
+
+  user          User            @relation(fields: [userId], references: [id])
+  guilds        DiscordMember[]
+
+  @@unique([discordId])
+}
+
+model DiscordMember {
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  discordUserId     String
+  discordGuildId    String
+
+  image             String
+  name              String
+
+  discordUser       DiscordUser @relation(fields: [discordUserId], references: [id], onDelete: Cascade)
+  discordGuild      DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
+
+  @@unique([discordUserId, discordGuildId])
 }
