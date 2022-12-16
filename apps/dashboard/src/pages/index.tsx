@@ -11,6 +11,7 @@ import BaseLayout from "../components/layouts/base";
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
+  const { data: user } = trpc.user.getUserBySession.useQuery();
   useEffect(() => {
     if (!sessionData) {
       router.push("/auth/signin");
@@ -25,12 +26,3 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const Navbar: React.FC = () => {
-  const { data: user } = trpc.user.getUserBySession.useQuery();
-
-  return ( 
-    <div className="min-w-screen h-full bg-gray-100">
-    <SideNavbar />
-    </div>
-  );
-};
