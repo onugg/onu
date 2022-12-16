@@ -18,9 +18,9 @@ const Home: NextPage = () => {
     }
   });
   return (
-    <>
+    <div className="overscroll-contain">
     <BaseLayout />
-    </>
+    </div>
   );
 };
 
