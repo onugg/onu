@@ -33,8 +33,8 @@ async function start() {
     eventTasks.removeGuild(guild)                         // removes the guild from the database when the bot is removed from a guild
   })
 
-  c.on("userUpdate", function(oldUser: User, newUser: User){
-    eventTasks.UpdateUser(oldUser, newUser)               // when a user changes their details update the database
+  c.on("userUpdate", function(_oldUser: User, newUser: User){
+    eventTasks.AddOrUpdateUser(newUser)               // when a user changes their details update the database
   })
 
   c.on("guildMemberUpdate", function(_oldMember: GuildMember, newMember: GuildMember){

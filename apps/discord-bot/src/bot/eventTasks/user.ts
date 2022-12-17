@@ -1,15 +1,7 @@
-const { Client } = require('discord.js');
 import { PrismaClient } from '@onu/prisma'
 import { User } from 'discord.js';
 
 var prisma = new PrismaClient()
-
-export async function UpdateUser (oldUser: typeof Client.ClientUser, newUser: typeof Client.ClientUser) {
-  console.log(oldUser)
-  if (!prisma.discordUser.findUnique({where: {discordId: newUser.id}})) {
-    AddOrUpdateUser(newUser)
-  }
-}
 
 export async function AddOrUpdateUser (user: User) {
   try { 
@@ -33,13 +25,5 @@ export async function AddOrUpdateUser (user: User) {
     console.log(e)
   } finally {
     return null
-  }
-}
-
-export async function UserExists (discordId: string) {
-  if (await prisma.discordUser.count({where: {discordId: discordId}}) > 0) {
-    return true
-  } else {
-    return false
   }
 }
