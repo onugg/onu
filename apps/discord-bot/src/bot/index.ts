@@ -34,11 +34,11 @@ async function start() {
   })
 
   c.on("userUpdate", function(oldUser: User, newUser: User){
-    eventTasks.UpdateUser(oldUser, newUser)
+    eventTasks.UpdateUser(oldUser, newUser)               // when a user changes their details update the database
   })
 
   c.on("guildMemberUpdate", function(_oldMember: GuildMember, newMember: GuildMember){
-    eventTasks.AddOrUpdateMemberAndUser(newMember)
+    eventTasks.AddOrUpdateMemberAndUser(newMember)        // when a member changes their details update the database
   })
 
   c.login(process.env["DISCORD_TOKEN"]);
