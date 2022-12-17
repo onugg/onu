@@ -8,7 +8,6 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
-  const { data: user } = trpc.user.getUserBySession.useQuery();
   useEffect(() => {
     if (!sessionData) {
       router.push("/auth/signin");
