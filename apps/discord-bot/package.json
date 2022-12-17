@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@trpc/server": "^10.5.0",
     "@onu/prisma": "*",
     "@onu/trpcclient": "*",
+    "@trpc/server": "^10.5.0",
     "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
     "zod": "^3.20.2"
   },
   "devDependencies": {

@@ -97,12 +97,10 @@ model DiscordGuild {
 
   name            String?
   discordId       String   @unique
-
   botInstallDate  DateTime?
   botInstalled    Boolean @default(false)
 
   members       DiscordMember[]
-
   community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
 }
 
@@ -125,7 +123,7 @@ model DiscordMember {
   discordUserId     String
   discordGuildId    String
 
-  name              String
+  nickname          String?
 
   discordUser       DiscordUser @relation(fields: [discordUserId], references: [id], onDelete: Cascade)
   discordGuild      DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
