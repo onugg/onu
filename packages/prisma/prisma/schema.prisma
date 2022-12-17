@@ -93,33 +93,30 @@ model DiscordGuild {
   id              String    @id @default(cuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  communityId     String
+  communityId     String?
 
   name            String?
-  discordId       String
-  image           String?
+  discordId       String   @unique
 
   botInstallDate  DateTime?
   botInstalled    Boolean @default(false)
 
   members       DiscordMember[]
 
-  community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
 }
 
 model DiscordUser {
   id            String          @id @default(cuid())
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  userId        String
-  discordId     String
+  userId        String?         
+  discordId     String          @unique
   name          String
-  image         String
+  discriminator String
 
-  user          User            @relation(fields: [userId], references: [id])
+  user          User?            @relation(fields: [userId], references: [id])
   guilds        DiscordMember[]
-
-  @@unique([discordId])
 }
 
 model DiscordMember {
@@ -128,7 +125,6 @@ model DiscordMember {
   discordUserId     String
   discordGuildId    String
 
-  image             String
   name              String
 
   discordUser       DiscordUser @relation(fields: [discordUserId], references: [id], onDelete: Cascade)
