@@ -1,6 +1,9 @@
 
 import { ShardingManager } from 'discord.js';
+import * as dotenv from 'dotenv';
 import Path from 'path';
+
+dotenv.config();
 
 export interface ShardManagerOptions {
   dev?: boolean;
@@ -15,7 +18,7 @@ export function createShardManager(shardManagerOptions: ShardManagerOptions) {
   const manager = new ShardingManager(
     Path.join(__dirname, '../bot/index.ts'), 
     { 
-      token: 'TOKEN', 
+      token: process.env["DISCORD_TOKEN"], 
       totalShards: "auto",
       execArgv: ['-r', 'ts-node/register']
     }
@@ -25,10 +28,10 @@ export function createShardManager(shardManagerOptions: ShardManagerOptions) {
   manager.on('shardCreate', (shard) => {
 
     shard.on("ready", () => {
-      //l.info(`Shard ${shard.id} ready`)
+      console.log(`Shard ${shard.id} ready`)
     });
 
-    //l.info(`Launched shard ${shard.id}`)
+    console.log(`Launched shard ${shard.id}`)
   });
 
   const spawnShards = async () => {

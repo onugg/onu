@@ -2,9 +2,6 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import { AppRouter as DiscordBotAppRouter } from '../../apps/discord-bot/src/trpcServer'
 import { AppRouter as DashboardAppRouter } from '../../apps/dashboard/src/server/trpc/router/_app'
 
-export type discordBotAppRouter = DiscordBotAppRouter
-export type dashboardAppRouter = DashboardAppRouter
-
 const discordBotClient = createTRPCProxyClient<DiscordBotAppRouter>({
   links: [
     httpBatchLink({
@@ -14,7 +11,7 @@ const discordBotClient = createTRPCProxyClient<DiscordBotAppRouter>({
   ]
 })
 
-const dashboardAppClient = createTRPCProxyClient<dashboardAppRouter>({
+const dashboardAppClient = createTRPCProxyClient<DashboardAppRouter>({
   links: [
     httpBatchLink({
       url: "http://localhost:3000/api/trpc",
@@ -24,6 +21,6 @@ const dashboardAppClient = createTRPCProxyClient<dashboardAppRouter>({
 })
 
 export const trpc = {
-  discord: discordBotClient,          // alias discordBot as discord
-  user: dashboardAppClient            // alias dashboardApp as user
+  discordBot: discordBotClient,
+  dashboard: dashboardAppClient
 }
