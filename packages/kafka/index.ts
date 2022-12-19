@@ -4,7 +4,7 @@ import { KafkaOptions, onuConsumer } from './interfaces';
 dotenv.config();
 
 
-
+export { Kafka } from 'kafkajs'
 
 
 export function OnuKafka(options: KafkaOptions) {
@@ -86,7 +86,7 @@ export function OnuKafka(options: KafkaOptions) {
     console.log(`Kafka producer started for ${options.clientId}`)
   }
 
-  const emitEvent = (topicName: string, message: any) => {
+  const emitEvent = (topicName: string, message: object) => {
     producer.send({
       topic: topicName,
       messages: [

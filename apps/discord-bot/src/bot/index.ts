@@ -38,10 +38,24 @@ async function start() {
   // Member events
   c.on("guildMemberAdd", function(member: GuildMember){
     eventTasks.AddOrUpdateMemberAndUser(member)           // adds/updates the user / member in the database
+    eventTasks.emitMemberAddedToGuild(                    // emit event user added to guild
+      k.emitEvent,
+      {
+       discordGuildId: member.guild.id,
+       discordUserId: member.user.id
+      }
+    )
   })
 
   c.on("guildMemberRemove", function(member: GuildMember){
     eventTasks.RemoveMember(member)                       // removes the member from the database
+    eventTasks.emitMemberLeftGuild(                       // emit event user left the guild
+      k.emitEvent,
+      {
+       discordGuildId: member.guild.id,
+       discordUserId: member.user.id
+      }
+    )
   })
 
   // Guild events
@@ -64,13 +78,23 @@ async function start() {
   var k = OnuKafka(discordBotKafkaOptions)
 
   await k.configureTopics([
-    OnuKafkaTypes.DiscordBot.ShardStartedTopic
+    OnuKafkaTypes.DiscordBot.ShardStartedTopic,
+    OnuKafkaTypes.DiscordBot.MemberAddedToGuildTopic,
+    OnuKafkaTypes.DiscordBot.MemberLeftGuildTopic
   ])
 
   await k.registerConsumers([
     {
       callback: test,
       topic: OnuKafkaTypes.DiscordBot.ShardStartedTopic
+    },
+    {
+      callback: test,
+      topic: OnuKafkaTypes.DiscordBot.MemberLeftGuildTopic
+    },
+    {
+      callback: test,
+      topic: OnuKafkaTypes.DiscordBot.MemberAddedToGuildTopic
     }
   ])
 

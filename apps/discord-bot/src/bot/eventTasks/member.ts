@@ -1,5 +1,6 @@
 import { GuildMember } from 'discord.js';
 import { PrismaClient } from '@onu/prisma'
+import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 
 var prisma = new PrismaClient()
 
@@ -16,11 +17,17 @@ export async function AddOrUpdateMemberAndUser (member: GuildMember) {
           where: {discordUserId_discordGuildId: {discordUserId: dbUser.id, discordGuildId: dbGuild.id}},
           update: {nickname: member.nickname},
           create: {discordUserId: dbUser.id, discordGuildId: dbGuild.id, nickname: member.nickname}
-        }).then(() => {console.log(`Member [${member.user.username}] synchronised with database`)})
+        }).then(() => {
+          console.log(`Member [${member.user.username}] synchronised with database`)
+        })
       }
     })
   })
 }
+
+export async function emitMemberAddedToGuild(emitEventCallback: Function, message: OnuKafkaTypes.DiscordBot.MemberAddedToGuildMessage) {
+  emitEventCallback(OnuKafkaTypes.DiscordBot.MemberAddedToGuildTopic, message)
+} 
 
 // remove a member from the database if they leave
 export async function RemoveMember (member: GuildMember) {
@@ -41,5 +48,8 @@ export async function RemoveMember (member: GuildMember) {
       console.log(`User [${member.user.username}] removed from database (no guilds)`)
     }
   }
-  
 }
+
+export async function emitMemberLeftGuild(emitEventCallback: Function, message: OnuKafkaTypes.DiscordBot.MemberLeftGuildMessage) {
+  emitEventCallback(OnuKafkaTypes.DiscordBot.MemberLeftGuildTopic, message)
+} 
