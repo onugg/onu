@@ -28,4 +28,6 @@ export async function addGuild (guild: Guild) {
 export async function removeGuild(guild: Guild) {
   await prisma.discordGuild.delete({where: {discordId: guild.id}})
   console.log(`Guild [${guild.name}] removed from database`)
+
+  // TO DO: Members are deleted buy orphaned users won't be deleted
 }

@@ -1,11 +1,24 @@
 const { Client } = require('discord.js');
+//const { Kafka } = require('kafkajs')
+import * as OnuKafkaTypes from '@onu/kafka/interfaces';
+//import { ShardStartedMessage } from '@onu/kafka/apps/discordBot';
 import * as intents from './intents'
 //import { trpc } from '@onu/trpcclient'
 import * as eventTasks from './eventTasks'
-import * as dotenv from 'dotenv';
+
 import { User, GuildMember, Guild } from 'discord.js';
+//import { Consumer, EachMessagePayload, ITopicConfig, Producer } from 'kafkajs';
+
+import { OnuKafka } from '@onu/kafka';
+
+import { discordBotKafkaOptions } from '@onu/config';
+
+import * as dotenv from 'dotenv';
 dotenv.config();
 
+async function test(test: string) {
+  console.log(test)
+}
 
 async function start() {
   const c = new Client({ intents: intents.gatewayIntents });
@@ -13,6 +26,13 @@ async function start() {
   // Bot startup event
   c.on("ready", function(){
     eventTasks.ProcessCache(c)                            // synchronise the cache with the database on startup of bot
+    eventTasks.emitShardReady(                            // emit a message to Kafka that the shard is ready
+      k.emitEvent, 
+      {
+        shardId: c.guilds.cache.map((guild: Guild) => {return guild.id}), 
+        guilds: c.shard?.ids[0]
+      }
+    )                
   })
   
   // Member events
@@ -40,6 +60,21 @@ async function start() {
   c.on("guildMemberUpdate", function(_oldMember: GuildMember, newMember: GuildMember){
     eventTasks.AddOrUpdateMemberAndUser(newMember)        // when a member changes their details update the database
   })
+
+  var k = OnuKafka(discordBotKafkaOptions)
+
+  await k.configureTopics([
+    OnuKafkaTypes.DiscordBot.ShardStartedTopic
+  ])
+
+  await k.registerConsumers([
+    {
+      callback: test,
+      topic: OnuKafkaTypes.DiscordBot.ShardStartedTopic
+    }
+  ])
+
+  await k.startProducer()
 
   c.login(process.env["DISCORD_TOKEN"]);
 }

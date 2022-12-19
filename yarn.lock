@@ -1321,6 +1321,11 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+
 dynamic-dedupe@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/dynamic-dedupe/-/dynamic-dedupe-0.3.0.tgz"
@@ -2235,6 +2240,11 @@ json5@^2.2.1:
   dependencies:
     array-includes "^3.1.5"
     object.assign "^4.1.3"
+
+kafkajs@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/kafkajs/-/kafkajs-2.2.3.tgz#a1ab1b7c4a27699871a89b3978b5cfe5b05c6f3e"
+  integrity sha512-JmzIiLHE/TdQ7b4I2B/DNMtfhTh66fmEaEg7gGkyQXBC6f1A7I2jSjeUsVIJfC8d9YcEIURyBjtOEKBO5OHVhg==
 
 language-subtag-registry@^0.3.20:
   version "0.3.22"
