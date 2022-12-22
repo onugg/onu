@@ -1,4 +1,4 @@
-import { GuildMember } from 'discord.js';
+import { GuildMember, PartialGuildMember } from 'discord.js';
 import { PrismaClient } from '@onu/prisma'
 import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 
@@ -30,7 +30,7 @@ export async function emitMemberAddedToGuild(emitEventCallback: Function, messag
 } 
 
 // remove a member from the database if they leave
-export async function RemoveMember (member: GuildMember) {
+export async function RemoveMember (member: GuildMember | PartialGuildMember) {
   var guildInDb = await prisma.discordGuild.findUnique({where: {discordId: member.guild.id}})
   var userInDb = await prisma.discordUser.findUnique({where: {discordId: member.user.id}})
 

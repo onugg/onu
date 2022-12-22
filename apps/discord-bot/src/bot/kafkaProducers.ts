@@ -3,7 +3,7 @@ const appName = 'discord-bot'
 export const ShardStartedTopic = `${appName}.shardStarted`
 
 export interface ShardStartedMessage {
-  shardId: number,
+  shardIds: number[], 
   guilds: string[]
 }
 
@@ -19,4 +19,11 @@ export const MemberLeftGuildTopic = `${appName}.memberLeftGuild`
 export interface MemberLeftGuildMessage {
   discordUserId: string
   discordGuildId: string
+}
+
+export const MemberWelcomeTopic = `${appName}.memberWelcome`
+
+export interface MemberWelcome {
+  discordGuildId: string
+  discordUserId: string
 }

@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev ./src/index.ts",
-    "build": "tsc --project tsconfig.json",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "ts-node-dev ./src/index.ts"
   },
   "dependencies": {
     "@onu/prisma": "*",

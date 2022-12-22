@@ -1,4 +1,5 @@
-const { Client } = require('discord.js');
+
+import { Client, Events, Message, PartialGuildMember, PartialUser } from 'discord.js';
 //const { Kafka } = require('kafkajs')
 import * as OnuKafkaTypes from '@onu/kafka/interfaces';
 //import { ShardStartedMessage } from '@onu/kafka/apps/discordBot';
@@ -25,31 +26,37 @@ async function start() {
 
   // Bot startup event
   c.on("ready", function(){
-    eventTasks.ProcessCache(c)                            // synchronise the cache with the database on startup of bot
-    eventTasks.emitShardReady(                            // emit a message to Kafka that the shard is ready
-      k.emitEvent, 
-      {
-        shardId: c.guilds.cache.map((guild: Guild) => {return guild.id}), 
-        guilds: c.shard?.ids[0]
-      }
-    )                
+    eventTasks.batch.ProcessCache(c)                            // synchronise the cache with the database on startup of bot
+    eventTasks.shard.emitShardReady(k.emitEvent, c)             // emit a message to Kafka that the shard is ready           
   })
   
   // Member events
-  c.on("guildMemberAdd", function(member: GuildMember){
-    eventTasks.AddOrUpdateMemberAndUser(member)           // adds/updates the user / member in the database
-    eventTasks.emitMemberAddedToGuild(                    // emit event user added to guild
+  c.on(Events.GuildMemberAdd, function(member: GuildMember){
+    eventTasks.member.AddOrUpdateMemberAndUser(member)           // adds/updates the user / member in the database
+    eventTasks.member.emitMemberAddedToGuild(                    // emit event user added to guild
       k.emitEvent,
       {
        discordGuildId: member.guild.id,
        discordUserId: member.user.id
       }
     )
+    eventTasks.welcome.registerWelcomeThread(c, member)              // register the welcome thread if the guild has this configured
   })
 
-  c.on("guildMemberRemove", function(member: GuildMember){
-    eventTasks.RemoveMember(member)                       // removes the member from the database
-    eventTasks.emitMemberLeftGuild(                       // emit event user left the guild
+  c.on(Events.MessageCreate, function(message: Message){
+    eventTasks.welcome.checkIfMessageIsWelcome(k.emitEvent, message)          // check if the message is a welcome message and if so trigger event
+  })
+
+
+
+  c.on(Events.ThreadMembersUpdate, function(addedMembers, removedMembers, thread){
+    console.log("threadMembersUpdate")
+    console.log(addedMembers, removedMembers, thread)
+  })
+
+  c.on(Events.GuildMemberRemove, function(member: GuildMember | PartialGuildMember){
+    eventTasks.member.RemoveMember(member)                       // removes the member from the database
+    eventTasks.member.emitMemberLeftGuild(                       // emit event user left the guild
       k.emitEvent,
       {
        discordGuildId: member.guild.id,
@@ -59,20 +66,20 @@ async function start() {
   })
 
   // Guild events
-  c.on("guildCreate", function(guild: Guild){
-    eventTasks.addGuild(guild)                            // adds the guild to the database when the bot is added to a new guild
+  c.on(Events.GuildCreate, function(guild: Guild){
+    eventTasks.guild.addGuild(guild)                            // adds the guild to the database when the bot is added to a new guild
   });
 
-  c.on("guildDelete", function(guild: Guild){
-    eventTasks.removeGuild(guild)                         // removes the guild from the database when the bot is removed from a guild
+  c.on(Events.GuildDelete, function(guild: Guild){
+    eventTasks.guild.removeGuild(guild)                         // removes the guild from the database when the bot is removed from a guild
   })
 
-  c.on("userUpdate", function(_oldUser: User, newUser: User){
-    eventTasks.AddOrUpdateUser(newUser)               // when a user changes their details update the database
+  c.on(Events.UserUpdate, function(_oldUser: User | PartialUser, newUser: User){
+    eventTasks.user.AddOrUpdateUser(newUser)               // when a user changes their details update the database
   })
 
-  c.on("guildMemberUpdate", function(_oldMember: GuildMember, newMember: GuildMember){
-    eventTasks.AddOrUpdateMemberAndUser(newMember)        // when a member changes their details update the database
+  c.on(Events.GuildMemberUpdate, function(_oldMember: GuildMember | PartialGuildMember, newMember: GuildMember){
+    eventTasks.member.AddOrUpdateMemberAndUser(newMember)        // when a member changes their details update the database
   })
 
   var k = OnuKafka(discordBotKafkaOptions)
@@ -80,7 +87,8 @@ async function start() {
   await k.configureTopics([
     OnuKafkaTypes.DiscordBot.ShardStartedTopic,
     OnuKafkaTypes.DiscordBot.MemberAddedToGuildTopic,
-    OnuKafkaTypes.DiscordBot.MemberLeftGuildTopic
+    OnuKafkaTypes.DiscordBot.MemberLeftGuildTopic,
+    OnuKafkaTypes.DiscordBot.MemberWelcomeTopic
   ])
 
   await k.registerConsumers([
@@ -95,6 +103,10 @@ async function start() {
     {
       callback: test,
       topic: OnuKafkaTypes.DiscordBot.MemberAddedToGuildTopic
+    },
+    {
+      callback: test,
+      topic: OnuKafkaTypes.DiscordBot.MemberWelcomeTopic
     }
   ])
 
