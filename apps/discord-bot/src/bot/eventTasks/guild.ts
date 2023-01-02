@@ -1,13 +1,18 @@
 
-import { PrismaClient } from '@onu/prisma'
+import { prisma } from '@onu/prisma'
 import { Guild, GuildMember } from 'discord.js';
 import { AddOrUpdateMemberAndUser } from './member';
 
-var prisma = new PrismaClient()
-
-export async function addGuild (guild: Guild) {
-  prisma.discordGuild.create({data: {
+export async function addGuildOrUpdate (guild: Guild) {
+  prisma.discordGuild.createIfNotExistsAndEmitEvent({
+    where: {discordId: guild.id}, 
+    create: {
       discordId: guild.id,
+      name: guild.name,
+      botInstallDate: new Date(),
+      botInstalled: true
+    },
+    update: {
       name: guild.name,
       botInstallDate: new Date(),
       botInstalled: true
@@ -26,6 +31,8 @@ export async function addGuild (guild: Guild) {
 }
 
 export async function removeGuild(guild: Guild) {
-  await prisma.discordGuild.delete({where: {discordId: guild.id}})
+  await prisma.discordGuild.deleteIfExistsAndEmitEvent({where: {discordId: guild.id}})
   console.log(`Guild [${guild.name}] removed from database`)
+
+  // TO DO: Members are deleted buy orphaned users won't be deleted
 }

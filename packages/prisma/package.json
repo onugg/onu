@@ -10,12 +10,12 @@
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
-    "prisma": "^4.7.1",
     "tsconfig": "*",
     "typescript": "^4.5.2"
   },
   "dependencies": {
     "@prisma/client": "^4.7.1",
+    "@prisma/internals": "^4.8.0",
     "prisma": "^4.7.1"
   }
 }

@@ -6,3 +6,15 @@ export const shardManagerOptions: ShardManagerOptions = {
   port: 2022,
   prefix: '/trpc',
 }
+
+import type { KafkaOptions } from '../../packages/kafka/interfaces'
+
+export const discordBotKafkaOptions: KafkaOptions = {
+  clientId: 'discord-bot',
+  groupId: 'discord-bot'
+}
+
+export const prismaKafkaOptions: KafkaOptions = {
+  clientId: 'prisma',
+  groupId: 'prisma'
+}

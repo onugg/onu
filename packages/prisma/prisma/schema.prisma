@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 datasource db {
@@ -99,6 +100,11 @@ model DiscordGuild {
   discordId       String   @unique
   botInstallDate  DateTime?
   botInstalled    Boolean @default(false)
+
+  // welcome settings
+  welcomeChannelId                      String?       // the channel monitored for welcome activity
+  welcomeType                           String?       // the type of welcome being monitored = thread, atmention
+  welcomeThreadArchiveDurationMinutes   Int? // the number of minutes to archive the welcome thread after
 
   members       DiscordMember[]
   community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
