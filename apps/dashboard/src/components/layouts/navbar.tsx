@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { trpc } from "../../utils/trpc";
 import { BellIcon } from "@heroicons/react/24/outline";
 import LogoLight from "../../assets/OnuLogoLight.svg";
@@ -13,9 +12,10 @@ const PrimaryNavigation = [
 ];
 
 const SubNavigation = [
-  { name: "Communities", href: "#", current: true },
-  { name: "My Profile", href: "#", current: false },
-  { name: "Recent Activity", href: "#", current: false },
+  { name: "Communities", href: "/communities", current: true },
+  { name: "Trending", href: "#", current: false },
+  { name: "Profile", href: "#", current: false },
+  { name: "Activity", href: "#", current: false },
   { name: "Settings", href: "#", current: false },
 ];
 

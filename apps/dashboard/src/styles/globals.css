@@ -2,8 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn-1 {
+    @apply flex rounded-md border border-neutral-100 bg-neutral-100 py-2 px-2 text-sm font-medium text-neutral-900 duration-300 hover:scale-110 hover:bg-black hover:text-neutral-100 focus:border-neutral-100 focus:bg-black focus:text-neutral-100;
+  }
+  .btn-input {
+    @apply block w-full rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm;
+  }
+  .heading-1 {
+    @apply my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72;
+  }
+}
+
 @layer base {
-    :root {
-     @apply bg-black text-white;
-    }
-   }
+  :root {
+    @apply bg-black text-white;
+  }
+}
