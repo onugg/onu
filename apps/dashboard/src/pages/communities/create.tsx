@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import React, { ComponentProps, forwardRef, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import React, { useEffect } from "react";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Navbar from "../../components/layouts/navbar";
 
@@ -41,11 +42,30 @@ const validateFormData = (inputs: unknown) => {
   return isValidData;
 };
 
+type FormSchemaType = z.infer<typeof formDataSchema>;
+
 const Form: React.FC = () => {
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(formDataSchema),
+  });
+
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    await new Promise(async (resolve) => {
+      await setTimeout(() => {
+        console.log(data);
+        resolve(undefined);
+      }, 3000);
+    });
+  };
   const { data: sessionData } = useSession();
   const username = sessionData?.user?.name;
   return (
-    <form className="mx-12 space-y-8" onSubmit={validateFormData}>
+    <form className="mx-12 space-y-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="heading-1">Create Community</div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -59,11 +79,11 @@ const Form: React.FC = () => {
             <div className="mt-1 flex rounded-md shadow-sm">
               <input
                 type="text"
-                name="name"
                 id="name"
                 className="btn-input"
                 placeholder={`${username}'s Community`}
                 defaultValue={`${username}'s Community`}
+                {...register("name")}
               />
             </div>
           </div>
@@ -78,11 +98,11 @@ const Form: React.FC = () => {
             <div className="mt-1">
               <textarea
                 id="about"
-                name="about"
                 rows={3}
                 className="btn-input"
                 placeholder={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
                 defaultValue={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
+                {...register("description")}
               />
             </div>
           </div>
@@ -99,9 +119,9 @@ const Form: React.FC = () => {
             >
               <input
                 id="file-upload"
-                name="file-upload"
                 type="file"
                 className="sr-only"
+                {...register("image")}
               />
               <div className="space-y-1 text-center">
                 <PhotoPlus />
