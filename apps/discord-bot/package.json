@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev ./src/index.ts",
-    "build": "tsc --project tsconfig.json",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "ts-node-dev ./src/index.ts"
   },
   "dependencies": {
     "@onu/prisma": "*",
@@ -14,6 +11,7 @@
     "@trpc/server": "^10.5.0",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "kafkajs": "^2.2.3",
     "zod": "^3.20.2"
   },
   "devDependencies": {
