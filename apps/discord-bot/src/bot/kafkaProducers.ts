@@ -1,29 +1,19 @@
 const appName = 'discord-bot'
 
-export const ShardStartedTopic = `${appName}.shardStarted`
+var DiscordBotTopics: string[] = []
 
+export const ShardStartedTopic = `${appName}.shardStarted`
+DiscordBotTopics.push(ShardStartedTopic)
 export interface ShardStartedMessage {
   shardIds: number[], 
   guilds: string[]
 }
 
-export const MemberAddedToGuildTopic = `${appName}.memberAddedToGuild`
-
-export interface MemberAddedToGuildMessage {
-  discordGuildId: string
-  discordUserId: string
-}
-
-export const MemberLeftGuildTopic = `${appName}.memberLeftGuild`
-
-export interface MemberLeftGuildMessage {
-  discordUserId: string
-  discordGuildId: string
-}
-
 export const MemberWelcomeTopic = `${appName}.memberWelcome`
-
+DiscordBotTopics.push(MemberWelcomeTopic)
 export interface MemberWelcome {
   discordGuildId: string
   discordUserId: string
 }
+
+export { DiscordBotTopics }

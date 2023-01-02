@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 datasource db {
@@ -106,32 +107,7 @@ model DiscordGuild {
   welcomeThreadArchiveDurationMinutes   Int? // the number of minutes to archive the welcome thread after
 
   members       DiscordMember[]
-  welcomeThreads DiscordWelcomeThread[]
   community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
-}
-
-model DiscordWelcomeThread {
-  id              String    @id @default(cuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  discordGuildId  String
-
-  threadDiscordId         String @unique
-  welcomedUserDiscordId   String
-
-  discordGuild        DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
-  welcomers           DiscordWelcomeThreadWelcomers[]
-}
-
-model DiscordWelcomeThreadWelcomers {
-  id              String    @id @default(cuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  discordWelcomeThreadId  String
-
-  welcomerDiscordId   String
-
-  discordWelcomeThread        DiscordWelcomeThread @relation(fields: [discordWelcomeThreadId], references: [id], onDelete: Cascade)
 }
 
 model DiscordUser {

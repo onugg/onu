@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { Consumer, EachMessagePayload, ITopicConfig, Kafka, Producer } from 'kafkajs';
-import { KafkaOptions, onuConsumer } from './interfaces';
+import { KafkaOptions, onuConsumer, AllTopics } from './interfaces';
 dotenv.config();
 
 
@@ -14,20 +14,21 @@ export function OnuKafka(options: KafkaOptions) {
   const kafkaClient = new Kafka({
     clientId: options.clientId,
     brokers: brokers,
+    
   })
 
   const producer: Producer = kafkaClient.producer({
     allowAutoTopicCreation: false,
     transactionTimeout: 30000
   })
-  
-  const configureTopics = async (topics: string[]) => {
+
+  const configureTopics = async () => {
     console.log(`Configuring topics for ${options.clientId}`)
 
     const admin = kafkaClient.admin()
     var previouslyConfiguredTopics = await admin.listTopics()
-  
-    var missingTopics = topics.filter((topic: string) => {
+
+    var missingTopics = AllTopics.filter((topic: string) => {
       return !previouslyConfiguredTopics.includes(topic)
     })
 
@@ -54,6 +55,7 @@ export function OnuKafka(options: KafkaOptions) {
   }
 
   const registerConsumers = async (consumers: onuConsumer[]) => {
+
     const consumer: Consumer = kafkaClient.consumer({ groupId: 'discord-bot' })
     await consumer.connect()
 
@@ -75,7 +77,7 @@ export function OnuKafka(options: KafkaOptions) {
           console.log(`No callback function found for topic ${messagePayLoad.topic}`)
           return
         }
-        callbackFunction(messagePayLoad.message.value?.toString())
+        callbackFunction(messagePayLoad.topic, messagePayLoad.message.value?.toString())
       },
     })
 
@@ -95,6 +97,8 @@ export function OnuKafka(options: KafkaOptions) {
     })
   }
 
-  return { startProducer, configureTopics, registerConsumers, emitEvent }
+  configureTopics()
+
+  return { startProducer, registerConsumers, emitEvent }
 }
 

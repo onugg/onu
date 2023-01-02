@@ -1,7 +1,5 @@
-import { PrismaClient } from '@onu/prisma'
+import { prisma } from '@onu/prisma'
 import { User } from 'discord.js';
-
-var prisma = new PrismaClient()
 
 export async function AddOrUpdateUser (user: User) {
   try { 

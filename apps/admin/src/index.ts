@@ -2,10 +2,11 @@ import AdminJS from 'adminjs'
 import AdminJSExpress from '@adminjs/express'
 import express from 'express'
 import * as AdminJSPrisma from '@adminjs/prisma'
-import { PrismaClient } from '@onu/prisma'
+import { prisma } from '@onu/prisma'
 import { DMMFClass } from '@prisma/client/runtime'
+import * as dotenv from 'dotenv';
 
-const prisma = new PrismaClient()
+dotenv.config()
 
 AdminJS.registerAdapter({
   Resource: AdminJSPrisma.Resource,

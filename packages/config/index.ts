@@ -13,3 +13,8 @@ export const discordBotKafkaOptions: KafkaOptions = {
   clientId: 'discord-bot',
   groupId: 'discord-bot'
 }
+
+export const prismaKafkaOptions: KafkaOptions = {
+  clientId: 'prisma',
+  groupId: 'prisma'
+}
