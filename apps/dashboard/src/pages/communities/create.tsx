@@ -11,6 +11,14 @@ import Navbar from "../../components/layouts/navbar";
 import type { SubmitHandler } from "react-hook-form";
 import type { NextPage } from "next";
 
+const MAX_FILE_SIZE = 1000000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
 const PhotoPlus: React.FC = () => {
   return (
     <svg
@@ -40,10 +48,14 @@ const validationSchema = z.object({
     .string()
     .min(1, { message: "A description is required" })
     .max(256, { message: "Description has to be less than 256 characters" }),
-  image: z.string().url({ message: "Invalid Image URL" }),
-  terms: z.literal(true, {
-    errorMap: () => ({ message: "You must accept Terms and Conditions" }),
-  }),
+  image: z
+    .any()
+    .refine((files) => files?.length == 1, "Image is required.")
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
@@ -57,7 +69,7 @@ const Form = () => {
     resolver: zodResolver(validationSchema),
   });
   const onSubmit: SubmitHandler<ValidationSchema> = (data) => console.log(data);
-  
+
   const { data: sessionData } = useSession();
   const username = sessionData?.user?.name;
   return (
@@ -78,14 +90,15 @@ const Form = () => {
                 id="name"
                 className={`btn-input ${errors.name && "btn-input-error"}`}
                 placeholder={`${username}'s Community`}
+                defaultValue={`${username}'s Community`}
                 {...register("name")}
               />
             </div>
             {errors.name && (
-                <p className="mt-2 text-xs italic text-red-500">
-                  {errors.name?.message}
-                </p>
-              )}
+              <p className="mt-2 text-xs italic text-red-500">
+                {errors.name?.message}
+              </p>
+            )}
           </div>
 
           <div className="sm:col-span-6">
@@ -99,11 +112,19 @@ const Form = () => {
               <textarea
                 id="description"
                 rows={3}
-                className={`btn-input ${errors.description && "btn-input-error"}`}
+                className={`btn-input ${
+                  errors.description && "btn-input-error"
+                }`}
                 placeholder={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
+                defaultValue={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
                 {...register("description")}
               />
             </div>
+            {errors.description && (
+              <p className="mt-2 text-xs italic text-red-500">
+                {errors.description?.message}
+              </p>
+            )}
           </div>
           <div className="sm:col-span-3">
             <label
@@ -119,7 +140,7 @@ const Form = () => {
               <input
                 id="file-upload"
                 type="file"
-                className="sr-only"
+                className={`sr-only ${errors.image && "btn-input-error"}`}
                 {...register("image")}
               />
               <div className="space-y-1 text-center">
@@ -134,6 +155,11 @@ const Form = () => {
             </label>
           </div>
         </div>
+        {errors.image && (
+            <p className="mt-2 text-xs italic text-red-500">
+              {errors.image?.message}
+            </p>
+          )}
         <div className="my-6 flex gap-x-4">
           <button className="btn-1">
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
