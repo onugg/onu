@@ -1,13 +1,14 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 import Navbar from "../../components/layouts/navbar";
 
+import type { SubmitHandler } from "react-hook-form";
 import type { NextPage } from "next";
 
 const PhotoPlus: React.FC = () => {
@@ -29,39 +30,34 @@ const PhotoPlus: React.FC = () => {
   );
 };
 
-// Define a zod schema for the form data
-const formDataSchema = z.object({
-  name: z.string().min(1).max(32),
-  description: z.string().min(1).max(1028),
-  image: z.string().min(1),
+const validationSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "A name is required" })
+    .min(5, { message: "Community Names has to be between 5-32 characters" })
+    .max(32, { message: "Community Names has to be between 5-32 characters" }),
+  description: z
+    .string()
+    .min(1, { message: "A description is required" })
+    .max(256, { message: "Description has to be less than 256 characters" }),
+  image: z.string().url({ message: "Invalid Image URL" }),
+  terms: z.literal(true, {
+    errorMap: () => ({ message: "You must accept Terms and Conditions" }),
+  }),
 });
 
-const validateFormData = (inputs: unknown) => {
-  const isValidData = formDataSchema.parse(inputs);
-  console.log(isValidData);
-  return isValidData;
-};
+type ValidationSchema = z.infer<typeof validationSchema>;
 
-type FormSchemaType = z.infer<typeof formDataSchema>;
-
-const Form: React.FC = () => {
+const Form = () => {
   const {
     register,
-    watch,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formDataSchema),
+    formState: { errors },
+  } = useForm<ValidationSchema>({
+    resolver: zodResolver(validationSchema),
   });
-
-  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    await new Promise(async (resolve) => {
-      await setTimeout(() => {
-        console.log(data);
-        resolve(undefined);
-      }, 3000);
-    });
-  };
+  const onSubmit: SubmitHandler<ValidationSchema> = (data) => console.log(data);
+  
   const { data: sessionData } = useSession();
   const username = sessionData?.user?.name;
   return (
@@ -80,28 +76,31 @@ const Form: React.FC = () => {
               <input
                 type="text"
                 id="name"
-                className="btn-input"
+                className={`btn-input ${errors.name && "btn-input-error"}`}
                 placeholder={`${username}'s Community`}
-                defaultValue={`${username}'s Community`}
                 {...register("name")}
               />
             </div>
+            {errors.name && (
+                <p className="mt-2 text-xs italic text-red-500">
+                  {errors.name?.message}
+                </p>
+              )}
           </div>
 
           <div className="sm:col-span-6">
             <label
-              htmlFor="about"
+              htmlFor="description"
               className="block text-sm font-medium text-neutral-500"
             >
-              About
+              Description
             </label>
             <div className="mt-1">
               <textarea
-                id="about"
+                id="description"
                 rows={3}
-                className="btn-input"
+                className={`btn-input ${errors.description && "btn-input-error"}`}
                 placeholder={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
-                defaultValue={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
                 {...register("description")}
               />
             </div>
