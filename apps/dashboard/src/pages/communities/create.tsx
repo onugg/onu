@@ -91,7 +91,7 @@ const Form: React.FC = () => {
   const mutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
       const communityId = data.id;
-      router.push(`/communities/${communityId}`);
+      router.push(`/communities/${communityId}/admin`);
     },
   })
 
@@ -102,7 +102,6 @@ const Form: React.FC = () => {
       description: data.description,
       imageUrl: url,
     });
-    router.push(`/communities/`);
   });
   const session = useSession();
   const username = session.data?.user?.name;
