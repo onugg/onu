@@ -65,6 +65,7 @@ const validationSchema = z.object({
 });
 
 const Form: React.FC = () => {
+  const router = useRouter();
   const {
     register,
     watch,
@@ -87,19 +88,21 @@ const Form: React.FC = () => {
 
   const { uploadToS3 } = useS3Upload();
 
-  const mutation = trpc.community.createCommunity.useMutation();
+  const mutation = trpc.community.createCommunity.useMutation({
+    onSuccess: (data) => {
+      const communityId = data.id;
+      router.push(`/communities/${communityId}`);
+    },
+  })
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    console.log("worked");
     const { url } = await uploadToS3(data.image);
-    console.log(url);
-
     mutation.mutate({
       name: data.name,
       description: data.description,
       imageUrl: url,
     });
+    router.push(`/communities/`);
   });
   const session = useSession();
   const username = session.data?.user?.name;
