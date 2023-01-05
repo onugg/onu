@@ -89,7 +89,7 @@ const Form: React.FC = () => {
 
   const mutation = trpc.community.createCommunity.useMutation();
 
-  const validateData = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => {
     console.log(data);
     console.log("worked");
     const { url } = await uploadToS3(data.image);
@@ -101,10 +101,12 @@ const Form: React.FC = () => {
       imageUrl: url,
     });
   });
-  const { data: sessionData } = useSession();
-  const username = sessionData?.user?.name;
+  const session = useSession();
+  const username = session.data?.user?.name;
+  const namePlaceholder = `${username}'s Community`;
+  const descriptionPlaceholder = `This is ${username}'s community. It is a place where we can share our cool ideas.`;
   return (
-    <form className="mx-12 space-y-8" onSubmit={validateData}>
+    <form className="mx-12 space-y-8" onSubmit={onSubmit}>
       <div className="heading-1">Create Community</div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -116,8 +118,8 @@ const Form: React.FC = () => {
               type="text"
               id="name"
               className={`btn-input ${errors.name && "btn-input-error"}`}
-              placeholder={`${username}'s Community`}
-              defaultValue={`${username}'s Community`}
+              placeholder={namePlaceholder}
+              defaultValue={namePlaceholder}
               {...register("name")}
             />
             {errors.name && (
@@ -134,8 +136,8 @@ const Form: React.FC = () => {
               id="description"
               rows={3}
               className={`btn-input ${errors.description && "btn-input-error"}`}
-              placeholder={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
-              defaultValue={`This is ${username}'s community. It is a place where we can share our cool ideas.`}
+              placeholder={descriptionPlaceholder}
+              defaultValue={descriptionPlaceholder}
               {...register("description")}
             />
             {errors.description && (
