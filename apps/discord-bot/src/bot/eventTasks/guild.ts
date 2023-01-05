@@ -1,7 +1,8 @@
 
-import { prisma } from '@onu/prisma'
 import { Guild, GuildMember } from 'discord.js';
 import { AddOrUpdateMemberAndUser } from './member';
+import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
+var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
 
 export async function addGuildOrUpdate (guild: Guild) {
   prisma.discordGuild.createIfNotExistsAndEmitEvent({

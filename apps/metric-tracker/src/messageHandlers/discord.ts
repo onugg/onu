@@ -1,5 +1,6 @@
 import * as OnuKafkaTypes from "@onu/kafka/interfaces";
-import { prisma } from '@onu/prisma';
+import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
+var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
 
 export async function messageCreated (emitEventCallback: Function, message: OnuKafkaTypes.DiscordBot.MessageCreatedMessage) {
   var discordUser = await prisma.discordUser.findUnique({

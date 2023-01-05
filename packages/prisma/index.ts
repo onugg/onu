@@ -3,13 +3,11 @@ import { OnuKafka } from '@onu/kafka';
 import { prismaKafkaOptions } from '@onu/config';
 import * as extensions from './extensions';
 
-const prisma_base = new PrismaClient(); 
-
 var k = OnuKafka(prismaKafkaOptions)
 
 k.startProducer()
 
-var prisma = prisma_base.$extends({
+const OnuPrismaExtensions = {
   model: {
 
     // DISCORD
@@ -38,8 +36,8 @@ var prisma = prisma_base.$extends({
       }
     }
   }
-})
+}
 
-export { prisma };
+export { OnuPrismaExtensions, PrismaClient };
 
 
