@@ -88,6 +88,7 @@ const MemberCommunitiesSample = [
 ];
 
 const SearchBar: React.FC = () => {
+  const { data: user } = trpc.user.getUserBySession.useQuery();
   return (
     <div className="relative z-10 my-12 mx-12">
       <div className="flex gap-x-4 md:mx-24 2xl:mx-72">
@@ -112,10 +113,7 @@ const SearchBar: React.FC = () => {
           </div>
         </div>
         <button>
-          <Link
-            className="btn-1 px-4"
-            href="/communities/create"
-          >
+          <Link className="btn-1 px-4" href="/communities/create">
             <PlusIcon className="h-5 w-5" aria-hidden="true" />
             <div className="hidden md:flex">Add Community</div>
           </Link>
@@ -129,6 +127,8 @@ const SearchBar: React.FC = () => {
 };
 
 const OwnedCommunities: React.FC = () => {
+  const { data: user } = trpc.user.getUserBySession.useQuery();
+  const profileImage = user?.image as string;
   return (
     <div className="relative z-10 mx-12 my-12">
       <div className="heading-1">Owned Communities</div>
@@ -137,18 +137,23 @@ const OwnedCommunities: React.FC = () => {
           <div key={community.name}>
             <Link
               href={community.id}
-              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black bg-cover text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              style={{
+                backgroundImage: `url(${profileImage})`,
+              }}
             >
-              <div className="flex items-center">
+              <div className="z-5 absolute inset-0 rounded-xl bg-black/75 backdrop-blur-md" />
+              <div className="z-10 flex items-center overflow-hidden">
                 <Image
-                  src={Logo}
+                  src={profileImage}
                   alt="Community"
-                  className="rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
+                  className="h-[110px] w-[110px] rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
                   width="128"
                   height="128"
                 />
               </div>
             </Link>
+
             <div className="my-2 mx-2 flex justify-between font-medium">
               <div className="flex w-1/2 flex-wrap">
                 <div>
@@ -172,6 +177,8 @@ const OwnedCommunities: React.FC = () => {
 };
 
 const Members: React.FC = () => {
+  const { data: user } = trpc.user.getUserBySession.useQuery();
+  const profileImage = user?.image as string;
   return (
     <div className="relative z-10 mx-12 my-12">
       <div className="heading-1">Members</div>
@@ -180,13 +187,17 @@ const Members: React.FC = () => {
           <div key={community.name}>
             <Link
               href={community.id}
-              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black bg-cover text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              style={{
+                backgroundImage: `url(${profileImage})`,
+              }}
             >
-              <div className="flex items-center">
+              <div className="z-5 absolute inset-0 rounded-xl bg-black/75 backdrop-blur-md" />
+              <div className="z-10 flex items-center overflow-hidden">
                 <Image
-                  src={Logo}
+                  src={profileImage}
                   alt="Community"
-                  className="rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
+                  className="h-[110px] w-[110px] rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
                   width="128"
                   height="128"
                 />
