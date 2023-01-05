@@ -3,7 +3,7 @@ import { OnuKafka } from '@onu/kafka';
 import { prismaKafkaOptions } from '@onu/config';
 import * as extensions from './extensions';
 
-const prisma_base = new PrismaClient();
+const prisma_base = new PrismaClient(); 
 
 var k = OnuKafka(prismaKafkaOptions)
 

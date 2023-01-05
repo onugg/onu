@@ -18,3 +18,13 @@ export const prismaKafkaOptions: KafkaOptions = {
   clientId: 'prisma',
   groupId: 'prisma'
 }
+
+export const metricTrackerKafkaOptions: KafkaOptions = {
+  clientId: 'metric-tracker',
+  groupId: 'metric-tracker'
+}
+
+export const setupKafkaOptions: KafkaOptions = {
+  clientId: 'setup',
+  groupId: 'setup'
+}

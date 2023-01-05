@@ -90,6 +90,8 @@ model Member {
   @@unique([userId, communityId])
 }
 
+// DISCORD
+
 model DiscordGuild {
   id              String    @id @default(cuid())
   createdAt       DateTime @default(now())
@@ -124,6 +126,7 @@ model DiscordUser {
 }
 
 model DiscordMember {
+  id                String    @id @default(cuid())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   discordUserId     String
@@ -134,5 +137,20 @@ model DiscordMember {
   discordUser       DiscordUser @relation(fields: [discordUserId], references: [id], onDelete: Cascade)
   discordGuild      DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
 
+  DiscordMemberTracker DiscordMemberTracker?
+
   @@unique([discordUserId, discordGuildId])
+}
+
+// Metric tracking
+
+model DiscordMemberTracker {
+  id                String    @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  discordMemberId   String @unique
+
+  discordMember     DiscordMember @relation(fields: [discordMemberId], references: [id], onDelete: Cascade)
+
+  messagesSent      Int
 }

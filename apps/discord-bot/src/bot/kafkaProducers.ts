@@ -9,11 +9,15 @@ export interface ShardStartedMessage {
   guilds: string[]
 }
 
-export const MemberWelcomeTopic = `${appName}.memberWelcome`
-DiscordBotTopics.push(MemberWelcomeTopic)
-export interface MemberWelcome {
-  discordGuildId: string
-  discordUserId: string
+export const MessageCreatedTopic = `${appName}.messageSent`
+DiscordBotTopics.push(MessageCreatedTopic)
+export interface MessageCreatedMessage {
+  guildDiscordId: string,
+  channelDiscordId: string,
+  authorDiscordId: string,
+  messageDiscordId: string,
+  messageContent: string
 }
+
 
 export { DiscordBotTopics }
