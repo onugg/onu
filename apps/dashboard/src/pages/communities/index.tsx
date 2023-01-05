@@ -1,3 +1,4 @@
+import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -104,17 +105,22 @@ const SearchBar: React.FC = () => {
             <input
               id="search"
               name="search"
-              className="block w-full rounded-md border border-neutral-700 bg-black py-2 pl-10 pr-3 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm"
+              className="btn-input pl-10 pr-3"
               placeholder="Search"
               type="search"
             />
           </div>
         </div>
-        <button className="flex rounded-md border border-neutral-100 bg-neutral-100 py-2 px-2 text-sm font-medium text-neutral-900 duration-300 hover:scale-110 hover:bg-black hover:text-neutral-100 focus:border-neutral-100 focus:bg-black focus:text-neutral-100 md:px-4">
-          <PlusIcon className="h-5 w-5" aria-hidden="true" />
-          <div className="hidden md:flex">Add Community</div>
+        <button>
+          <Link
+            className="btn-1 px-4"
+            href="/communities/create"
+          >
+            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            <div className="hidden md:flex">Add Community</div>
+          </Link>
         </button>
-        <button className="justify-center rounded-md border border-neutral-100 bg-neutral-100 py-2 px-2 text-sm font-medium text-neutral-900 duration-300 hover:scale-110 hover:bg-black hover:text-neutral-100 focus:border-neutral-100 focus:bg-black focus:text-neutral-100">
+        <button className="btn-1">
           <AdjustmentsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>
@@ -125,21 +131,19 @@ const SearchBar: React.FC = () => {
 const OwnedCommunities: React.FC = () => {
   return (
     <div className="relative z-10 mx-12 my-12">
-      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
-        Owned Communities
-      </div>
-      <div className=" grid grid-cols-1 justify-center md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72 ">
+      <div className="heading-1">Owned Communities</div>
+      <div className="grid grid-cols-1 justify-center md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72 ">
         {OwnedCommunitiesSample.map((community) => (
           <div key={community.name}>
             <Link
               href={community.id}
-              className="relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-150 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
             >
               <div className="flex items-center">
                 <Image
                   src={Logo}
                   alt="Community"
-                  className="rounded-full border border-neutral-700"
+                  className="rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
                   width="128"
                   height="128"
                 />
@@ -157,7 +161,7 @@ const OwnedCommunities: React.FC = () => {
               </div>
               <div className="flex w-1/2 flex-row items-center justify-end gap-x-2 font-light text-neutral-400">
                 <UserCircleIcon className="w-8" />
-                <div className="">{community.members}</div>
+                <div>{community.members}</div>
               </div>
             </div>
           </div>
@@ -170,21 +174,19 @@ const OwnedCommunities: React.FC = () => {
 const Members: React.FC = () => {
   return (
     <div className="relative z-10 mx-12 my-12">
-      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
-        Members
-      </div>
+      <div className="heading-1">Members</div>
       <div className=" grid grid-cols-1 justify-center md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72 ">
         {MemberCommunitiesSample.map((community) => (
           <div key={community.name}>
             <Link
               href={community.id}
-              className="relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-150 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
+              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
             >
               <div className="flex items-center">
                 <Image
                   src={Logo}
                   alt="Community"
-                  className="rounded-full border border-neutral-700"
+                  className="rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
                   width="128"
                   height="128"
                 />
