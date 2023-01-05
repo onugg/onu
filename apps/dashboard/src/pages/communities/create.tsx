@@ -221,11 +221,11 @@ const Form: React.FC = () => {
 };
 
 const CreateCommunity: NextPage = () => {
-  const { data: sessionData } = useSession();
+  const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!sessionData) {
+    if (!session.data) {
       router.push("/auth/signin");
     }
   });
