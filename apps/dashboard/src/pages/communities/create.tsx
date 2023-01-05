@@ -1,16 +1,16 @@
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
+import { useS3Upload } from "next-s3-upload";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { useS3Upload } from "next-s3-upload";
-import { trpc } from "../../utils/trpc";
 
 import Navbar from "../../components/layouts/navbar";
+import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
 
@@ -73,7 +73,6 @@ const Form: React.FC = () => {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
-  const { uploadToS3 } = useS3Upload();
 
   const imageList = watch("image", undefined) as unknown as
     | FileList
@@ -86,13 +85,17 @@ const Form: React.FC = () => {
     }
   }, [imageList]);
 
+  const { uploadToS3 } = useS3Upload();
+
+  const mutation = trpc.community.createCommunity.useMutation();
+
   const validateData = handleSubmit(async (data) => {
     console.log(data);
     console.log("worked");
     const { url } = await uploadToS3(data.image);
     console.log(url);
 
-    trpc.community.createCommunity.useMutation().mutate({
+    mutation.mutate({
       name: data.name,
       description: data.description,
       imageUrl: url,
