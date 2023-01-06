@@ -1,3 +1,7 @@
+import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
+var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
+
+/* 
 import { PrismaClient } from "@onu/prisma";
 
 import { env } from "../../env/server.mjs";
@@ -17,3 +21,4 @@ export const prisma =
 if (env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }
+*/

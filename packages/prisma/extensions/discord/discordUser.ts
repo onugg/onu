@@ -12,12 +12,14 @@ export async function createOrUpdateAndEmitEventIfNotExists(emitEventCallBack: F
     // to do: check if we need to update the user by comparing values between user and discordUserUpsertArgs.update
     user = await prisma.discordUser.upsert(discordUserUpsertArgs)
   } else {
+    user = await prisma.discordUser.upsert(discordUserUpsertArgs)
+
     var discordMemberCreatedMessage: OnuKafkaTypes.Prisma.DiscordUserMessage = {
       discordId: discordUserUpsertArgs.create.discordId
     }
     emitEventCallBack(OnuKafkaTypes.Prisma.DiscordMemberCreatedTopic, discordMemberCreatedMessage)
   }
-  
+
   return user
 }
 

@@ -9,6 +9,8 @@ export { Kafka } from 'kafkajs'
 
 export function OnuKafka(options: KafkaOptions) {
 
+  console.log(process.env["KAFKA_BROKERS"])
+
   const brokers = JSON.parse(process.env["KAFKA_BROKERS"]!)
 
   const kafkaClient = new Kafka({
@@ -97,8 +99,6 @@ export function OnuKafka(options: KafkaOptions) {
     })
   }
 
-  configureTopics()
-
-  return { startProducer, registerConsumers, emitEvent }
+  return { startProducer, registerConsumers, emitEvent, configureTopics }
 }
 

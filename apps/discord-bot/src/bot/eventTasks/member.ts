@@ -1,5 +1,7 @@
 import { GuildMember, PartialGuildMember } from 'discord.js';
-import { prisma } from '@onu/prisma'
+import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
+var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
+
 
 // add a member and user to database if they join - will update if they already exist (e.g. user is in other guild already)
 export async function AddOrUpdateMemberAndUser (member: GuildMember) {
