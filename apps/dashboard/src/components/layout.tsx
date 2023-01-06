@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "../utils/trpc";
 import { BellIcon } from "@heroicons/react/24/outline";
-import LogoLight from "../../assets/OnuLogoLight.svg";
+import LogoLight from "../assets/OnuLogoLight.svg";
 
 const PrimaryNavigation = [
   { name: "Support", href: "#" },
@@ -53,10 +53,10 @@ const PrimaryNavbar: React.FC = () => {
   const profileImage = user?.image as string;
 
   return (
-    <div className="relative h-12 bg-black scroll-smooth z-40">
+    <div className="relative z-40 h-12 scroll-smooth bg-black">
       <div className="flex items-center justify-between px-6 ">
         <Image src={LogoLight} alt="Logo" className="my-3 w-28" />
-        <div className="hidden md:flex font-sm mx-4 flex-row items-center py-2 text-neutral-400">
+        <div className="font-sm mx-4 hidden flex-row items-center py-2 text-neutral-400 md:flex">
           <Link
             key="feedback"
             href="/"
@@ -94,8 +94,8 @@ const PrimaryNavbar: React.FC = () => {
 const SubNavbar: React.FC = () => {
   const completion = useReadingProgress();
   return (
-    <div className="z-40 sticky top-0 bg-black">
-      <div className="flex items-center justify-between px-4 sm:px-0 border-b border-neutral-700">
+    <div className="sticky top-0 z-40 bg-black">
+      <div className="flex items-center justify-between border-b border-neutral-700 px-4 sm:px-0">
         <span
           id="progress-bar"
           style={{
@@ -125,13 +125,224 @@ const SubNavbar: React.FC = () => {
   );
 };
 
-const Navbar: React.FC = () => {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
-        <PrimaryNavbar />
-        <SubNavbar />
-    </>
+    <div className="min-h-screen bg-neutral-900">
+      <PrimaryNavbar />
+      <SubNavbar />
+      {children}
+    </div>
   );
-}
+};
 
-export default Navbar;
+export default RootLayout;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

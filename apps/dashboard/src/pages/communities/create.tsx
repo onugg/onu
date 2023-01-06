@@ -8,8 +8,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import RootLayout from "../../components/layout";
 
-import Navbar from "../../components/layouts/navbar";
+import Navbar from "../../components/layout";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
@@ -49,6 +50,14 @@ const validationSchema = z.object({
     .min(1, { message: "A name is required" })
     .min(5, { message: "Community Names has to be between 5-32 characters" })
     .max(32, { message: "Community Names has to be between 5-32 characters" }),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9_]+$/, {
+      message:
+        "Community slug can only contain lowercase letters, numbers and underscores",
+    })
+    .min(1, { message: "A slug is required" })
+    .max(32, { message: "Community slug has to be between 1-32 characters" }),
   description: z
     .string()
     .min(1, { message: "A description is required" })
@@ -90,15 +99,16 @@ const Form: React.FC = () => {
 
   const mutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
-      const communityId = data.id;
-      router.push(`/communities/${communityId}/admin`);
+      const communitySlug = data.slug;
+      router.push(`/c/${communitySlug}/admin`);
     },
-  })
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     const { url } = await uploadToS3(data.image);
     mutation.mutate({
       name: data.name,
+      slug: data.slug,
       description: data.description,
       imageUrl: url,
     });
@@ -107,6 +117,7 @@ const Form: React.FC = () => {
   const username = session.data?.user?.name;
   const namePlaceholder = `${username}'s Community`;
   const descriptionPlaceholder = `This is ${username}'s community. It is a place where we can share our cool ideas.`;
+
   return (
     <form className="mx-12 space-y-8" onSubmit={onSubmit}>
       <div className="heading-1">Create Community</div>
@@ -127,6 +138,23 @@ const Form: React.FC = () => {
             {errors.name && (
               <p className="mt-2 text-xs italic text-red-500">
                 {errors.name?.message}
+              </p>
+            )}
+          </div>
+
+          <div className="sm:col-span-2">
+            <label htmlFor="name" className="form-label">
+              Slug
+            </label>
+            <input
+              type="text"
+              id="name"
+              className={`btn-input ${errors.slug && "btn-input-error"}`}
+              {...register("slug")}
+            />
+            {errors.slug && (
+              <p className="mt-2 text-xs italic text-red-500">
+                {errors.slug?.message}
               </p>
             )}
           </div>
@@ -233,12 +261,11 @@ const CreateCommunity: NextPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-neutral-900">
-      <Navbar />
+    <RootLayout>
       <div className="overflow-hidden">
         <Form />
       </div>
-    </div>
+    </RootLayout>
   );
 };
 

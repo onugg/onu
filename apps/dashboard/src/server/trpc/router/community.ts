@@ -7,6 +7,7 @@ export const communityRouter = router({
     createCommunity: protectedProcedure
     .input(z.object({
         name: z.string(),
+        slug: z.string(),
         description: z.string(),
         imageUrl: string()
     }))
@@ -14,6 +15,7 @@ export const communityRouter = router({
       const community = await ctx.prisma.community.create({
         data: {
             name: input.name,
+            slug: input.slug,
             description: input.description,
             image: input.imageUrl
         },
