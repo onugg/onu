@@ -71,6 +71,9 @@ model Community {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   name          String
+  slug          String    @unique
+  description   String
+  image         String
   
   members       Member[]
   discordGuilds DiscordGuild[]
