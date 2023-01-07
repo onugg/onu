@@ -2,7 +2,6 @@ import { string, z } from "zod";
 import { router, protectedProcedure } from "../trpc";
 
 export const communityRouter = router({
-
     // Create Community
     createCommunity: protectedProcedure
     .input(z.object({
@@ -23,4 +22,17 @@ export const communityRouter = router({
       return community;
     }),
 
+    // Get Community By Slug
+    getCommunityBySlug: protectedProcedure
+    .input(z.object({
+        slug: z.string(),
+    }))
+    .query(async ({ input, ctx }) => {
+      const community = await ctx.prisma.community.findUnique({
+        where: {
+          slug: input.slug,
+        },
+      });
+      return community;
+    }),
   });

@@ -8,9 +8,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import RootLayout from "../../components/layout";
+import RootLayout from "../../components/rootLayout";
 
-import Navbar from "../../components/layout";
+import Navbar from "../../components/rootLayout";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
@@ -96,9 +96,16 @@ const Form: React.FC = () => {
   }, [imageList]);
 
   const { uploadToS3 } = useS3Upload();
-
-  const mutation = trpc.community.createCommunity.useMutation({
+  const { data: user } = trpc.user.getUserBySession.useQuery();
+  const memberMutation = trpc.member.createMember.useMutation();
+  const communityMutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
+      if (user) {
+        memberMutation.mutate({
+          communityId: data.id,
+          userId: user.id,
+        });
+      } else return;
       const communitySlug = data.slug;
       router.push(`/c/${communitySlug}/admin`);
     },
@@ -106,7 +113,7 @@ const Form: React.FC = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     const { url } = await uploadToS3(data.image);
-    mutation.mutate({
+    communityMutation.mutate({
       name: data.name,
       slug: data.slug,
       description: data.description,
@@ -114,6 +121,7 @@ const Form: React.FC = () => {
     });
   });
   const session = useSession();
+
   const username = session.data?.user?.name;
   const namePlaceholder = `${username}'s Community`;
   const descriptionPlaceholder = `This is ${username}'s community. It is a place where we can share our cool ideas.`;

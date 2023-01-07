@@ -1,5 +1,5 @@
 import React from "react";
-import RootLayout from "../../components/layout";
+import RootLayout from "../../components/rootLayout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

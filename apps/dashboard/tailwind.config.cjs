@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        accent: "#3454D1",
+        'discord': '#7289da',
       },
     },
   },

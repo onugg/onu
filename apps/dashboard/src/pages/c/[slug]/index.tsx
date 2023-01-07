@@ -1,5 +1,5 @@
 import React from "react";
-import RootLayout from "../../../components/layout";
+import RootLayout from "../../../components/rootLayout";
 
 const userCommunityDashboard: React.FC = () => {
   return (

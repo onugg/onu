@@ -17,7 +17,7 @@
   }
   .heading-1 {
     @apply my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72;
-  }
+  } 
 
 }
 
@@ -26,3 +26,5 @@
     @apply bg-black text-white;
   }
 }
+
+
