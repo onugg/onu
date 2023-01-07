@@ -8,9 +8,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import RootLayout from "../../components/rootLayout";
+import RootLayout from "../../components/layouts/rootLayout";
 
-import Navbar from "../../components/rootLayout";
+import Navbar from "../../components/layouts/rootLayout";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";

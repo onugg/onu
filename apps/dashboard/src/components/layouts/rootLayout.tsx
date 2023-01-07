@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import { BellIcon } from "@heroicons/react/24/outline";
-import LogoLight from "../assets/OnuLogoLight.svg";
+import LogoLight from "../../assets/OnuLogoLight.svg";
 
 const PrimaryNavigation = [
   { name: "Support", href: "#" },

@@ -2,8 +2,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-import RootLayout from "../components/rootLayout";
-import { trpc } from "../utils/trpc";
+import RootLayout from "./rootLayout";
+import { trpc } from "../../utils/trpc";
 
 const PlusIcon: React.FC = () => {
   return (
