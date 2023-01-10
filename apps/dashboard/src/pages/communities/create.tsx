@@ -1,3 +1,5 @@
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -6,14 +8,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
+import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import RootLayout from "../../components/layouts/rootLayout";
 
-import Navbar from "../../components/layouts/rootLayout";
+import RootLayout from "../../components/layouts/rootLayout";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
+import { DiscordGuild } from "../../types";
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -23,6 +26,14 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/jpg",
   "image/png",
   "image/webp",
+];
+
+const people = [
+  { id: 1, name: "Durward Reynolds" },
+  { id: 2, name: "Kenton Towne" },
+  { id: 3, name: "Therese Wunsch" },
+  { id: 4, name: "Benedict Kessler" },
+  { id: 5, name: "Katelyn Rohan" },
 ];
 
 const PhotoPlus: React.FC = () => {
@@ -54,10 +65,11 @@ const validationSchema = z.object({
     .string()
     .regex(/^[a-z0-9_]+$/, {
       message:
-        "Community slug can only contain lowercase letters, numbers and underscores",
+        "Community URL can only contain lowercase letters, numbers and underscores",
     })
-    .min(1, { message: "A slug is required" })
-    .max(32, { message: "Community slug has to be between 1-32 characters" }),
+    .min(1, { message: "A URL is required" })
+    .min(5, { message: "Community URL has to be between 5-32 characters" })
+    .max(32, { message: "Community URL has to be between 5-32 characters" }),
   description: z
     .string()
     .min(1, { message: "A description is required" })
@@ -73,6 +85,7 @@ const validationSchema = z.object({
     ),
 });
 
+// async
 const Form: React.FC = () => {
   const router = useRouter();
   const {
@@ -97,6 +110,7 @@ const Form: React.FC = () => {
 
   const { uploadToS3 } = useS3Upload();
   const { data: user } = trpc.user.getUserBySession.useQuery();
+
   const memberMutation = trpc.member.createMember.useMutation();
   const communityMutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
@@ -107,7 +121,7 @@ const Form: React.FC = () => {
         });
       } else return;
       const communitySlug = data.slug;
-      router.push(`/c/${communitySlug}/admin`);
+      router.push(`/c/${communitySlug}/admin/discord/overview`);
     },
   });
 
@@ -120,15 +134,31 @@ const Form: React.FC = () => {
       imageUrl: url,
     });
   });
+
   const session = useSession();
+
+
+  const account = trpc.account.getAccountByUserIdAndProvider.useQuery({
+    userId: session?.data?.user?.id,
+    provider: "discord",
+  });
+
+  const ownedGuilds = trpc.discord.getDiscordOwnedGuilds.useQuery({
+    accessToken: account.data?.access_token,
+    tokenType: account.data?.token_type,
+  });
 
   const username = session.data?.user?.name;
   const namePlaceholder = `${username}'s Community`;
   const descriptionPlaceholder = `This is ${username}'s community. It is a place where we can share our cool ideas.`;
 
+  const [selected, setSelected] = useState(
+    ownedGuilds?.data ? ownedGuilds?.data?.[0] : "...loading"
+  );
+
   return (
     <form className="mx-12 space-y-8" onSubmit={onSubmit}>
-      <div className="heading-1">Create Community</div>
+      <div className="heading-1">Create Communities</div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-2">
@@ -149,22 +179,30 @@ const Form: React.FC = () => {
               </p>
             )}
           </div>
-
           <div className="sm:col-span-2">
             <label htmlFor="name" className="form-label">
-              Slug
+              URL
             </label>
-            <input
-              type="text"
-              id="name"
-              className={`btn-input ${errors.slug && "btn-input-error"}`}
-              {...register("slug")}
-            />
-            {errors.slug && (
-              <p className="mt-2 text-xs italic text-red-500">
-                {errors.slug?.message}
-              </p>
-            )}
+            <div className="mt-1 sm:col-span-3 sm:mt-0">
+              <div className="flex max-w-lg rounded-md shadow-sm">
+                <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-700 bg-white/10 px-3 text-neutral-400 sm:text-sm">
+                  onu.gg/c/
+                </span>
+                <input
+                  type="text"
+                  id="name"
+                  className={`block w-full rounded-r-md bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
+                    errors.slug && "btn-input-error"
+                  }`}
+                  {...register("slug")}
+                />
+              </div>
+              {errors.slug && (
+                <p className="mt-2 text-xs italic text-red-500">
+                  {errors.slug?.message}
+                </p>
+              )}
+            </div>
           </div>
           <div className="sm:col-span-6">
             <label htmlFor="description" className="form-label">
@@ -244,6 +282,73 @@ const Form: React.FC = () => {
               )}
             </div>
           )}
+          <div className="col-span-6 sm:col-span-2">
+            <label htmlFor="server" className="form-label">
+              Discord Server
+            </label>
+
+            {ownedGuilds?.data ? (
+              <Listbox value={selected} onChange={setSelected}>
+                <div className="relative ">
+                  <Listbox.Button className="btn-input py-2 pl-3 pr-10 text-left">
+                    <span className="block truncate text-neutral-500">
+                      {ownedGuilds?.data?.[0]?.name}
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-neutral-500"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
+                      {ownedGuilds.data.map((guild: DiscordGuild) => (
+                        <Listbox.Option
+                          key={guild.id}
+                          className={({ active }) =>
+                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                              active
+                                ? "bg-neutral-800 text-neutral-300"
+                                : "text-neutral-500"
+                            }`
+                          }
+                          value={guild.id}
+                        >
+                          {({ selected }) => (
+                            <>
+                              <span
+                                className={`block truncate ${
+                                  selected ? "font-medium" : "font-normal"
+                                }`}
+                              >
+                                {guild.name}
+                              </span>
+                              {selected ? (
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
+                                  <CheckIcon
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+            ) : (
+              <div> poopy </div>
+            )}
+          </div>
         </div>
         <div className="my-6 flex gap-x-4">
           <Link className="btn-1" href="/">
@@ -263,7 +368,7 @@ const CreateCommunity: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!session.data) {
+    if (session.status === "unauthenticated") {
       router.push("/auth/signin");
     }
   });
