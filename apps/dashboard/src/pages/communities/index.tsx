@@ -225,13 +225,14 @@ const Members: React.FC = () => {
 };
 
 const Communities: NextPage = () => {
-  const { data: sessionData } = useSession();
+  const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (!sessionData) {
+    if (session.status === "unauthenticated") {
       router.push("/auth/signin");
     }
   });
+
   return (
     <RootLayout>
       <div className="overflow-hidden">

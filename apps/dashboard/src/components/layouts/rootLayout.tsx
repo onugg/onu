@@ -1,9 +1,12 @@
+import { BellIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { trpc } from "../../utils/trpc";
-import { BellIcon } from "@heroicons/react/24/outline";
+
 import LogoLight from "../../assets/OnuLogoLight.svg";
+import { trpc } from "../../utils/trpc";
 
 const PrimaryNavigation = [
   { name: "Support", href: "#" },
@@ -101,7 +104,7 @@ const SubNavbar: React.FC = () => {
           style={{
             transform: `translateX(${completion - 100}%)`,
           }}
-          className={`bg-accent absolute bottom-0 h-0.5 w-full transition-transform`}
+          className={`absolute bottom-0 h-0.5 w-full bg-blue-500 transition-transform`}
         />
         <div className="mx-4 flex items-baseline py-2">
           {SubNavigation.map((item) => (
@@ -126,8 +129,16 @@ const SubNavbar: React.FC = () => {
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  const session = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  });
   return (
-    <div className ="flex min-h-max h-screen flex-col  ">
+    <div className="flex min-h-screen flex-col bg-neutral-900  ">
       <PrimaryNavbar />
       <SubNavbar />
       {children}
