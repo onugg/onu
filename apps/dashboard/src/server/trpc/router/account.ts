@@ -20,7 +20,6 @@ export const accountRouter = router({
             });
             return account;
         }
-        console.log('No User Provided');
         return null;
     }),
 });

@@ -1,9 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import {
-  ArrowLeftIcon,
-  CubeTransparentIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useS3Upload } from "next-s3-upload";
@@ -21,8 +18,6 @@ import { trpc } from "../../utils/trpc";
 import type { NextPage } from "next";
 import type { DiscordGuild } from "../../types";
 
-type ValidationSchema = z.infer<typeof validationSchema>;
-
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -31,25 +26,7 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-const PhotoPlus: React.FC = () => {
-  return (
-    <svg
-      className="mx-auto h-12 w-12 text-neutral-400"
-      stroke="currentColor"
-      fill="none"
-      viewBox="0 0 48 48"
-      aria-hidden="true"
-    >
-      <path
-        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
-
+type ValidationSchema = z.infer<typeof validationSchema>;
 const validationSchema = z.object({
   name: z
     .string()
@@ -80,7 +57,6 @@ const validationSchema = z.object({
     ),
 });
 
-// async
 const Form: React.FC = () => {
   const router = useRouter();
   const {
@@ -104,10 +80,11 @@ const Form: React.FC = () => {
   }, [imageList]);
 
   const { uploadToS3 } = useS3Upload();
-  const { data: user } = trpc.user.getUserBySession.useQuery();
+
+  const userData = trpc.user.getUserBySession.useQuery();
+  const user = userData.data;
 
   const memberMutation = trpc.member.createMember.useMutation();
-
   const createDiscordGuildMutation =
     trpc.discord.createDiscordGuild.useMutation({});
   const communityMutation = trpc.community.createCommunity.useMutation({
@@ -123,29 +100,30 @@ const Form: React.FC = () => {
         discordId: selectedGuildId,
         communityId: data.id,
       });
-      router.push(`https://discord.com/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20bot%20applications.commands%20guilds`);
+      router.push(
+        `https://discord.com/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20bot%20applications.commands%20guilds`
+      );
     },
   });
-
   const session = useSession();
 
   const account = trpc.account.getAccountByUserIdAndProvider.useQuery({
     userId: session?.data?.user?.id,
     provider: "discord",
   });
-
   const ownedGuilds = trpc.discord.getDiscordOwnedGuilds.useQuery({
     accessToken: account.data?.access_token,
     tokenType: account.data?.token_type,
   });
 
-  const username = session.data?.user?.name;
-  const namePlaceholder = `${username}'s Community`;
-  const descriptionPlaceholder = `This is ${username}'s community. It is a place where we can share our cool ideas.`;
-
   const [selected, setSelected] = useState(
     ownedGuilds?.data ? ownedGuilds?.data?.[0] : "...loading"
   );
+
+
+  const username = user?.name
+  const namePlaceholder = session.status === 'authenticated' ? `${username}'s Community` : 'My Community';
+  const descriptionPlaceholder = session.status === 'authenticated' ? `A community for ${username}'s friends` : 'A community for my friends';
 
   const selectedGuildName = selected?.name;
   const selectedGuildId = selected?.id;
@@ -270,7 +248,21 @@ const Form: React.FC = () => {
                   {...register("image")}
                 />
                 <div className="space-y-1 text-center">
-                  <PhotoPlus />
+                  <svg
+                    className="mx-auto h-12 w-12 text-neutral-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+
                   <div className="flex text-sm text-neutral-500">
                     <span>Upload a file or drag and drop</span>
                   </div>
@@ -295,7 +287,7 @@ const Form: React.FC = () => {
               <Listbox value={selected} onChange={setSelected} name="guild">
                 <div className="relative ">
                   <Listbox.Button
-                    className={`btn-input flex flex-row justify-between py-2 pl-3 pr-3 text-left`}
+                    className={`btn-input flex flex-row justify-between py-2 pl-3 pr-3 text-left ${selected?.name ? "" : "btn-input-error flex flex-row justify-between py-2 pl-3 pr-3 text-left"}`}
                   >
                     <span className="block truncate text-neutral-500">
                       {selected?.name ? selected.name : "Select a server"}
@@ -353,7 +345,7 @@ const Form: React.FC = () => {
                 </div>
               </Listbox>
             ) : (
-              <div> loading... </div>
+              <div className="btn-input-skeleton" />
             )}
           </div>
         </div>
@@ -361,7 +353,7 @@ const Form: React.FC = () => {
           <Link className="btn-1" href="/">
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <button type="submit" className="btn-1 px-4">
+          <button type="submit" className="btn-1 px-4" disabled={selected?.name ? false : true }>
             Create
           </button>
         </div>

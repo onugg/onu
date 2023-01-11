@@ -12,14 +12,8 @@ export const discordRouter = router({
     )
     .query(async ({ input }) => {
       if (!input.accessToken || !input.tokenType) {
-        console.log("No access token or token type provided.");
         return [];
       } else {
-        console.log(
-          "This is the accessToken Info",
-          input.accessToken,
-          input.tokenType
-        );
         const response = await fetch(
           "https://discord.com/api/users/@me/guilds",
           {

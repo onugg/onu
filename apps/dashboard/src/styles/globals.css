@@ -12,6 +12,9 @@
   .btn-input-error {
     @apply border-red-500 hover:border-red-500 focus:border-red-500 focus:ring-red-500;
   }
+  .btn-input-skeleton {
+    @apply block w-full rounded-md border border-neutral-700 h-10 flex-row justify-between pl-3 pr-3 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 animate-pulse;
+  }
   .form-label {
     @apply block text-sm font-medium text-neutral-400 mb-1;
   }
