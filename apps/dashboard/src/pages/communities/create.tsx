@@ -1,6 +1,9 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftIcon,
+  CubeTransparentIcon,
+} from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useS3Upload } from "next-s3-upload";
@@ -16,7 +19,7 @@ import RootLayout from "../../components/layouts/rootLayout";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
-import { DiscordGuild } from "../../types";
+import type { DiscordGuild } from "../../types";
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -26,14 +29,6 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/jpg",
   "image/png",
   "image/webp",
-];
-
-const people = [
-  { id: 1, name: "Durward Reynolds" },
-  { id: 2, name: "Kenton Towne" },
-  { id: 3, name: "Therese Wunsch" },
-  { id: 4, name: "Benedict Kessler" },
-  { id: 5, name: "Katelyn Rohan" },
 ];
 
 const PhotoPlus: React.FC = () => {
@@ -112,6 +107,9 @@ const Form: React.FC = () => {
   const { data: user } = trpc.user.getUserBySession.useQuery();
 
   const memberMutation = trpc.member.createMember.useMutation();
+
+  const createDiscordGuildMutation =
+    trpc.discord.createDiscordGuild.useMutation({});
   const communityMutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
       if (user) {
@@ -119,24 +117,17 @@ const Form: React.FC = () => {
           communityId: data.id,
           userId: user.id,
         });
-      } else return;
-      const communitySlug = data.slug;
-      router.push(`/c/${communitySlug}/admin/discord/overview`);
+      }
+      createDiscordGuildMutation.mutate({
+        name: selectedGuildName,
+        discordId: selectedGuildId,
+        communityId: data.id,
+      });
+      router.push(`https://discord.com/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20bot%20applications.commands%20guilds`);
     },
   });
 
-  const onSubmit = handleSubmit(async (data) => {
-    const { url } = await uploadToS3(data.image);
-    communityMutation.mutate({
-      name: data.name,
-      slug: data.slug,
-      description: data.description,
-      imageUrl: url,
-    });
-  });
-
   const session = useSession();
-
 
   const account = trpc.account.getAccountByUserIdAndProvider.useQuery({
     userId: session?.data?.user?.id,
@@ -156,9 +147,22 @@ const Form: React.FC = () => {
     ownedGuilds?.data ? ownedGuilds?.data?.[0] : "...loading"
   );
 
+  const selectedGuildName = selected?.name;
+  const selectedGuildId = selected?.id;
+
+  const onSubmit = handleSubmit(async (data) => {
+    const { url } = await uploadToS3(data.image);
+    communityMutation.mutate({
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      imageUrl: url,
+    });
+  });
+
   return (
     <form className="mx-12 space-y-8" onSubmit={onSubmit}>
-      <div className="heading-1">Create Communities</div>
+      <div className="heading-1">Create Community</div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-2">
@@ -184,14 +188,14 @@ const Form: React.FC = () => {
               URL
             </label>
             <div className="mt-1 sm:col-span-3 sm:mt-0">
-              <div className="flex max-w-lg rounded-md shadow-sm">
-                <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-700 bg-white/10 px-3 text-neutral-400 sm:text-sm">
+              <div className="flex max-w-lg rounded-md">
+                <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-700 bg-neutral-900 px-3 text-neutral-400 sm:text-sm">
                   onu.gg/c/
                 </span>
                 <input
                   type="text"
-                  id="name"
-                  className={`block w-full rounded-r-md bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
+                  id="slug"
+                  className={`block w-full rounded-r-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
                     errors.slug && "btn-input-error"
                   }`}
                   {...register("slug")}
@@ -288,13 +292,16 @@ const Form: React.FC = () => {
             </label>
 
             {ownedGuilds?.data ? (
-              <Listbox value={selected} onChange={setSelected}>
+              <Listbox value={selected} onChange={setSelected} name="guild">
                 <div className="relative ">
-                  <Listbox.Button className="btn-input py-2 pl-3 pr-10 text-left">
+                  <Listbox.Button
+                    className={`btn-input flex flex-row justify-between py-2 pl-3 pr-3 text-left`}
+                  >
                     <span className="block truncate text-neutral-500">
-                      {ownedGuilds?.data?.[0]?.name}
+                      {selected?.name ? selected.name : "Select a server"}
                     </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+
+                    <span className="pointer-events-none flex items-center pr-2">
                       <ChevronUpDownIcon
                         className="h-5 w-5 text-neutral-500"
                         aria-hidden="true"
@@ -307,7 +314,7 @@ const Form: React.FC = () => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
+                    <Listbox.Options className="absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
                       {ownedGuilds.data.map((guild: DiscordGuild) => (
                         <Listbox.Option
                           key={guild.id}
@@ -318,7 +325,7 @@ const Form: React.FC = () => {
                                 : "text-neutral-500"
                             }`
                           }
-                          value={guild.id}
+                          value={guild}
                         >
                           {({ selected }) => (
                             <>
@@ -346,7 +353,7 @@ const Form: React.FC = () => {
                 </div>
               </Listbox>
             ) : (
-              <div> poopy </div>
+              <div> loading... </div>
             )}
           </div>
         </div>
