@@ -2,26 +2,56 @@
 import { Client, Events, PartialGuildMember, PartialUser, Message } from 'discord.js';
 import * as intents from './intents'
 import * as eventTasks from './eventTasks'
+import * as messageHandlers from './messageHandlers'
 import { User, GuildMember, Guild } from 'discord.js';
 import { OnuKafka } from '@onu/kafka';
+import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 import { discordBotKafkaOptions } from '@onu/config';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+const c = new Client({ intents: intents.gatewayIntents });
+
+async function checkIfGuildInShard(guildId: string) {
+  const guilds = c.guilds.cache.map(guild => guild.id)
+  if (guilds.includes(guildId)) {return true}
+  return false
+}
+
+async function messageRouter(topicName: string, message: any) {
+  console.log("Received message on topic: " + topicName)
+  switch (topicName) {
+    case OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic:
+      var discordGuildCreatedMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage = JSON.parse(message)
+      if (!(await checkIfGuildInShard(discordGuildCreatedMessage.discordId))) {
+        console.log('Guild does not belong to this shard')
+        return
+      }
+      messageHandlers.discordGuild.created(c, discordGuildCreatedMessage)
+      break
+    default:
+      console.log("Unknown topic")
+  } 
+}
+
 async function start() {
-  const c = new Client({ intents: intents.gatewayIntents });
+
+  // each bot will be its own kafka consumer
+  discordBotKafkaOptions.clientId = `${discordBotKafkaOptions.clientId}-${c.shard?.ids.join("-")}`
+  discordBotKafkaOptions.groupId = `${discordBotKafkaOptions.groupId}-${c.shard?.ids.join("-")}`
 
   var k = OnuKafka(discordBotKafkaOptions)
 
   // Bot startup event
   c.on("ready", function(){
     eventTasks.batch.ProcessCache(c)                            // synchronise the cache with the database on startup of bot
-    eventTasks.shard.emitShardReady(k.emitEvent, c)             // emit a message to Kafka that the shard is ready           
+    eventTasks.shard.emitShardReady(k.emitEvent, c)             // emit a message to Kafka that the shard is ready  
   })
 
   // Message Sent
 
   c.on(Events.MessageCreate, function(message: Message){
+    
     if (message.author.id != c.user!.id) {eventTasks.message.messageCreate(k.emitEvent, message)}
   })
   
@@ -50,6 +80,10 @@ async function start() {
   c.on(Events.GuildMemberUpdate, function(_oldMember: GuildMember | PartialGuildMember, newMember: GuildMember){
     if (newMember.user.id != c.user!.id) {eventTasks.member.AddOrUpdateMemberAndUser(newMember)}        // when a member changes their details update the database
   })
+
+  k.registerConsumers([
+    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic}
+  ])
 
   await k.startProducer()
 

@@ -73,7 +73,7 @@ model Community {
   name          String
   
   members       Member[]
-  discordGuilds DiscordGuild[]
+  discordGuild  DiscordGuild?
 }
 
 model Member {
@@ -91,32 +91,29 @@ model Member {
 }
 
 // DISCORD
-
 model DiscordGuild {
   id              String    @id @default(cuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  communityId     String?
+  communityId     String? @unique           // when community isn't linked we won't setup the guild completely
 
   name            String?
   discordId       String   @unique
   botInstallDate  DateTime?
   botInstalled    Boolean @default(false)
-
-  // welcome settings
-  welcomeChannelId                      String?       // the channel monitored for welcome activity
-  welcomeType                           String?       // the type of welcome being monitored = thread, atmention
-  welcomeThreadArchiveDurationMinutes   Int? // the number of minutes to archive the welcome thread after
+  communityUnlinkedMessageSent  Boolean?  @default(false) // when community is unlinked we send a message to the guild
+  guildInitialSetupRun          Boolean?  @default(false) // when community is linked we run the initial setup
 
   members       DiscordMember[]
-  community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  questConfig   DiscordQuestConfig?
+  community     Community? @relation(fields: [communityId], references: [id])
 }
 
 model DiscordUser {
   id            String          @id @default(cuid())
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  userId        String?         
+  userId        String         
   discordId     String          @unique
   name          String
   discriminator String
@@ -138,6 +135,7 @@ model DiscordMember {
   discordGuild      DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
 
   DiscordMemberTracker DiscordMemberTracker?
+  DiscordMemberQuestRecord DiscordMemberQuestRecord?
 
   @@unique([discordUserId, discordGuildId])
 }
@@ -154,3 +152,37 @@ model DiscordMemberTracker {
 
   messagesSent      Int
 }
+
+// QUESTS
+model DiscordQuestConfig {
+  id               String    @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  discordGuildId   String @unique
+  discordGuild     DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
+
+  discordQuestsEnabled                      Boolean   @default(true)
+
+  communityCanToggleQuests                  Boolean   @default(true)  // default true because in free version enabled
+  communityCanModifyQuests                  Boolean   @default(false) // default false because in free version disabled
+
+  // messages sent
+  messagesSentEnabled                       Boolean   @default(true)
+  messagesSentIncrementByLevel              Int       @default(50)
+  messagesSentRewardMultiplierByLevel       Int       @default(50)
+  messagesSentMaxLevels                     Int       @default(999)
+}
+
+model DiscordMemberQuestRecord {
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  discordMemberId   String    @unique
+  discordMember     DiscordMember @relation(fields: [discordMemberId], references: [id], onDelete: Cascade)
+  
+  totalExp          Int       @default(0)
+
+  messagesSentLevel Int      @default(0)
+}
+
+// quests run on discord even without a user signing up

@@ -61,7 +61,7 @@ export async function messageCreated (emitEventCallback: Function, message: OnuK
         messagesSent: messagesSent
       }
 
-      emitEventCallback(OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdate, discordMemberTrackerUpdatedMessage)
+      emitEventCallback(OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateTopic, discordMemberTrackerUpdatedMessage)
     }
   }
 }

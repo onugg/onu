@@ -58,7 +58,7 @@ export function OnuKafka(options: KafkaOptions) {
 
   const registerConsumers = async (consumers: onuConsumer[]) => {
 
-    const consumer: Consumer = kafkaClient.consumer({ groupId: 'discord-bot' })
+    const consumer: Consumer = kafkaClient.consumer({ groupId: options.groupId })
     await consumer.connect()
 
     var topics: string[] = []
@@ -91,6 +91,7 @@ export function OnuKafka(options: KafkaOptions) {
   }
 
   const emitEvent = (topicName: string, message: object) => {
+    console.log(`Emitting event to topic ${topicName}`)
     producer.send({
       topic: topicName,
       messages: [

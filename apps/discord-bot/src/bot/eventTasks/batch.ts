@@ -1,10 +1,13 @@
-const { Client } = require('discord.js');
+import { Client } from 'discord.js'
 import { Guild } from 'discord.js';
-import { addGuildOrUpdate } from './guild';
+import { verifyGuildSetup } from './guild';
 
 // runs on startup to sync the cache with the database
-export async function ProcessCache (client: typeof Client) {
+export async function ProcessCache (client: Client) {
   client.guilds.cache.map((guild: Guild) => {
-    addGuildOrUpdate(guild).then(() => {})
+    //addGuildOrUpdate(guild).then(() => {})
+
+    verifyGuildSetup(guild).then(() => {})
+
   })
 }

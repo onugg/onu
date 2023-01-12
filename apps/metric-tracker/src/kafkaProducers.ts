@@ -2,8 +2,8 @@ const appName = 'metric-tracker'
 
 var MetricTrackerTopics: string[] = []
 
-export const DiscordMemberTrackerUpdate = `${appName}.discordMemberTracker.update`
-MetricTrackerTopics.push(DiscordMemberTrackerUpdate)
+export const DiscordMemberTrackerUpdateTopic = `${appName}.discordMemberTracker.update`
+MetricTrackerTopics.push(DiscordMemberTrackerUpdateTopic)
 
 export interface DiscordMemberTrackerUpdateMessage {
   discordGuildId: string

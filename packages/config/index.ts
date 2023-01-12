@@ -24,6 +24,11 @@ export const metricTrackerKafkaOptions: KafkaOptions = {
   groupId: 'metric-tracker'
 }
 
+export const questTrackerKafkaOptions: KafkaOptions = {
+  clientId: 'quest-tracker',
+  groupId: 'quest-tracker'
+}
+
 export const setupKafkaOptions: KafkaOptions = {
   clientId: 'setup',
   groupId: 'setup'

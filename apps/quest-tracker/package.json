@@ -1,0 +1,22 @@
+{
+  "name": "@onu/quest-tracker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node-dev ./src/index.ts"
+  },
+  "dependencies": {
+    "@onu/prisma": "*",
+    "dotenv": "^16.0.3",
+    "kafkajs": "^2.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@types/node": "^17.0.12",
+    "eslint": "7.32.0",
+    "eslint-config-custom": "*",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig": "*",
+    "typescript": "^4.5.3"
+  }
+}
