@@ -1,4 +1,5 @@
 import React from "react";
+import RootLayout from "../../components/layouts/rootLayout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -9,8 +10,6 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 
-import Navbar from "../../components/layouts/navbar";
-import Logo from "../../assets/500x500Light.png";
 import { trpc } from "../../utils/trpc";
 
 import type { NextPage } from "next";
@@ -226,22 +225,22 @@ const Members: React.FC = () => {
 };
 
 const Communities: NextPage = () => {
-  const { data: sessionData } = useSession();
+  const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (!sessionData) {
+    if (session.status === "unauthenticated") {
       router.push("/auth/signin");
     }
   });
+
   return (
-    <div className="min-h-screen bg-neutral-900">
-      <Navbar />
+    <RootLayout>
       <div className="overflow-hidden">
         <SearchBar />
         <OwnedCommunities />
         <Members />
       </div>
-    </div>
+    </RootLayout>
   );
 };
 
