@@ -5,12 +5,9 @@ import React, { useEffect } from "react";
 import RootLayout from "./rootLayout";
 import { trpc } from "@/utils/trpc";
 
-import type { AdminMenuSection } from "@/types";
 import DiscordLogo from "@/assets/discord-mark-white.svg";
 import Image from "next/image";
 import Link from "next/link";
-
-type AdminMenuOptions = AdminMenuSection[];
 
 const PlusIcon: React.FC = () => {
   return (
@@ -34,7 +31,7 @@ const PlusIcon: React.FC = () => {
 const PluginSidebar: React.FC = () => {
   const router = useRouter();
   const slug = router.query.slug as string;
-  const community = trpc.community.getCommunityDiscordBySlug.useQuery({
+  const community = trpc.discord.getDiscordBySlug.useQuery({
     slug: slug,
   });
   return (

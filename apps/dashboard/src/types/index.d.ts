@@ -20,3 +20,14 @@ export interface DiscordGuild {
   botInGuild: boolean;
   memberType: string;
 }
+
+export interface DiscordGuildChannel {
+  id: string;
+  name: string;
+  type: number;
+  position: number;
+  permission_overwrites: unknown[];
+  parent_id: string;
+  nsfw: boolean;
+}
+

@@ -1,21 +1,14 @@
-import React from "react";
 import RootLayout from "@/components/layouts/primary/rootLayout";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import {
-  UserCircleIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-  AdjustmentsHorizontalIcon,
-} from "@heroicons/react/24/outline";
-
 import { trpc } from "@/utils/trpc";
+import { AdjustmentsHorizontalIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { useEffect } from "react";
 
 import type { NextPage } from "next";
-import Link from "next/link";
-import Image from "next/image";
-
 const OwnedCommunitiesSample = [
   {
     name: "Owned Community 1",

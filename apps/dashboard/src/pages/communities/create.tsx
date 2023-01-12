@@ -1,5 +1,5 @@
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import RootLayout from "@/components/layouts/primary/rootLayout";
+import { trpc } from "@/utils/trpc";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -8,15 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import RootLayout from "@/components/layouts/primary/rootLayout";
-import { trpc } from "@/utils/trpc";
-
 import type { NextPage } from "next";
 import type { DiscordGuild } from "@/types";
+import GuildSelectDropdown from "@/components/ui/selectDropdown";
 
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -86,7 +84,7 @@ const Form: React.FC = () => {
 
   const memberMutation = trpc.member.createMember.useMutation();
   const createDiscordGuildMutation =
-    trpc.discord.createDiscordGuild.useMutation({});
+    trpc.discord.createDiscordGuild.useMutation();
   const communityMutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data) => {
       if (user) {
@@ -101,8 +99,9 @@ const Form: React.FC = () => {
         communityId: data.id,
       });
       router.push(
-        `https://discord.com/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20bot%20applications.commands%20guilds`
+        `https://discord.com/api/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
       );
+
     },
   });
   const session = useSession();
@@ -116,9 +115,11 @@ const Form: React.FC = () => {
     tokenType: account.data?.token_type,
   });
 
-  const [selected, setSelected] = useState(
-    ownedGuilds?.data ? ownedGuilds?.data?.[0] : "...loading"
-  );
+  const [selectedGuild, setSelectedGuild] = useState(ownedGuilds?.data?.[0]);
+
+  const handleSelection = (guild: DiscordGuild) => {
+    setSelectedGuild(guild);
+  }
 
 
   const username = user?.name
@@ -126,8 +127,8 @@ const Form: React.FC = () => {
   const descriptionPlaceholder = session.status === 'authenticated' ? `A community for ${username}'s friends` : 'A community for my friends';
   const slugPlaceholder = session.status === 'authenticated' ? `${username}-community` : 'my-community';
 
-  const selectedGuildName = selected?.name;
-  const selectedGuildId = selected?.id;
+  const selectedGuildName = selectedGuild?.name;
+  const selectedGuildId = selectedGuild?.id;
 
   const onSubmit = handleSubmit(async (data) => {
     const { url } = await uploadToS3(data.image);
@@ -279,81 +280,14 @@ const Form: React.FC = () => {
             </div>
           )}
           <div className="col-span-6 sm:col-span-2">
-            <label htmlFor="server" className="form-label">
-              Discord Server
-            </label>
-
-            {ownedGuilds?.data ? (
-              <Listbox value={selected} onChange={setSelected} name="guild">
-                <div className="relative ">
-                  <Listbox.Button
-                    className={`btn-input flex flex-row justify-between py-2 pl-3 pr-3 text-left ${selected?.name ? "" : "btn-input-error flex flex-row justify-between py-2 pl-3 pr-3 text-left"}`}
-                  >
-                    <span className="block truncate text-neutral-500">
-                      {selected?.name ? selected.name : "Select a server"}
-                    </span>
-
-                    <span className="pointer-events-none flex items-center pr-2">
-                      <ChevronUpDownIcon
-                        className="h-5 w-5 text-neutral-500"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Listbox.Button>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
-                      {ownedGuilds.data.map((guild: DiscordGuild) => (
-                        <Listbox.Option
-                          key={guild.id}
-                          className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                              active
-                                ? "bg-neutral-800 text-neutral-300"
-                                : "text-neutral-500"
-                            }`
-                          }
-                          value={guild}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
-                              >
-                                {guild.name}
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
-                                  <CheckIcon
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-            ) : (
-              <div className="btn-input-skeleton" />
-            )}
+            <GuildSelectDropdown discordGuilds={ownedGuilds.data} title={"Discord Servers"} onSelection={handleSelection} />
           </div>
         </div>
         <div className="my-6 flex gap-x-4">
           <Link className="btn-1" href="/">
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <button type="submit" className="btn-1 px-4" disabled={selected?.name ? false : true }>
+          <button type="submit" className="btn-1 px-4" disabled={selectedGuild?.name ? false : true }>
             Create
           </button>
         </div>
