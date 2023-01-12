@@ -106,6 +106,7 @@ model DiscordGuild {
   botInstalled    Boolean @default(false)
   communityUnlinkedMessageSent  Boolean?  @default(false) // when community is unlinked we send a message to the guild
   guildInitialSetupRun          Boolean?  @default(false) // when community is linked we run the initial setup
+  welcomeChannelId              String?
 
   members       DiscordMember[]
   questConfig   DiscordQuestConfig?
