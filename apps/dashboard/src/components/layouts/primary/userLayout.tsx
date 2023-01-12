@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 import RootLayout from "./rootLayout";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "@/utils/trpc";
 
 const MenuSidebar: React.FC = () => {
   return (

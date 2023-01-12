@@ -1,5 +1,5 @@
 import React from "react";
-import UserLayout from "../../../components/layouts/userLayout";
+import UserLayout from "@/components/layouts/primary/userLayout";
 
 const UserQuests: React.FC = () => {
   return (

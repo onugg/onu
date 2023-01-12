@@ -35,4 +35,20 @@ export const communityRouter = router({
       });
       return community;
     }),
+
+    getCommunityDiscordBySlug: protectedProcedure
+    .input(z.object({
+        slug: z.string(),
+    }))
+    .query(async ({ input, ctx }) => {
+      const community = await ctx.prisma.community.findUnique({
+        where: {
+          slug: input.slug,
+        },
+        select: {
+          discordGuild: true,
+        },
+      });
+      return community;
+    }),
   });

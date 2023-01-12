@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { router, protectedProcedure } from "../trpc";
-import type { DiscordGuild } from "../../../types";
+import type { DiscordGuild } from "@/types";
 
 export const discordRouter = router({
 

@@ -1,5 +1,5 @@
 import React from "react";
-import RootLayout from "../../components/layouts/rootLayout";
+import RootLayout from "@/components/layouts/primary/rootLayout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 
-import { trpc } from "../../utils/trpc";
+import { trpc } from "@/utils/trpc";
 
 import type { NextPage } from "next";
 import Link from "next/link";

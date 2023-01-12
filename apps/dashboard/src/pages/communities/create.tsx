@@ -12,11 +12,11 @@ import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import RootLayout from "../../components/layouts/rootLayout";
-import { trpc } from "../../utils/trpc";
+import RootLayout from "@/components/layouts/primary/rootLayout";
+import { trpc } from "@/utils/trpc";
 
 import type { NextPage } from "next";
-import type { DiscordGuild } from "../../types";
+import type { DiscordGuild } from "@/types";
 
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -124,6 +124,7 @@ const Form: React.FC = () => {
   const username = user?.name
   const namePlaceholder = session.status === 'authenticated' ? `${username}'s Community` : 'My Community';
   const descriptionPlaceholder = session.status === 'authenticated' ? `A community for ${username}'s friends` : 'A community for my friends';
+  const slugPlaceholder = session.status === 'authenticated' ? `${username}-community` : 'my-community';
 
   const selectedGuildName = selected?.name;
   const selectedGuildId = selected?.id;
@@ -152,7 +153,6 @@ const Form: React.FC = () => {
               id="name"
               className={`btn-input ${errors.name && "btn-input-error"}`}
               placeholder={namePlaceholder}
-              defaultValue={namePlaceholder}
               {...register("name")}
             />
             {errors.name && (
@@ -173,6 +173,7 @@ const Form: React.FC = () => {
                 <input
                   type="text"
                   id="slug"
+                  placeholder={slugPlaceholder}
                   className={`block w-full rounded-r-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
                     errors.slug && "btn-input-error"
                   }`}
@@ -195,7 +196,6 @@ const Form: React.FC = () => {
               rows={3}
               className={`btn-input ${errors.description && "btn-input-error"}`}
               placeholder={descriptionPlaceholder}
-              defaultValue={descriptionPlaceholder}
               {...register("description")}
             />
             {errors.description && (
