@@ -16,6 +16,10 @@ import type { NextPage } from "next";
 import type { DiscordGuild } from "@/types";
 import GuildSelectDropdown from "@/components/ui/selectDropdown";
 
+type selectedGuild = {
+  selectedGuild: DiscordGuild
+}
+
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -94,12 +98,12 @@ const Form: React.FC = () => {
         });
       }
       createDiscordGuildMutation.mutate({
-        name: selectedGuildName,
-        discordId: selectedGuildId,
+        name: selectedGuild?.name,
+        discordId: selectedGuild?.id,
         communityId: data.id,
       });
       router.push(
-        `https://discord.com/api/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuildId}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
+        `https://discord.com/api/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuild?.id}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
       );
 
     },
@@ -110,25 +114,22 @@ const Form: React.FC = () => {
     userId: session?.data?.user?.id,
     provider: "discord",
   });
-  const ownedGuilds = trpc.discord.getDiscordOwnedGuilds.useQuery({
+  const ownedGuildsRoot = trpc.discord.getDiscordOwnedGuilds.useQuery({
     accessToken: account.data?.access_token,
     tokenType: account.data?.token_type,
   });
+  const ownedGuilds = ownedGuildsRoot?.data;
 
-  const [selectedGuild, setSelectedGuild] = useState(ownedGuilds?.data?.[0]);
-
-  const handleSelection = (guild: DiscordGuild) => {
+  function handleSelectedGuild(guild: DiscordGuild) {
+    console.log(guild)
     setSelectedGuild(guild);
   }
-
-
+  const [selectedGuild, setSelectedGuild] = useState<DiscordGuild>(); 
+  
   const username = user?.name
   const namePlaceholder = session.status === 'authenticated' ? `${username}'s Community` : 'My Community';
   const descriptionPlaceholder = session.status === 'authenticated' ? `A community for ${username}'s friends` : 'A community for my friends';
   const slugPlaceholder = session.status === 'authenticated' ? `${username}-community` : 'my-community';
-
-  const selectedGuildName = selectedGuild?.name;
-  const selectedGuildId = selectedGuild?.id;
 
   const onSubmit = handleSubmit(async (data) => {
     const { url } = await uploadToS3(data.image);
@@ -280,7 +281,7 @@ const Form: React.FC = () => {
             </div>
           )}
           <div className="col-span-6 sm:col-span-2">
-            <GuildSelectDropdown discordGuilds={ownedGuilds.data} title={"Discord Servers"} onSelection={handleSelection} />
+            <GuildSelectDropdown discordGuilds={ownedGuilds} title={"Discord Servers"} onSelection={handleSelectedGuild} />
           </div>
         </div>
         <div className="my-6 flex gap-x-4">

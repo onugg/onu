@@ -6,24 +6,37 @@ export const discordRouter = router({
   createDiscordGuild: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        discordId: z.string(),
-        communityId: z.string(),
+        name: z.string().optional(),
+        discordId: z.string().optional(),
+        communityId: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const guild = await ctx.prisma.discordGuild.create({
-        data: {
-          name: input.name,
-          discordId: input.discordId,
-          community: {
-            connect: {
-              id: input.communityId,
+      if (!input.name) {
+        console.log("No Name in createDiscordGuild");
+        return;
+      }
+      if (!input.discordId) {
+        console.log("No Discord ID in createDiscordGuild");
+        return;
+      }
+      if (!input.communityId) {
+        console.log("No Community ID in createDiscordGuild");
+        return;
+      } else {
+        const guild = await ctx.prisma.discordGuild.create({
+          data: {
+            name: input.name,
+            discordId: input.discordId,
+            community: {
+              connect: {
+                id: input.communityId,
+              },
             },
           },
-        },
-      });
-      return guild;
+        });
+        return guild;
+      }
     }),
 
   getDiscordGuildTextChannels: protectedProcedure
@@ -36,11 +49,11 @@ export const discordRouter = router({
     )
     .query(async ({ input }) => {
       if (!input.accessToken || !input.tokenType) {
-        console.log('No Access Token or Token Type');
+        console.log("No Access Token or Token Type");
         return [];
-      } 
+      }
       if (!input.guildId) {
-        console.log('No Guild ID');
+        console.log("No Guild ID");
         return [];
       } else {
         const response = await fetch(
@@ -53,7 +66,7 @@ export const discordRouter = router({
         );
         const channels = await response.json();
 
-        if (channels ) {
+        if (channels) {
           const textChannels = channels.filter(
             (channel: DiscordGuildChannel) => channel.type === 0
           );

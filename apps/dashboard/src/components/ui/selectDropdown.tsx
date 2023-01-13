@@ -1,6 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import type { DiscordGuild } from "@/types";
 type guildSelectDropdownProps = {
@@ -9,18 +9,32 @@ type guildSelectDropdownProps = {
   onSelection: (guild: DiscordGuild) => void;
 };
 
+const placeholderGuild = {
+  id: "0",
+  name: "Select a server",
+  icon: null,
+  owner: false,
+  permissions: 0,
+  features: [],
+};
+
 const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
   discordGuilds,
   title,
-    onSelection,
-
+  onSelection,
 }: {
   discordGuilds: DiscordGuild[];
   title: string;
-    onSelection: (guild: DiscordGuild) => void;
-  
+  onSelection: (guild: DiscordGuild) => void;
+
 }) => {
   const [selected, setSelected] = useState(discordGuilds?.[0]);
+  useEffect(() => {
+    if (onSelection) {
+      onSelection(selected);
+    }
+  }, [onSelection, selected]);
+  
   return (
     <div>
       <label htmlFor="server" className="form-label">
