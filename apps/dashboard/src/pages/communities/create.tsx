@@ -1,4 +1,5 @@
 import RootLayout from "@/components/layouts/primary/rootLayout";
+import DiscordGuildSelectDropdown from "@/components/ui/discord/discordGuildSelectDropdown";
 import { trpc } from "@/utils/trpc";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,11 +15,8 @@ import { z } from "zod";
 
 import type { NextPage } from "next";
 import type { DiscordGuild } from "@/types";
-import GuildSelectDropdown from "@/components/ui/selectDropdown";
 
-type selectedGuild = {
-  selectedGuild: DiscordGuild
-}
+type ValidationSchema = z.infer<typeof validationSchema>;
 
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -27,8 +25,6 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
-
-type ValidationSchema = z.infer<typeof validationSchema>;
 const validationSchema = z.object({
   name: z
     .string()
@@ -105,7 +101,6 @@ const Form: React.FC = () => {
       router.push(
         `https://discord.com/api/oauth2/authorize?client_id=976737996982329354&permissions=8&guild_id=${selectedGuild?.id}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
       );
-
     },
   });
   const session = useSession();
@@ -121,15 +116,24 @@ const Form: React.FC = () => {
   const ownedGuilds = ownedGuildsRoot?.data;
 
   function handleSelectedGuild(guild: DiscordGuild) {
-    console.log(guild)
+    console.log(guild);
     setSelectedGuild(guild);
   }
-  const [selectedGuild, setSelectedGuild] = useState<DiscordGuild>(); 
-  
-  const username = user?.name
-  const namePlaceholder = session.status === 'authenticated' ? `${username}'s Community` : 'My Community';
-  const descriptionPlaceholder = session.status === 'authenticated' ? `A community for ${username}'s friends` : 'A community for my friends';
-  const slugPlaceholder = session.status === 'authenticated' ? `${username}-community` : 'my-community';
+  const [selectedGuild, setSelectedGuild] = useState<DiscordGuild>();
+
+  const username = user?.name;
+  const namePlaceholder =
+    session.status === "authenticated"
+      ? `${username}'s Community`
+      : "My Community";
+  const descriptionPlaceholder =
+    session.status === "authenticated"
+      ? `A community for ${username}'s friends`
+      : "A community for my friends";
+  const slugPlaceholder =
+    session.status === "authenticated"
+      ? `${username}-community`
+      : "my-community";
 
   const onSubmit = handleSubmit(async (data) => {
     const { url } = await uploadToS3(data.image);
@@ -281,14 +285,22 @@ const Form: React.FC = () => {
             </div>
           )}
           <div className="col-span-6 sm:col-span-2">
-            <GuildSelectDropdown discordGuilds={ownedGuilds} title={"Discord Servers"} onSelection={handleSelectedGuild} />
+            <DiscordGuildSelectDropdown
+              discordGuilds={ownedGuilds}
+              title={"Discord Servers"}
+              onSelection={handleSelectedGuild}
+            />
           </div>
         </div>
         <div className="my-6 flex gap-x-4">
           <Link className="btn-1" href="/">
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <button type="submit" className="btn-1 px-4" disabled={selectedGuild?.name ? false : true }>
+          <button
+            type="submit"
+            className="btn-1 px-4"
+            disabled={selectedGuild?.name ? false : true}
+          >
             Create
           </button>
         </div>

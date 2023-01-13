@@ -2,46 +2,39 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import React, { Fragment, useEffect, useState } from "react";
 
-import type { DiscordGuild } from "@/types";
-type guildSelectDropdownProps = {
-  discordGuilds: DiscordGuild[];
-  title: string;
-  onSelection: (guild: DiscordGuild) => void;
+import type { DiscordGuildChannel } from "@/types";
+
+type channelSelectDropdownProps = {
+    discordGuildChannels: DiscordGuildChannel[];
+    title: string;
+    onSelection: (channel: DiscordGuildChannel) => void;
 };
 
-const placeholderGuild = {
-  id: "0",
-  name: "Select a server",
-  icon: null,
-  owner: false,
-  permissions: 0,
-  features: [],
-};
-
-const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
-  discordGuilds,
-  title,
-  onSelection,
+const DiscordChannelSelectDropdown: React.FC<channelSelectDropdownProps> = ({
+    discordGuildChannels,
+    title,
+    onSelection,
 }: {
-  discordGuilds: DiscordGuild[];
-  title: string;
-  onSelection: (guild: DiscordGuild) => void;
+    discordGuildChannels: DiscordGuildChannel[];
+    title: string;
+    onSelection: (channel: DiscordGuildChannel) => void;
 
 }) => {
-  const [selected, setSelected] = useState(discordGuilds?.[0]);
-  useEffect(() => {
-    if (onSelection) {
-      onSelection(selected);
+    const [selected, setSelected] = useState(discordGuildChannels?.[0]);
+    useEffect(() => {
+        if (onSelection) {
+            onSelection(selected);
+        }
     }
-  }, [onSelection, selected]);
-  
-  return (
-    <div>
+    , [onSelection, selected]);
+
+    return (
+        <div>
       <label htmlFor="server" className="form-label">
         {title}
       </label>
 
-      {discordGuilds ? (
+      {discordGuildChannels ? (
         <Listbox value={selected} onChange={setSelected} name="guild">
           <div className="relative ">
             <Listbox.Button
@@ -69,9 +62,9 @@ const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
-                {discordGuilds.map((guild: DiscordGuild) => (
+                {discordGuildChannels.map((guildChannel: DiscordGuildChannel) => (
                   <Listbox.Option
-                    key={guild.id}
+                    key={guildChannel.id}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
                         active
@@ -79,7 +72,7 @@ const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
                           : "text-neutral-500"
                       }`
                     }
-                    value={guild}
+                    value={guildChannel}
                   >
                     {({ selected }) => (
                       <>
@@ -88,7 +81,7 @@ const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
                             selected ? "font-medium" : "font-normal"
                           }`}
                         >
-                          {guild.name}
+                          {guildChannel.name}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
@@ -110,4 +103,4 @@ const GuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
   );
 };
 
-export default GuildSelectDropdown;
+export default DiscordChannelSelectDropdown;
