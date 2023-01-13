@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../../index'
+import { publicProcedure } from '@/index'
 import { PrismaClient } from '@onu/prisma'
 import { z } from 'zod'
 

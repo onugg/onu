@@ -1,4 +1,4 @@
-import Logo from "../../assets/Logo.svg";
+import Logo from "@/assets/Logo.svg";
 import { InformationCircleIcon, LockClosedIcon } from "@heroicons/react/20/solid";
 import type { InferGetServerSidePropsType } from "next";
 import { getProviders, signIn, useSession } from "next-auth/react";

@@ -1,6 +1,6 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
-import { AppRouter as DiscordBotAppRouter } from '../../apps/discord-bot/src/trpcServer'
-import { AppRouter as DashboardAppRouter } from '../../apps/dashboard/src/server/trpc/router/_app'
+import { AppRouter as DiscordBotAppRouter } from '@/apps/discord-bot/src/trpcServer'
+import { AppRouter as DashboardAppRouter } from '@/apps/dashboard/src/server/trpc/router/_app'
 
 const discordBotClient = createTRPCProxyClient<DiscordBotAppRouter>({
   links: [

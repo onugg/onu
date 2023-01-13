@@ -1,5 +1,5 @@
 import React from "react";
-import AdminLayout from "../../../../../components/layouts/adminLayout";
+import AdminLayout from "@/components/layouts/primary/adminLayout";
 
 
 const BlockchainOverview: React.FC = () => {
