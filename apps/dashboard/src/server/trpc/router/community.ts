@@ -36,4 +36,23 @@ export const communityRouter = router({
       return community;
     }),
 
+    // Get Owned Communities 
+    getOwnedCommunitiesByUserId: protectedProcedure
+    .input(z.object({
+        userId: z.string(),
+    }))
+    .query(async ({ input, ctx }) => {
+      const communities = await ctx.prisma.community.findMany({
+        include: {
+          members: {
+            where: {
+              userId: input.userId,
+              role: "owner",
+            },
+          },
+        },
+      });
+      return communities;
+    },)
+
   });
