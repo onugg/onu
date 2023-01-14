@@ -109,14 +109,13 @@ const Form: React.FC = () => {
     userId: session?.data?.user?.id,
     provider: "discord",
   });
-  const ownedGuildsRoot = trpc.discord.getDiscordOwnedGuilds.useQuery({
+  const ownedGuildsRoot = trpc.discord.getDiscordUnusedOwnedGuilds.useQuery({
     accessToken: account.data?.access_token,
     tokenType: account.data?.token_type,
   });
   const ownedGuilds = ownedGuildsRoot?.data;
 
   function handleSelectedGuild(guild: DiscordGuild) {
-    console.log(guild);
     setSelectedGuild(guild);
   }
   const [selectedGuild, setSelectedGuild] = useState<DiscordGuild>();

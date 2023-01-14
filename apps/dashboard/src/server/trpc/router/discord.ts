@@ -109,6 +109,61 @@ export const discordRouter = router({
       }
     }),
 
+  getDiscordUnusedOwnedGuilds: protectedProcedure
+    .input(
+      z.object({
+        accessToken: z.string().nullable().optional(),
+        tokenType: z.string().nullable().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (!input.accessToken || !input.tokenType) {
+        return [];
+      } else {
+        const response = await fetch(
+          "https://discord.com/api/users/@me/guilds",
+          {
+            headers: {
+              authorization: `${input.tokenType} ${input.accessToken}`,
+            },
+          }
+        );
+
+        const guilds = await response.json();
+
+        if (guilds) {
+          const ownedGuilds = guilds.filter(
+            (guild: DiscordGuild) => guild.owner
+          );
+
+          const ownedGuildIds = ownedGuilds.map(
+            (guild: DiscordGuild) => guild.id
+          );
+          const ownedGuildIdsUsed = await ctx.prisma.discordGuild.findMany({
+
+            select: {
+              discordId: true,
+            },
+            where: {
+              discordId: {
+                in: ownedGuildIds,
+              },
+            },
+          });
+
+          const ownedGuildsThatAreNotBeingUsed = ownedGuilds.filter(
+            (guild: DiscordGuild) =>
+              !ownedGuildIdsUsed.some(
+                (usedGuild) => usedGuild.discordId === guild.id
+              )
+          );
+
+          return ownedGuildsThatAreNotBeingUsed;
+        }
+        console.log("No Guilds Found");
+      }
+    }),
+
   getDiscordBySlug: protectedProcedure
     .input(
       z.object({

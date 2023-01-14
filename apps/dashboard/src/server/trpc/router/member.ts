@@ -19,8 +19,7 @@ export const memberRouter = router({
         return member;
         }
     ),
-
-    // Get Member By Community ID and User ID
+    
     getMemberByCommunityIdAndUserId: protectedProcedure
     .input(z.object({
         communityId: z.string(),

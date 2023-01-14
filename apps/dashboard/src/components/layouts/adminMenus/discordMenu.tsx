@@ -17,49 +17,12 @@ const DiscordMenu: React.FC = () => {
 
     const router = useRouter();
     const slug = router.query.slug as string;
+    const currentPath = router.pathname;
+
+    console.log(`/c/[slug]/admin/discord/overview`)
+    console.log(currentPath)
 
     const DiscordAdminMenuOptions: DiscordAdminMenuOptions = [
-        {
-          title: "",
-          options: [
-            {
-              name: "Overview",
-              href: `/c/${slug}/admin/discord/overview`,
-              icon: Square2StackIcon,
-              current: true,
-            },
-            {
-              name: "General",
-              href: `/c/${slug}/admin/discord/general`,
-              icon: Cog6ToothIcon,
-              current: false,
-            },
-            {
-              name: "Moderation",
-              href: `/c/${slug}/admin/discord/moderation`,
-              icon: UserGroupIcon,
-              current: false,
-            },
-            {
-              name: "Quests",
-              href: `/c/${slug}/admin/discord/quests`,
-              icon: MapIcon,
-              current: false,
-            },
-            {
-              name: "Minigames",
-              href: `/c/${slug}/admin/discord/minigames`,
-              icon: PuzzlePieceIcon,
-              current: false,
-            },
-            {
-              name: "Statistics",
-              href: `/c/${slug}/admin/discord/statistics`,
-              icon: PresentationChartBarIcon,
-              current: false,
-            },
-          ],
-        },
         {
           title: "Server Management",
           options: [
@@ -67,7 +30,48 @@ const DiscordMenu: React.FC = () => {
               name: "Overview",
               href: `/c/${slug}/admin/discord/overview`,
               icon: Square2StackIcon,
-              current: false,
+              current: currentPath === `/c/[slug]/admin/discord/overview`,
+            },
+            {
+              name: "General",
+              href: `/c/${slug}/admin/discord/general`,
+              icon: Cog6ToothIcon,
+              current: currentPath === `/c/[slug]/admin/discord/general`,
+            },
+            {
+              name: "Moderation",
+              href: `/c/${slug}/admin/discord/moderation`,
+              icon: UserGroupIcon,
+              current: currentPath === `/c/[slug]/admin/discord/moderation`,
+            },
+            {
+              name: "Quests",
+              href: `/c/${slug}/admin/discord/quests`,
+              icon: MapIcon,
+              current: currentPath === `/c/[slug]/admin/discord/quests`,
+            },
+            {
+              name: "Minigames",
+              href: `/c/${slug}/admin/discord/minigames`,
+              icon: PuzzlePieceIcon,
+              current: currentPath === `/c/[slug]/admin/discord/minigames`,
+            },
+            {
+              name: "Analytics",
+              href: `/c/${slug}/admin/discord/analytics`,
+              icon: PresentationChartBarIcon,
+              current: currentPath === `/c/[slug]/admin/discord/analytics`,
+            },
+          ],
+        },
+        {
+          title: "Miscellaneous",
+          options: [
+            {
+              name: "Overview",
+              href: `/c/${slug}/admin/discord/overview`,
+              icon: Square2StackIcon,
+              current: currentPath === `/c/[slug]/admin/discord/analytics`,
             },
           ],
         },
@@ -78,7 +82,7 @@ const DiscordMenu: React.FC = () => {
       <div className="mx-4 mt-2 space-y-2">
         {DiscordAdminMenuOptions.map((section) => (
           <div key={section.title}>
-            <p className="mb-2 px-3 py-1 text-xs font-semibold uppercase text-white">
+            <p className="mb-2 px-3 pt-2 py-1 text-xs font-semibold uppercase text-white">
               {section.title}
             </p>
             {section.options.map((option) => (

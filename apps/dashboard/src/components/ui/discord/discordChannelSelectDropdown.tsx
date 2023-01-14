@@ -45,7 +45,7 @@ const DiscordChannelSelectDropdown: React.FC<channelSelectDropdownProps> = ({
               }`}
             >
               <span className="block truncate text-neutral-500">
-                {selected?.name ? selected.name : "Select a server"}
+                {selected?.name ? selected.name : "Select a channel"}
               </span>
 
               <span className="pointer-events-none flex items-center pr-2">
