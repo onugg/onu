@@ -74,6 +74,8 @@ model Community {
   slug          String    @unique
   description   String
   image         String
+  totalMembers  Int       @default(0)
+  activeMembers Int       @default(0)
   
   members       Member[]
   discordGuild  DiscordGuild?
