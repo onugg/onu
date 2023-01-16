@@ -150,16 +150,22 @@ export const discordRouter = router({
             (guild: DiscordGuild) => guild.id
           );
           const ownedGuildIdsUsed = await ctx.prisma.discordGuild.findMany({
-
             select: {
               discordId: true,
             },
             where: {
-              discordId: {
-                in: ownedGuildIds,
-              },
+              AND: [
+                {NOT: {communityId: null}},
+                {
+                  discordId: {
+                    in: ownedGuildIds,
+                  }
+                }
+              ],
             },
           });
+
+          console.log(ownedGuildIdsUsed)
 
           const ownedGuildsThatAreNotBeingUsed = ownedGuilds.filter(
             (guild: DiscordGuild) =>
