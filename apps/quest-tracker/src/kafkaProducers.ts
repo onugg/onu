@@ -2,17 +2,20 @@ const appName = 'quest-tracker'
 
 var QuestTrackerTopics: string[] = []
 
-export const DiscordQuestConfigurationCreated = `${appName}.questTracker.configuration.discord.created`
-QuestTrackerTopics.push(DiscordQuestConfigurationCreated)
+export const DiscordQuestConfigurationCreatedTopic = `${appName}.configuration.discord.created`
+QuestTrackerTopics.push(DiscordQuestConfigurationCreatedTopic)
 
 // quests
-export const DiscordMessagesSentQuestAchieved = `${appName}.questTracker.quests.discord.messagesSent.achieved`
-QuestTrackerTopics.push(DiscordMessagesSentQuestAchieved)
+export const DiscordMessagesSentQuestAchievedTopic = `${appName}.quests.discord.messagesSent.achieved`
+QuestTrackerTopics.push(DiscordMessagesSentQuestAchievedTopic)
 
-export interface DiscordQuestAchieved {
-  discordGuildId: string
-  discordUserID: string
-  questType: string                 // e.g. messagesSent
+export interface QuestAchievedMessage {
+  communityId: string
+  memberId: string
+  currentExp: number
+  newExpAdded: number
+  domain: string                    // e.g. discord
+  questType: string                 // e.g. discordMessagesSent
   questDescription: string          // e.g. 1000 messages sent
 }
 

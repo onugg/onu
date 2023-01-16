@@ -2,37 +2,86 @@ import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
 var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
 
-export async function routeTrackerMessage (_emitEventCallback: Function, message: OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateMessage) {
+export async function routeTrackerMessage (emitEventCallback: Function, message: OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateMessage) {
 
   var discordGuild = await prisma.discordGuild.findUnique({where: {discordId: message.discordGuildId}})
-  if (!discordGuild) {return}
+  if (!discordGuild) {
+    console.log(`Discord guild ${message.discordGuildId} not found`)
+    return
+  }
+  if (!discordGuild.communityId) {
+    console.log(`Discord guild ${message.discordGuildId} does not have a communityId`)
+    return
+  }
 
-  var config = await prisma.discordQuestConfig.findUnique({where: {discordGuildId: discordGuild.id}})
-  if (!config) {return}
+  var community = await prisma.community.findUnique({where: {id: discordGuild.communityId}})
+  if (!community) {
+    console.log(`Community ${discordGuild.communityId} not found`)
+    return
+  }
 
-  if (!config.discordQuestsEnabled) {return}
+  var discordQuestConfig = await prisma.discordQuestConfig.findUnique({where: {discordGuildId: discordGuild.id}})
+  if (!discordQuestConfig) {
+    console.log(`Discord guild ${message.discordGuildId} does not have a quest configuration`)
+    return
+  }
+
+  if (!discordQuestConfig.discordQuestsEnabled) {
+    console.log(`Discord guild ${message.discordGuildId} does not have quests enabled`)
+    return
+  }
 
   var discordUser = await prisma.discordUser.findUnique({where: {discordId: message.discordUserId}})
-  if (!discordUser) {return}
+  if (!discordUser) {
+    console.log(`Discord user ${message.discordUserId} not found`)
+    return
+  }
 
-  var discordMemberQuestRecord = await prisma.discordMemberQuestRecord.findUnique({where: {discordMemberId: discordUser.id}})
-  if (!discordMemberQuestRecord) {
-    discordMemberQuestRecord = await prisma.discordMemberQuestRecord.create({
+  var user = await prisma.user.findUnique({where: {id: discordUser.userId}})
+  if (!user) {
+    console.log(`User ${discordUser.userId} not found`)
+    return
+  }
+
+  var member = await prisma.member.findUnique({where: {userId_communityId: {userId: user.id, communityId: community.id}}})
+  if (!member) {
+    console.log(`Member ${user.id} not found in community ${community.id}`)
+    return
+  }
+
+  var memberQuestRecord = await prisma.memberQuestRecord.findUnique({where: {memberId: member.id}})
+  if (!memberQuestRecord) {
+    memberQuestRecord = await prisma.memberQuestRecord.create({
       data: {
-        discordMemberId: discordUser.id
+        memberId: member.id
       }
     })
   }
 
   switch (message.updatedField) {
     case 'messagesSent': {
-      if (!config.messagesSentEnabled) {return}
-      var level = await calculateLevel(config.messagesSentIncrementByLevel, message.messagesSent)
-      if (level > discordMemberQuestRecord.messagesSentLevel) {
-        await prisma.discordMemberQuestRecord.update({
-          where: {discordMemberId: discordUser.id},
-          data: {messagesSentLevel: level}
+      if (!discordQuestConfig.messagesSentEnabled) {return}
+      var level = await calculateLevel(discordQuestConfig.messagesSentIncrementByLevel, message.messagesSent)
+      var newExp = level * discordQuestConfig.messagesSentRewardMultiplierByLevel
+      var existingExp = memberQuestRecord.totalExp
+      var totalExp = existingExp + newExp
+      if (level > memberQuestRecord.discordMessagesSentLevel) {
+        await prisma.memberQuestRecord.update({
+          where: {memberId: member.id},
+          data: {discordMessagesSentLevel: level, totalExp: totalExp}
         })
+
+        var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = {
+          communityId: community.id,
+          memberId: member.id,
+          currentExp: totalExp,
+          newExpAdded: newExp,
+          domain: 'discord',
+          questType: 'messagesSent',
+          questDescription: `Sent ${message.messagesSent} messages in Discord` 
+        }
+
+        emitEventCallback(OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic, questAchievedMessage)
       }
     }
   }

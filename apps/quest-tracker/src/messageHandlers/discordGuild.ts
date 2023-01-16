@@ -2,7 +2,8 @@ import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
 var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
 
-export async function created (emitEventCallback: Function, discordGuildMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage) {
+// create the guild quest configuration if it doesn't exist
+export async function createGuildQuestConfig (emitEventCallback: Function, discordGuildMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage) {
   var guild = await prisma.discordGuild.findUnique({where: {discordId: discordGuildMessage.discordId}})
 
   if (!guild) {return}
@@ -17,7 +18,7 @@ export async function created (emitEventCallback: Function, discordGuildMessage:
     }
   })
 
-  emitEventCallback(OnuKafkaTypes.QuestTracker.DiscordQuestConfigurationCreated, {discordGuildId: guild.id})
+  emitEventCallback(OnuKafkaTypes.QuestTracker.DiscordQuestConfigurationCreatedTopic, {discordGuildId: guild.id})
 
   console.log(`Quests configured for discord guild ${guild.name} (${guild.id})`)
 }

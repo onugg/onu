@@ -34,6 +34,9 @@ async function messageRouter(topicName: string, message: any) {
         return
       }
       break
+    case OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic:
+      console.log(message)
+      return
     default:
       console.log("Unknown topic")
   } 
@@ -88,7 +91,8 @@ async function start() {
 
   k.registerConsumers([
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic},
-    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic}
+    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic},
+    {callback: messageRouter, topic: OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic},
   ])
 
   await k.startProducer()

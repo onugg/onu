@@ -12,7 +12,7 @@ async function trackMetric(topicName: string, message: any) {
       messageHandlers.discordMember.routeTrackerMessage(k.emitEvent, JSON.parse(message))
       break
     case OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic:
-      messageHandlers.discordGuild.created(k.emitEvent, JSON.parse(message))
+      messageHandlers.discordGuild.createGuildQuestConfig(k.emitEvent, JSON.parse(message))
       break
     default:
       console.log("Unknown topic")
