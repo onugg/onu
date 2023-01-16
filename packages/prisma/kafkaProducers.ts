@@ -33,4 +33,13 @@ export interface DiscordGuildMessage {
   discordId: string
 }
 
+// Community
+export const CommunityCreatedTopic = `${appName}.community.created`
+PrismaTopics.push(CommunityCreatedTopic)
+export const CommunityDeletedTopic = `${appName}.community.deleted`
+PrismaTopics.push(CommunityDeletedTopic)
+export interface CommunityMessage {
+  communityId: string
+}
+
 export { PrismaTopics }

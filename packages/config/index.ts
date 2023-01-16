@@ -1,5 +1,5 @@
 // discord bot configuration
-import type { ShardManagerOptions } from '@/apps/discord-bot/src/shard-manager'
+import type { ShardManagerOptions } from '@onu/discord-bot/src/shard-manager'
 
 export const shardManagerOptions: ShardManagerOptions = {
   dev: false,
@@ -7,7 +7,7 @@ export const shardManagerOptions: ShardManagerOptions = {
   prefix: '/trpc',
 }
 
-import type { KafkaOptions } from '@/packages/kafka/interfaces'
+import type { KafkaOptions } from '@onu/kafka/interfaces'
 
 export const discordBotKafkaOptions: KafkaOptions = {
   clientId: 'discord-bot',
