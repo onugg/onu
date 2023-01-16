@@ -23,11 +23,16 @@ async function messageRouter(topicName: string, message: any) {
   switch (topicName) {
     case OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic:
       var discordGuildCreatedMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage = JSON.parse(message)
-      if (!(await checkIfGuildInShard(discordGuildCreatedMessage.discordId))) {
-        console.log('Guild does not belong to this shard')
+      if (!(await checkIfGuildInShard(discordGuildCreatedMessage.discordId))) {return}
+      messageHandlers.discordGuild.created(c, discordGuildCreatedMessage)
+      break
+    case OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic:
+      var discordGuildUpdatedMessage: OnuKafkaTypes.Prisma.DiscordGuildUpdatedMessage = JSON.parse(message)
+      if (!(await checkIfGuildInShard(discordGuildUpdatedMessage.discordId))) {return}
+      if (discordGuildUpdatedMessage.updatedFields.includes('communityId')) {
+        messageHandlers.discordGuild.communityIdUpdated(c, discordGuildUpdatedMessage)
         return
       }
-      messageHandlers.discordGuild.created(c, discordGuildCreatedMessage)
       break
     default:
       console.log("Unknown topic")
@@ -49,9 +54,7 @@ async function start() {
   })
 
   // Message Sent
-
   c.on(Events.MessageCreate, function(message: Message){
-    
     if (message.author.id != c.user!.id) {eventTasks.message.messageCreate(k.emitEvent, message)}
   })
   
@@ -66,7 +69,9 @@ async function start() {
 
   // Guild events
   c.on(Events.GuildCreate, function(guild: Guild){
+    console.log("Received event GuildCreate")
     eventTasks.guild.addGuildOrUpdate(guild)                            // adds the guild to the database when the bot is added to a new guild
+    eventTasks.guild.verifyGuildSetup(guild)
   });
 
   c.on(Events.GuildDelete, function(guild: Guild){
@@ -82,7 +87,8 @@ async function start() {
   })
 
   k.registerConsumers([
-    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic}
+    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic},
+    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic}
   ])
 
   await k.startProducer()

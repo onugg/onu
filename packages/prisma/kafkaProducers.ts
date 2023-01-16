@@ -32,6 +32,13 @@ PrismaTopics.push(DiscordGuildDeletedTopic)
 export interface DiscordGuildMessage {
   discordId: string
 }
+export const DiscordGuildUpdatedTopic = `${appName}.discordGuild.updated`
+PrismaTopics.push(DiscordGuildUpdatedTopic)
+export interface DiscordGuildUpdatedMessage {
+  discordId: string,
+  updatedFields: string[]
+}
+
 
 // Community
 export const CommunityCreatedTopic = `${appName}.community.created`

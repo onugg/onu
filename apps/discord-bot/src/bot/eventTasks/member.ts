@@ -6,6 +6,15 @@ var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
 // add a member and user to database if they join - will update if they already exist (e.g. user is in other guild already)
 export async function AddOrUpdateMemberAndUser (member: GuildMember) {
 
+  var guild = member.guild
+
+  var dbGuild = (await prisma.discordGuild.findUnique({where: {discordId: guild.id}}))!
+
+  if (!dbGuild) {return}
+  if (!dbGuild.communityId) {return}
+
+  var communityId = dbGuild.communityId
+
   // create a community user and account if they don't exist
   var account = await prisma.account.findFirst({where: {provider: 'discord', providerAccountId: member.user.id}})
   if (!account) {
@@ -19,6 +28,19 @@ export async function AddOrUpdateMemberAndUser (member: GuildMember) {
         type: 'oauth',
         provider: 'discord',
         providerAccountId: member.user.id,
+      }
+    })
+
+    var role = 'member'
+    if (member.user.id == guild.ownerId) {
+      role = 'owner'
+    }
+
+    await prisma.member.create({
+      data: {
+        userId: user.id,
+        communityId: communityId,
+        role: role
       }
     })
   } else {

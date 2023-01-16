@@ -1,4 +1,4 @@
-import { shardManagerOptions } from '@/packages/config';
+import { shardManagerOptions } from '@onu/config';
 import { createShardManager } from './shard-manager';
 
 const shardManager = createShardManager(shardManagerOptions);

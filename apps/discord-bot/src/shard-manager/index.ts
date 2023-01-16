@@ -16,7 +16,7 @@ export function createShardManager(shardManagerOptions: ShardManagerOptions) {
   console.log(shardManagerOptions)
 
   const manager = new ShardingManager(
-    Path.join(__dirname, '@/bot/index.ts'), 
+    Path.join(__dirname, '../bot/index.ts'), 
     { 
       token: process.env["DISCORD_TOKEN"], 
       totalShards: "auto",
