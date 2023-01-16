@@ -14,49 +14,7 @@ import React from "react";
 import { useEffect } from "react";
 import type { NextPage } from "next";
 import CommunityCard from "@/components/ui/community/communityCard";
-
-const MemberCommunitiesSample = [
-  {
-    name: "Member Community 1",
-    image:
-      "https://cdn.discordapp.com/avatars/8917045513364434/102f0fe2cf4086daddab8bdd6af98d.png",
-    id: "12345678901",
-    role: "Member",
-    members: 821,
-  },
-  {
-    name: "Member Community 2",
-    image:
-      "https://cdn.discordapp.com/avatars/8917045513364434/102f0fe2cf4086daddab8bdd6af98d.png",
-    id: "12345678902",
-    role: "Member",
-    members: 4921,
-  },
-  {
-    name: "Member Community 3",
-    image:
-      "https://cdn.discordapp.com/avatars/8917045513364434/102f0fe2cf4086daddab8bdd6af98d.png",
-    id: "12345678903",
-    role: "Member",
-    members: 302849,
-  },
-  {
-    name: "Member Community 4",
-    image:
-      "https://cdn.discordapp.com/avatars/8917045513364434/102f0fe2cf4086daddab8bdd6af98d.png",
-    id: "12345678904",
-    role: "Member",
-    members: 302849,
-  },
-  {
-    name: "Member Community 5",
-    image:
-      "https://cdn.discordapp.com/avatars/8917045513364434/102f0fe2cf4086daddab8bdd6af98d.png",
-    id: "12345678905",
-    role: "Member",
-    members: 302849,
-  },
-];
+import CommunityAddCard from "@/components/ui/community/communityAddCard";
 
 const SearchBar: React.FC = () => {
   const { data: user } = trpc.user.getUserBySession.useQuery();
@@ -103,74 +61,61 @@ const OwnedCommunities: React.FC = () => {
   const ownedCommunities = trpc.community.getOwnedCommunitiesByUserId.useQuery({
     userId: userId,
   });
-  return (
+  return ownedCommunities.data?.[0] ? (
     <div className="relative z-10 mx-12 my-12">
       <div className="heading-1">Owned Communities</div>
-      <div className="grid grid-cols-1 justify-center md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72 ">
+      <div className="gap-y-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center lg:mx-24 sm:gap-x-8 2xl:mx-72 ">
         {ownedCommunities.data?.map((community) => (
           <div key={community.name}>
             <Link href={community.id}>
               <CommunityCard
                 image={community.image}
                 name={community.name}
+                slug={community.slug}
                 description={community.description}
                 totalMembers={community.totalMembers}
                 activeMembers={community.activeMembers}
-                id={community.id}
               />
             </Link>
           </div>
         ))}
       </div>
     </div>
+  ) : (
+    <div />
   );
 };
 
-const Members: React.FC = () => {
-  const { data: user } = trpc.user.getUserBySession.useQuery();
-  const profileImage = user?.image as string;
+const MemberCommunities: React.FC = () => {
+  const user = trpc.user.getUserBySession.useQuery();
+  const userId = user.data?.id as string;
+  const memberCommunities =
+    trpc.community.getMemberCommunitiesByUserId.useQuery({
+      userId: userId,
+    });
   return (
     <div className="relative z-10 mx-12 my-12">
-      <div className="heading-1">Members</div>
-      <div className=" grid grid-cols-1 justify-center md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72 ">
-        {MemberCommunitiesSample.map((community) => (
-          <div key={community.name}>
-            <Link
-              href={community.id}
-              className="group relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black bg-cover text-sm duration-300 hover:scale-105 hover:border-2 hover:border-neutral-100 hover:text-neutral-100"
-              style={{
-                backgroundImage: `url(${profileImage})`,
-              }}
-            >
-              <div className="z-5 absolute inset-0 rounded-xl bg-black/75 backdrop-blur-md" />
-              <div className="z-10 flex items-center overflow-hidden">
-                <Image
-                  src={profileImage}
-                  alt="Community"
-                  className="h-[110px] w-[110px] rounded-full border border-neutral-700 duration-300 group-hover:border-neutral-100"
-                  width="128"
-                  height="128"
+      <div className="heading-1">Communities</div>
+      {memberCommunities.data?.[0] ? (
+      <div className="gap-y-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center lg:mx-24 sm:gap-x-8 2xl:mx-72 ">
+        {memberCommunities.data?.map((community) => (
+            <div key={community.name}>
+              <Link href={community.id}>
+                <CommunityCard
+                  image={community.image}
+                  name={community.name}
+                  slug={community.slug}
+                  description={community.description}
+                  totalMembers={community.totalMembers}
+                  activeMembers={community.activeMembers}
                 />
-              </div>
-            </Link>
-            <div className="my-2 mx-2 flex justify-between font-medium">
-              <div className="flex w-1/2 flex-wrap">
-                <div>
-                  {community.name}
-                  <br />
-                  <p className="text-sm font-light leading-8 text-neutral-400">
-                    {community.role}
-                  </p>
-                </div>
-              </div>
-              <div className="flex w-1/2 flex-row items-center justify-end gap-x-2 font-light text-neutral-400">
-                <UserCircleIcon className="w-8" />
-                <div className="">{community.members}</div>
-              </div>
+              </Link>
             </div>
+          ))}
           </div>
-        ))}
-      </div>
+      ) : (
+        <CommunityAddCard />
+      )}
     </div>
   );
 };
@@ -189,7 +134,7 @@ const Communities: NextPage = () => {
       <div className="overflow-hidden">
         <SearchBar />
         <OwnedCommunities />
-        <Members />
+        <MemberCommunities />
       </div>
     </RootLayout>
   );

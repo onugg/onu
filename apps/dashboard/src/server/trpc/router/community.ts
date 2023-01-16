@@ -43,16 +43,33 @@ export const communityRouter = router({
     }))
     .query(async ({ input, ctx }) => {
       const communities = await ctx.prisma.community.findMany({
-        include: {
+        where: {
           members: {
-            where: {
+            some: {
               userId: input.userId,
               role: "owner",
             },
-          },
-        },
+          }
+        }
       });
       return communities;
-    },)
+    }),
 
+    getMemberCommunitiesByUserId: protectedProcedure
+    .input(z.object({
+        userId: z.string(),
+    }))
+    .query(async ({ input, ctx }) => {
+      const communities = await ctx.prisma.community.findMany({
+        where: {
+          members: {
+            some: {
+              userId: input.userId,
+              role: "member",
+            },
+          }
+        }
+      });
+      return communities;
+    }),
   });
