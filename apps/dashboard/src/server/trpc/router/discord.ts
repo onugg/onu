@@ -24,8 +24,9 @@ export const discordRouter = router({
         console.log("No Community ID in createDiscordGuild");
         return;
       } else {
-        const guild = await ctx.prisma.discordGuild.create({
-          data: {
+        const guild = await ctx.prisma.discordGuild.createIfNotExistsAndEmitEvent({
+          where: { discordId: input.discordId},
+          update: {
             name: input.name,
             discordId: input.discordId,
             community: {
@@ -34,6 +35,15 @@ export const discordRouter = router({
               },
             },
           },
+          create: {
+            name: input.name,
+            discordId: input.discordId,
+            community: {
+              connect: {
+                id: input.communityId,
+              },
+            },
+          }
         });
         return guild;
       }
