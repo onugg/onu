@@ -11,7 +11,7 @@ export const communityRouter = router({
         imageUrl: string()
     }))
     .mutation(async ({ input, ctx }) => {
-      const community = await ctx.prisma.community.create({
+      const community = await ctx.prisma.community.createIfNotExistsAndEmitEvent({
         data: {
             name: input.name,
             slug: input.slug,
