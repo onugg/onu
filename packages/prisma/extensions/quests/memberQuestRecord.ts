@@ -41,8 +41,6 @@ export async function updateAndEmitLevelUpEvent(emitEventCallBack: Function, mem
         discordUserId: dbMember.user.discordUser.discordId,
         level: newLevel
       }
-
-      console.log(questMemberLevelUpMessage)
   
       emitEventCallBack(OnuKafkaTypes.Prisma.QuestMemberLevelUp, questMemberLevelUpMessage)
     }
