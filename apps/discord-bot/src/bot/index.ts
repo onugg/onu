@@ -20,29 +20,33 @@ async function checkIfGuildInShard(guildId: string) {
 
 async function messageRouter(topicName: string, message: any) {
   console.log("Received message on topic: " + topicName)
-  console.log(OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic)
-  switch (topicName) {
-    case OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic:
-      var discordGuildCreatedMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage = JSON.parse(message)
-      if (!(await checkIfGuildInShard(discordGuildCreatedMessage.discordId))) {return}
-      messageHandlers.discordGuild.created(c, discordGuildCreatedMessage)
-      break
-    case OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic:
-      var discordGuildUpdatedMessage: OnuKafkaTypes.Prisma.DiscordGuildUpdatedMessage = JSON.parse(message)
-      if (!(await checkIfGuildInShard(discordGuildUpdatedMessage.discordId))) {return}
-      if (discordGuildUpdatedMessage.updatedFields.includes('communityId')) {
-        messageHandlers.discordGuild.communityIdUpdated(c, discordGuildUpdatedMessage)
-        return
-      }
-      break
-    case OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic:
-      var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = JSON.parse(message)
-      if (!(await checkIfGuildInShard(questAchievedMessage.discordGuildId))) {return}
-      messageHandlers.quests.achieved(c, questAchievedMessage)
+  
+  if (topicName === OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic) {
+    var discordGuildCreatedMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage = JSON.parse(message)
+    if (!(await checkIfGuildInShard(discordGuildCreatedMessage.discordId))) {return}
+    messageHandlers.discordGuild.created(c, discordGuildCreatedMessage)
+    return
+  }
+
+
+  if (topicName === OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic) {
+    var discordGuildUpdatedMessage: OnuKafkaTypes.Prisma.DiscordGuildUpdatedMessage = JSON.parse(message)
+    if (!(await checkIfGuildInShard(discordGuildUpdatedMessage.discordId))) {return}
+    if (discordGuildUpdatedMessage.updatedFields.includes('communityId')) {
+      messageHandlers.discordGuild.communityIdUpdated(c, discordGuildUpdatedMessage)
       return
-    default:
-      console.log("Unknown topic")
-  } 
+    }
+    return
+  }
+
+  if (topicName.startsWith("quest-tracker.quests")) {
+    var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = JSON.parse(message)
+    if (!(await checkIfGuildInShard(questAchievedMessage.discordGuildId))) {return}
+    messageHandlers.quests.achieved(c, questAchievedMessage)
+    return
+  }
+
+  console.log(`Unknown topic: ${topicName}`)
 }
 
 async function start() {
