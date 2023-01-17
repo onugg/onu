@@ -61,16 +61,16 @@ export async function routeTrackerMessage (emitEventCallback: Function, message:
   switch (message.updatedField) {
     case 'messagesSent': {
       if (!discordQuestConfig.messagesSentEnabled) {return}
-      var level = await calculateLevel(discordQuestConfig.messagesSentIncrementByLevel, message.messagesSent)
-      var requiredForLevel = await valueRequiredForLevel(discordQuestConfig.messagesSentIncrementByLevel, level)
+      var questLevel = await calculateLevel(discordQuestConfig.messagesSentIncrementByLevel, message.messagesSent)
+      var requiredForLevel = await valueRequiredForLevel(discordQuestConfig.messagesSentIncrementByLevel, questLevel)
       if (message.messagesSent != requiredForLevel) {return}
-      var newExp = level * discordQuestConfig.messagesSentRewardMultiplierByLevel
+      var newExp = questLevel * discordQuestConfig.messagesSentRewardMultiplierByLevel
       var existingExp = memberQuestRecord.totalExp
       var totalExp = existingExp + newExp
-      if (level > memberQuestRecord.discordMessagesSentLevel) {
-        await prisma.memberQuestRecord.update({
+      if (questLevel > memberQuestRecord.discordMessagesSentLevel) {
+        await prisma.memberQuestRecord.updateAndEmitLevelUpEvent({
           where: {memberId: member.id},
-          data: {discordMessagesSentLevel: level, totalExp: totalExp}
+          data: {discordMessagesSentLevel: questLevel, totalExp: totalExp}
         })
 
         var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = {

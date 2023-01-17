@@ -39,6 +39,13 @@ async function messageRouter(topicName: string, message: any) {
     return
   }
 
+  if (topicName === OnuKafkaTypes.Prisma.QuestMemberLevelUp) {
+    var questMemberLevelUpMessage: OnuKafkaTypes.Prisma.QuestMemberLevelUpMessage = JSON.parse(message)
+    if (!(await checkIfGuildInShard(questMemberLevelUpMessage.discordGuildId))) {return}
+    messageHandlers.quests.memberLevelUp(c, questMemberLevelUpMessage)
+    return
+  }
+
   if (topicName.startsWith("quest-tracker.quests")) {
     var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = JSON.parse(message)
     if (!(await checkIfGuildInShard(questAchievedMessage.discordGuildId))) {return}
@@ -99,6 +106,7 @@ async function start() {
   k.registerConsumers([
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic},
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic},
+    {callback: messageRouter, topic: OnuKafkaTypes.Prisma.QuestMemberLevelUp},
     {callback: messageRouter, topic: OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic},
   ])
 

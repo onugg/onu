@@ -189,6 +189,7 @@ model MemberQuestRecord {
   member     Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
   
   totalExp          Int       @default(0)
+  level             Int       @default(0)
 
   discordMessagesSentLevel Int      @default(0)
 }

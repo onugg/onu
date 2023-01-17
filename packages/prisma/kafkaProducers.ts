@@ -49,4 +49,15 @@ export interface CommunityMessage {
   communityId: string
 }
 
+// Quests
+export const QuestMemberLevelUp = `${appName}.quest.levelup`
+PrismaTopics.push(QuestMemberLevelUp)
+export interface QuestMemberLevelUpMessage {
+  communityId: string
+  memberId: string
+  discordGuildId: string
+  discordUserId: string
+  level: number
+}
+
 export { PrismaTopics }

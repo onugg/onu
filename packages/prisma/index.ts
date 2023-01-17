@@ -42,6 +42,13 @@ const OnuPrismaExtensions = {
         return extensions.main.community.createAndEmitEvent(k.emitEvent, communityCreateArgs)
       }
     },
+
+    // QUEST
+    memberQuestRecord: {
+      async updateAndEmitLevelUpEvent(memberQuestRecordUpdateArgs: Prisma.MemberQuestRecordUpdateArgs) {
+        return extensions.quests.memberQuestRecord.updateAndEmitLevelUpEvent(k.emitEvent, memberQuestRecordUpdateArgs)
+      }
+    }
   }
 }
 
