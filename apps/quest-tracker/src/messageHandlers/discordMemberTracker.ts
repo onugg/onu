@@ -62,6 +62,8 @@ export async function routeTrackerMessage (emitEventCallback: Function, message:
     case 'messagesSent': {
       if (!discordQuestConfig.messagesSentEnabled) {return}
       var level = await calculateLevel(discordQuestConfig.messagesSentIncrementByLevel, message.messagesSent)
+      var requiredForLevel = await valueRequiredForLevel(discordQuestConfig.messagesSentIncrementByLevel, level)
+      if (message.messagesSent != requiredForLevel) {return}
       var newExp = level * discordQuestConfig.messagesSentRewardMultiplierByLevel
       var existingExp = memberQuestRecord.totalExp
       var totalExp = existingExp + newExp
@@ -97,4 +99,12 @@ async function calculateLevel(levelIncrement: number, valueToAssess: number) {
   }
 
   return currentLevel - 1
+}
+
+async function valueRequiredForLevel(levelIncrement: number, level: number) {
+  var totalValue = 0
+  for (let l = 1; l <= level; l++) {
+    totalValue = totalValue + (l * levelIncrement)
+  }
+  return totalValue
 }
