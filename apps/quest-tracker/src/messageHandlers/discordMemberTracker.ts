@@ -73,12 +73,13 @@ export async function routeTrackerMessage (emitEventCallback: Function, message:
 
         var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = {
           communityId: community.id,
+          discordGuildId: discordGuild.discordId,
           memberId: member.id,
           currentExp: totalExp,
           newExpAdded: newExp,
           domain: 'discord',
           questType: 'messagesSent',
-          questDescription: `Sent ${message.messagesSent} messages in Discord` 
+          questDescription: `Send ${message.messagesSent} messages in Discord` 
         }
 
         emitEventCallback(OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic, questAchievedMessage)

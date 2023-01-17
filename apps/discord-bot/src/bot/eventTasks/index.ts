@@ -1,4 +1,3 @@
-export * as user from './user'
 export * as member from './member'
 export * as guild from './guild'
 export * as batch from './batch'

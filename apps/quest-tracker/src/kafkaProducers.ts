@@ -11,6 +11,7 @@ QuestTrackerTopics.push(DiscordMessagesSentQuestAchievedTopic)
 
 export interface QuestAchievedMessage {
   communityId: string
+  discordGuildId: string
   memberId: string
   currentExp: number
   newExpAdded: number

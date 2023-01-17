@@ -53,7 +53,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   communities   Member[]
-  discordUsers  DiscordUser[]
+  discordUser  DiscordUser?
 }
 
 model VerificationToken {
@@ -111,6 +111,7 @@ model DiscordGuild {
   communityUnlinkedMessageSent  Boolean?  @default(false) // when community is unlinked we send a message to the guild
   guildInitialSetupRun          Boolean?  @default(false) // when community is linked we run the initial setup
   welcomeChannelId              String?
+  questChannelId                String?
 
   members       DiscordMember[]
   questConfig   DiscordQuestConfig?
@@ -121,12 +122,12 @@ model DiscordUser {
   id            String          @id @default(cuid())
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  userId        String         
+  userId        String          @unique
   discordId     String          @unique
   name          String
   discriminator String
 
-  user          User?            @relation(fields: [userId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
   guilds        DiscordMember[]
 }
 

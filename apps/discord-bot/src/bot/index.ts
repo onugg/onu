@@ -1,9 +1,9 @@
 
-import { Client, Events, PartialGuildMember, PartialUser, Message } from 'discord.js';
+import { Client, Events, PartialGuildMember, Message } from 'discord.js';
 import * as intents from './intents'
 import * as eventTasks from './eventTasks'
 import * as messageHandlers from './messageHandlers'
-import { User, GuildMember, Guild } from 'discord.js';
+import { GuildMember, Guild } from 'discord.js';
 import { OnuKafka } from '@onu/kafka';
 import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 import { discordBotKafkaOptions } from '@onu/config';
@@ -20,6 +20,7 @@ async function checkIfGuildInShard(guildId: string) {
 
 async function messageRouter(topicName: string, message: any) {
   console.log("Received message on topic: " + topicName)
+  console.log(OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic)
   switch (topicName) {
     case OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic:
       var discordGuildCreatedMessage: OnuKafkaTypes.Prisma.DiscordGuildMessage = JSON.parse(message)
@@ -35,7 +36,9 @@ async function messageRouter(topicName: string, message: any) {
       }
       break
     case OnuKafkaTypes.QuestTracker.DiscordMessagesSentQuestAchievedTopic:
-      console.log(message)
+      var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = JSON.parse(message)
+      if (!(await checkIfGuildInShard(questAchievedMessage.discordGuildId))) {return}
+      messageHandlers.quests.achieved(c, questAchievedMessage)
       return
     default:
       console.log("Unknown topic")
@@ -81,9 +84,9 @@ async function start() {
     eventTasks.guild.removeGuild(guild)                         // removes the guild from the database when the bot is removed from a guild
   })
 
-  c.on(Events.UserUpdate, function(_oldUser: User | PartialUser, newUser: User){
+  /*c.on(Events.UserUpdate, function(_oldUser: User | PartialUser, newUser: User){
     if (newUser.id != c.user!.id) {eventTasks.user.AddOrUpdateUser(newUser)}               // when a user changes their details update the database
-  })
+  })*/
 
   c.on(Events.GuildMemberUpdate, function(_oldMember: GuildMember | PartialGuildMember, newMember: GuildMember){
     if (newMember.user.id != c.user!.id) {eventTasks.member.AddOrUpdateMemberAndUser(newMember)}        // when a member changes their details update the database
