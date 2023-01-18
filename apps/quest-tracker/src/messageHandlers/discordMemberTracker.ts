@@ -1,6 +1,8 @@
 import * as OnuKafkaTypes from "@onu/kafka/interfaces";
 import { PrismaClient, OnuPrismaExtensions } from '@onu/prisma'
-var prisma = (new PrismaClient({})).$extends(OnuPrismaExtensions)
+var prisma = (new PrismaClient({
+  log: ["query", "info", "warn", "error"]
+})).$extends(OnuPrismaExtensions)
 
 export async function routeTrackerMessage (emitEventCallback: Function, message: OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateMessage) {
 

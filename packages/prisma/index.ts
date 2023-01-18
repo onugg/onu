@@ -2,6 +2,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import { OnuKafka } from '@onu/kafka';
 import { prismaKafkaOptions } from '@onu/config';
 import * as extensions from './extensions';
+import * as analytics from './analytics';
 
 var k = OnuKafka(prismaKafkaOptions)
 
@@ -47,6 +48,13 @@ const OnuPrismaExtensions = {
     memberQuestRecord: {
       async updateAndEmitLevelUpEvent(memberQuestRecordUpdateArgs: Prisma.MemberQuestRecordUpdateArgs) {
         return extensions.quests.memberQuestRecord.updateAndEmitLevelUpEvent(k.emitEvent, memberQuestRecordUpdateArgs)
+      }
+    },
+
+    // ANALYTICS
+    memberQuestRecordDailySnapshot: {
+      async getCommunityRankedAnalytics(communityId: string) {
+        return analytics.getCommunityRankedAnalytics(communityId)
       }
     }
   }
