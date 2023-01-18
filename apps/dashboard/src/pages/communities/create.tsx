@@ -215,23 +215,34 @@ const Form: React.FC = () => {
               <label htmlFor="cover-photo" className="form-label">
                 Cover photo
               </label>
-              <div
-                className="relative flex h-48 justify-center rounded-xl border border-neutral-700 bg-black bg-cover bg-center text-sm duration-300"
+
+              <label
+                htmlFor="file-upload"
+                className="group relative flex h-48 cursor-pointer justify-center rounded-xl border border-neutral-700 bg-black bg-cover bg-center text-sm duration-300"
                 style={{
                   backgroundImage: `url(${localImageUrl})`,
                 }}
               >
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="sr-only"
+                  {...register("image")}
+                />
                 <div className="z-5 absolute inset-0 rounded-xl bg-black/75 backdrop-blur-md" />
-                <div className="z-10 flex items-center overflow-hidden">
-                  <Image
-                    src={localImageUrl}
-                    alt="Community Profile"
-                    className="relative h-[110px] w-[110px] rounded-full border border-neutral-700 object-cover duration-300 group-hover:border-neutral-100"
-                    width="128"
-                    height="128"
-                  />
-                </div>
-              </div>
+                <Image
+                  src={localImageUrl}
+                  alt="Community Profile"
+                  className="relative z-10 flex h-[110px] w-[110px] self-center overflow-hidden rounded-full border border-neutral-700 object-cover"
+                  width="128"
+                  height="128"
+                />
+              </label>
+
+              <p className="form-label mt-2">
+                Tip: Click again to change image
+              </p>
+
               {errors.image && (
                 <p className="mt-2 text-xs italic text-red-500">
                   {errors.image?.message}
@@ -270,7 +281,7 @@ const Form: React.FC = () => {
                   </svg>
 
                   <div className="flex text-sm text-neutral-500">
-                    <span>Upload a file or drag and drop</span>
+                    <span>Upload a file by clicking here</span>
                   </div>
                   <p className="text-sm text-neutral-500">
                     PNG, JPG, GIF up to 10MB

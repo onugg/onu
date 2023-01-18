@@ -5,7 +5,7 @@ import React from "react";
 type CommunityCardProps = {
   image: string;
   name: string;
-  slug: string,
+  slug: string;
   description: string;
   totalMembers: number;
   activeMembers: number;
@@ -45,9 +45,12 @@ const CommunityCard: React.FC<CommunityCardProps> = ({
 }) => {
   return (
     <div>
-      <Link href={`/c/${slug}`} className="group relative flex flex-col duration-300 hover:scale-105">
+      <Link
+        href={`/c/${slug}`}
+        className="group relative flex flex-col duration-300 hover:scale-105"
+      >
         <div
-          className=" relative flex h-40 justify-center rounded-t-xl border border-neutral-700 bg-black bg-cover text-sm group-hover:border-2 group-hover:border-neutral-200 group-hover:text-neutral-100 duration-300 "
+          className=" relative flex h-40 justify-center rounded-t-xl border border-neutral-700 bg-black bg-cover text-sm duration-300 group-hover:border-2 group-hover:border-neutral-200 group-hover:text-neutral-100 "
           style={{
             backgroundImage: `url(${image})`,
           }}
@@ -63,21 +66,18 @@ const CommunityCard: React.FC<CommunityCardProps> = ({
             />
           </div>
         </div>
-        <div className="relative flex h-40 rounded-b-xl border border-neutral-700 border-t-transparent bg-black group-hover:border-2 group-hover:border-t-transparent group-hover:border-neutral-200 group-hover:text-neutral-100 duration-300">
-          <div className="mx-4 my-4 flex flex-col gap-2 justify-between">
+        <div className="relative flex h-40 rounded-b-xl border border-neutral-700 border-t-transparent bg-black duration-300 group-hover:border-2 group-hover:border-neutral-200 group-hover:border-t-transparent group-hover:text-neutral-100">
+          <div className="mx-4 my-4 flex flex-col justify-between gap-2">
             <div className="flex flex-col gap-2">
-            <div className="text-base font-semibold text-neutral-200">
-              {name}
+              <div className="text-base font-semibold text-neutral-200">
+                {name}
+              </div>
+              <div className="text-sm font-normal text-neutral-500 line-clamp-3">
+                {description}
+              </div>
             </div>
-            <div className="text-sm font-normal text-neutral-500 line-clamp-3">
-              {description}
-            </div>
-            </div>
-
-
-
-            <div className="flex gap-8 justify-start text-[13px] font-normal text-neutral-500">
-            <div className="flex flex-row items-center justify-center gap-1">
+            <div className="flex justify-start gap-8 text-[13px] font-normal text-neutral-500">
+              <div className="flex flex-row items-center justify-center gap-1">
                 <GreenDot />
                 {activeMembers} Online
               </div>

@@ -1,22 +1,17 @@
 import RootLayout from "@/components/layouts/primary/rootLayout";
+import CommunityAddCard from "@/components/ui/community/communityAddCard";
+import CommunityCard from "@/components/ui/community/communityCard";
 import { trpc } from "@/utils/trpc";
-import {
-  AdjustmentsHorizontalIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { Dialog, Transition } from "@headlessui/react";
+import { AdjustmentsHorizontalIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useEffect } from "react";
-import type { NextPage } from "next";
-import CommunityCard from "@/components/ui/community/communityCard";
-import CommunityAddCard from "@/components/ui/community/communityAddCard";
 import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
+import type { NextPage } from "next";
 const AddCommunityModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
