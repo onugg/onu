@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as OnuKafkaTypes from "@onu/kafka/interfaces";
+import * as analytics from '../../analytics'
 
 var prisma = new PrismaClient();
 
@@ -45,10 +46,12 @@ export async function updateAndEmitLevelUpEvent(emitEventCallBack: Function, mem
       emitEventCallBack(OnuKafkaTypes.Prisma.QuestMemberLevelUp, questMemberLevelUpMessage)
     }
 
-    await prisma.memberQuestRecord.update({
+    var memberQuestRecord = await prisma.memberQuestRecord.update({
       where: memberQuestUpdateArgs.where,
       data: memberQuestUpdateArgs.data
     })
+
+    analytics.updateAnalyticsForMemberQuestRecordDailySnapshot(memberQuestRecord)
   }
 }
 

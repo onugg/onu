@@ -93,6 +93,7 @@ model Member {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
   MemberQuestRecord MemberQuestRecord?
+  MemberQuestRecordDailySnapshots MemberQuestRecordDailySnapshot[]
 
   @@unique([userId, communityId])
 }
@@ -158,7 +159,7 @@ model DiscordMemberTracker {
 
   discordMember     DiscordMember @relation(fields: [discordMemberId], references: [id], onDelete: Cascade)
 
-  messagesSent      Int
+  messagesSent              Int
 }
 
 // QUESTS
@@ -194,4 +195,19 @@ model MemberQuestRecord {
   discordMessagesSentLevel Int      @default(0)
 }
 
-// quests run on discord even without a user signing up
+// ANALYTICS
+
+model MemberQuestRecordDailySnapshot {
+  memberId          String
+  snapshotDate      DateTime
+  updatedAt         DateTime @updatedAt
+
+  totalExp          Int
+  level             Int
+
+  discordMessagesSentLevel Int
+
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, snapshotDate])
+}
