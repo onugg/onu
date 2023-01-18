@@ -13,7 +13,7 @@ export async function updateAndEmitLevelUpEvent(emitEventCallBack: Function, mem
   
   if (!existingMemberQuestRecord) {return}
   
-
+  // check if there is a level change
   if (existingMemberQuestRecord) {
     var previousLevel = existingMemberQuestRecord.level
     var newLevel = await calculateLevel(levelIncrement, existingMemberQuestRecord.totalExp)
