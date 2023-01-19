@@ -67,15 +67,16 @@ model VerificationToken {
 }
 
 model Community {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  name          String
-  slug          String    @unique
-  description   String
-  image         String
-  totalMembers  Int       @default(0)
-  activeMembers Int       @default(0)
+  id                          String    @id @default(cuid())
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+  name                        String
+  slug                        String    @unique
+  description                 String
+  image                       String
+  totalMembers                Int       @default(0)
+  activeMembers               Int       @default(0)
+  weeklyStreakStartDayNumber  Int       @default(1)   // 1 = Monday, 0 = Sunday
   
   members       Member[]
   discordGuild  DiscordGuild?
@@ -95,6 +96,7 @@ model Member {
   MemberQuestRecord MemberQuestRecord?
   MemberQuestLogs MemberQuestLog[]
   MemberQuestRecordDailySnapshots MemberQuestRecordDailySnapshot[]
+  MemberWeeklyStreak MemberWeeklyStreak?
 
   @@unique([userId, communityId])
 }
@@ -209,6 +211,23 @@ model MemberQuestLog {
   increment         Int?        // some quests will increment by a value
   expAwarded        Int
   details           Json?       // any extra details to be stored with the completed quest
+}
+
+model MemberWeeklyStreak {
+  id                String    @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  memberId          String @unique
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  lastSeenDateTime  DateTime                    // used to log how often they're seen each day
+  day1              Boolean? @default(false)
+  day2              Boolean? @default(false)
+  day3              Boolean? @default(false)
+  day4              Boolean? @default(false)
+  day5              Boolean? @default(false)
+  day6              Boolean? @default(false)
+  day7              Boolean? @default(false)
 }
 
 // ANALYTICS
