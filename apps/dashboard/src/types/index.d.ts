@@ -5,9 +5,15 @@ export interface SidebarMenuOption {
   current: boolean;
 }
 
-export interface AdminMenuSection {
+export interface User {
+  name: string;
+  level: number;
+  change: 'up' | 'down';
+}
+
+export interface MenuSection {
   title: string;
-  options: AdminMenuOption[];
+  options: SidebarMenuOption[];
 }
 
 export interface DiscordGuild {

@@ -1,67 +1,45 @@
-import RootLayout from "@/components/layouts/primary/rootLayout";
-import SidebarMenuOption from "@/components/ui/common/sidebarMenuOption";
-import {
-  HeartIcon,
-  LifebuoyIcon,
-  MegaphoneIcon,
-} from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
+import LeaderboardLayout from "@/components/layouts/primary/leaderboardLayout";
+import Leaderboard from "@/components/ui/common/leaderboard";
 import React from "react";
 
-type LeaderboardMenuOptions = SidebarMenuOption[];
-type LeaderboardProps = {
-  children: React.ReactNode;
-};
+import type { User }from "@/types";
 
-const LeaderboardSidebar: React.FC = () => {
-  const router = useRouter();
-  const currentPath = router.pathname;
+const people: User[] = [
+  {
+    name: "user1",
+    level: 1,
+    change: "up",
+  },
+  {
+    name: "user2",
+    level: 2,
+    change: "down",
+  },
+  {
+    name: "user3",
+    level: 3,
+    change: "up",
+  },
+  {
+    name: "user4",
+    level: 4,
+    change: "down",
+  },
+  {
+    name: "user5",
+    level: 5,
+    change: "up",
+  },
+];
 
-  const LeaderboardMenuOptions: LeaderboardMenuOptions = [
-    {
-      name: "Chatters",
-      href: `/leaderboards/chatters`,
-      icon: MegaphoneIcon,
-      current: currentPath === `/leaderboards/chatters`,
-    },
-    {
-      name: "Helpers",
-      href: `/leaderboards/helpers`,
-      icon: LifebuoyIcon,
-      current: currentPath === `/leaderboards/helpers`,
-    },
-    {
-      name: "Lovers",
-      href: `/leaderboards/lovers`,
-      icon: HeartIcon,
-      current: currentPath === `/leaderboards/lovers`,
-    },
-  ];
 
+
+const GlobalLeaderboard: React.FC = () => {
   return (
-    <div className="flex h-screen min-h-max flex-col bg-neutral-900">
-      <div className="relative flex flex-1 ">
-        <div className="h-full w-64 border-r border-neutral-600 bg-black/50">
-          <div className="mx-4 mt-2 space-y-2">
-            {LeaderboardMenuOptions.map((option) => (
-              <SidebarMenuOption option={option} key={option.name} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+    <LeaderboardLayout>
+      <Leaderboard users={people} />
+    </LeaderboardLayout>
   );
 };
 
-const Leaderboards: React.FC<LeaderboardProps> = ({ children }) => {
-  return (
-    <div>
-      <RootLayout>
-        <LeaderboardSidebar />
-        {children}
-      </RootLayout>
-    </div>
-  );
-};
-
-export default Leaderboards;
+export default GlobalLeaderboard;
