@@ -1,5 +1,5 @@
 import React from "react";
-import type { AdminMenuSection } from "@/types";
+import type { MenuSection } from "@/types";
 import {
   Square2StackIcon,
   Cog6ToothIcon,
@@ -8,19 +8,16 @@ import {
   PuzzlePieceIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import SidebarMenuOption from "@/components/ui/common/sidebarMenuOption";
 
-type DiscordAdminMenuOptions = AdminMenuSection[];
+type DiscordAdminMenuOptions = MenuSection[];
 
 const DiscordMenu: React.FC = () => {
 
     const router = useRouter();
     const slug = router.query.slug as string;
     const currentPath = router.pathname;
-
-    console.log(`/c/[slug]/admin/discord/overview`)
-    console.log(currentPath)
 
     const DiscordAdminMenuOptions: DiscordAdminMenuOptions = [
         {
@@ -30,7 +27,7 @@ const DiscordMenu: React.FC = () => {
               name: "Overview",
               href: `/c/${slug}/admin/discord/overview`,
               icon: Square2StackIcon,
-              current: currentPath === `/c/[slug]/admin/discord/overview`,
+              current: (currentPath === `/c/[slug]/admin/discord/overview`),
             },
             {
               name: "General",
@@ -82,25 +79,11 @@ const DiscordMenu: React.FC = () => {
       <div className="mx-4 mt-2 space-y-2">
         {DiscordAdminMenuOptions.map((section) => (
           <div key={section.title}>
-            <p className="mb-2 px-3 pt-2 py-1 text-xs font-semibold uppercase text-white">
+            <p className="mx-1 mb-1 pt-2 py-1 text-xs font-semibold uppercase text-neutral-600">
               {section.title}
             </p>
             {section.options.map((option) => (
-              <Link className="flex flex-col" key={option.name} href={option.href}>
-                <div
-                  className={`font-small w-full rounded-md px-3 py-2 text-sm
-                    transition duration-200 hover:text-white ${
-                      option.current
-                        ? `bg-neutral-800 text-neutral-200`
-                        : `text-neutral-400`
-                    }`}
-                >
-                  <div className="flex flex-row items-center gap-3 align-baseline">
-                    <option.icon className="h-5 w-5" />
-                    {option.name}
-                  </div>
-                </div>
-              </Link>
+              <SidebarMenuOption option={option} key={option.name}/>
             ))}
           </div>
         ))}

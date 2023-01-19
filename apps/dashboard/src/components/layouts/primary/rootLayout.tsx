@@ -89,11 +89,12 @@ const PrimaryNavbar: React.FC = () => {
 const SubNavbar: React.FC = () => {
   const router = useRouter();
   const currentPath = router.pathname;
+  const pathStart = currentPath.split("/")[1];
 
   const SubNavigation = [
-    { name: "Communities", href: "/communities", current: currentPath === "/communities" },
+    { name: "Communities", href: "/communities", current: (currentPath === "/communities") || (pathStart === "c") },
     { name: "Trending", href: "/trending", current: currentPath === "/trending"},
-    { name: "Leaderboard", href: "/leaderboard", current: currentPath === "/leaderboard"},
+    { name: "Leaderboards", href: "/leaderboards", current: currentPath === "/leaderboards"},
     { name: "Profile", href: "/profile", current: currentPath === "/profile"},
     { name: "Activity", href: "/activity", current: currentPath === "/activity"},
     { name: "Settings", href: "/settings", current: currentPath === "/settings"},
