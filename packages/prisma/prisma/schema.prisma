@@ -93,6 +93,7 @@ model Member {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
   MemberQuestRecord MemberQuestRecord?
+  MemberQuestLogs MemberQuestLog[]
   MemberQuestRecordDailySnapshots MemberQuestRecordDailySnapshot[]
 
   @@unique([userId, communityId])
@@ -191,8 +192,23 @@ model MemberQuestRecord {
   
   totalExp          Int       @default(0)
   level             Int       @default(0)
+  rank              Int       @default(0)
 
   discordMessagesSentLevel Int      @default(0)
+}
+
+model MemberQuestLog {
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  memberId          String
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  questDate         DateTime
+  domain            String
+  type              String      // valid values messages-sent
+  increment         Int?        // some quests will increment by a value
+  expAwarded        Int
+  details           Json?       // any extra details to be stored with the completed quest
 }
 
 // ANALYTICS

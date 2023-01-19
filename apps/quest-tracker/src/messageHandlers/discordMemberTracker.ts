@@ -73,6 +73,17 @@ export async function routeTrackerMessage (emitEventCallback: Function, message:
         await prisma.memberQuestRecord.updateAndEmitLevelUpEvent({
           where: {memberId: member.id},
           data: {discordMessagesSentLevel: questLevel, totalExp: totalExp}
+        })  
+
+        await prisma.memberQuestLog.create({
+          data: {
+            memberId: member.id,
+            questDate: new Date(),
+            domain: 'discord',
+            type: 'messagesSent',
+            increment: message.messagesSent,
+            expAwarded: newExp,
+          }
         })
 
         var questAchievedMessage: OnuKafkaTypes.QuestTracker.QuestAchievedMessage = {
