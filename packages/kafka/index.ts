@@ -79,8 +79,10 @@ export function OnuKafka(options: KafkaOptions) {
           console.log(`No callback function found for topic ${messagePayLoad.topic}`)
           return
         }
+
         callbackFunction(messagePayLoad.topic, messagePayLoad.message.value?.toString())
       },
+      autoCommit: true
     })
 
     console.log(`Kafka consumers started for ${options.clientId}`)

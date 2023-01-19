@@ -53,6 +53,14 @@ async function messageRouter(topicName: string, message: any) {
     return
   }
 
+  if (topicName === OnuKafkaTypes.QuestTracker.WeeklyStreakUpdateTopic) {
+    var weeklyStreakUpdateMessage: OnuKafkaTypes.QuestTracker.WeeklyStreakUpdateMessage = JSON.parse(message)
+    console.log(weeklyStreakUpdateMessage)
+    if (!(await checkIfGuildInShard(weeklyStreakUpdateMessage.discordGuildId))) {return}
+      messageHandlers.streak.memberWeeklyStreakUpdate(c, weeklyStreakUpdateMessage)
+    return
+  }
+
   console.log(`Unknown topic: ${topicName}`)
 }
 
@@ -104,6 +112,7 @@ async function start() {
   })
 
   k.registerConsumers([
+    {callback: messageRouter, topic: OnuKafkaTypes.QuestTracker.WeeklyStreakUpdateTopic},
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic},
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.DiscordGuildUpdatedTopic},
     {callback: messageRouter, topic: OnuKafkaTypes.Prisma.QuestMemberLevelUp},

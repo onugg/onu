@@ -24,5 +24,26 @@ export interface DiscordQuestConfigurationCreated {
   discordGuildId: string
 }
 
+// streaks
+
+export const WeeklyStreakUpdateTopic = `${appName}.weeklyStreak.updated`
+QuestTrackerTopics.push(WeeklyStreakUpdateTopic)
+
+export interface WeeklyStreakUpdateMessage {
+  communityId: string
+  discordGuildId: string
+  memberId: string
+  streakDays: number
+  currentExp: number
+  newExpAdded: number
+  day1: boolean
+  day2: boolean
+  day3: boolean
+  day4: boolean
+  day5: boolean
+  day6: boolean
+  day7: boolean
+  streakStartDay: number
+}
 
 export { QuestTrackerTopics }
