@@ -14,14 +14,6 @@ const PrimaryNavigation = [
   { name: "Docs", href: "#" },
 ];
 
-const SubNavigation = [
-  { name: "Communities", href: "/communities", current: true },
-  { name: "Trending", href: "#", current: false },
-  { name: "Profile", href: "#", current: false },
-  { name: "Activity", href: "#", current: false },
-  { name: "Settings", href: "#", current: false },
-];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -95,6 +87,17 @@ const PrimaryNavbar: React.FC = () => {
 };
 
 const SubNavbar: React.FC = () => {
+  const router = useRouter();
+  const currentPath = router.pathname;
+
+  const SubNavigation = [
+    { name: "Communities", href: "/communities", current: currentPath === "/communities" },
+    { name: "Trending", href: "/trending", current: currentPath === "/trending"},
+    { name: "Leaderboard", href: "/leaderboard", current: currentPath === "/leaderboard"},
+    { name: "Profile", href: "/profile", current: currentPath === "/profile"},
+    { name: "Activity", href: "/activity", current: currentPath === "/activity"},
+    { name: "Settings", href: "/settings", current: currentPath === "/settings"},
+  ];
   const completion = useReadingProgress();
   return (
     <div className="sticky top-0 z-40 bg-black">
