@@ -1,4 +1,4 @@
-export interface AdminMenuOption {
+export interface SidebarMenuOption {
   name: string;
   href: string;
   icon: any;
