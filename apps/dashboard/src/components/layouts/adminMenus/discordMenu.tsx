@@ -1,5 +1,5 @@
 import React from "react";
-import type { AdminMenuSection } from "@/types";
+import type { MenuSection } from "@/types";
 import {
   Square2StackIcon,
   Cog6ToothIcon,
@@ -8,11 +8,10 @@ import {
   PuzzlePieceIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import SidebarMenuOption from "@/components/ui/common/sidebarMenuOption";
 
-type DiscordAdminMenuOptions = AdminMenuSection[];
+type DiscordAdminMenuOptions = MenuSection[];
 
 const DiscordMenu: React.FC = () => {
 
