@@ -5,6 +5,11 @@ export interface SidebarMenuOption {
   current: boolean;
 }
 
+interface StarProps {
+  number: number;
+  color: string;
+}
+
 export interface User {
   name: string;
   level: number;
