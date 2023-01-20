@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig/typescriptService.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "typeRoots": ["./types"],
+    "outDir": "dist"
+  }
+}

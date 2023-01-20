@@ -33,3 +33,8 @@ export const setupKafkaOptions: KafkaOptions = {
   clientId: 'setup',
   groupId: 'setup'
 }
+
+export const schedulerKafkaOptions: KafkaOptions = {
+  clientId: 'scheduler',
+  groupId: 'scheduler'
+}

@@ -36,6 +36,9 @@ async function trackMetric(topicName: string, message: any) {
   }
 
   switch (topicName) {
+    case OnuKafkaTypes.Scheduler.SchedulerWeeklyStreakCommunityResetTopic:
+      messageHandlers.resetStreaks.resetStreaks(JSON.parse(message))
+      break
     case OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateTopic:
       messageHandlers.discordMember.routeTrackerMessage(k.emitEvent, JSON.parse(message))
       break
@@ -49,6 +52,7 @@ async function trackMetric(topicName: string, message: any) {
 
 async function start() {
   k.registerConsumers([
+    {callback: trackMetric, topic: OnuKafkaTypes.Scheduler.SchedulerWeeklyStreakCommunityResetTopic},
     {callback: trackMetric, topic: OnuKafkaTypes.DiscordBot.MessageCreatedTopic},
     {callback: trackMetric, topic: OnuKafkaTypes.Prisma.DiscordGuildCreatedTopic},
     {callback: trackMetric, topic: OnuKafkaTypes.MetricTracker.DiscordMemberTrackerUpdateTopic}
