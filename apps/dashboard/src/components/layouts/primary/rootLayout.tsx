@@ -48,14 +48,14 @@ const PrimaryNavbar: React.FC = () => {
   const profileImage = user?.image as string;
 
   return (
-    <div className="relative z-40 h-12 scroll-smooth bg-black">
+    <div className="relative z-40 h-12 scroll-smooth bg-theme-900">
       <div className="flex items-center justify-between px-6 ">
         <Image src={LogoLight} alt="Logo" className="my-3 w-28" />
-        <div className="font-sm mx-4 hidden flex-row items-center py-2 text-neutral-400 md:flex">
+        <div className="font-sm mx-4 hidden flex-row items-center py-2 text-theme-200 md:flex">
           <Link
             key="feedback"
             href="/"
-            className="rounded-md border border-neutral-700 px-3 py-2 text-sm hover:border-neutral-100"
+            className="rounded-md border border-theme-700 px-3 py-2 text-sm hover:border-neutral-100"
           >
             Feedback
           </Link>
@@ -101,8 +101,8 @@ const SubNavbar: React.FC = () => {
   ];
   const completion = useReadingProgress();
   return (
-    <div className="sticky top-0 z-40 bg-black">
-      <div className="flex items-center justify-between border-b border-neutral-700 px-4 sm:px-0">
+    <div className="sticky top-0 z-40 bg-theme-900">
+      <div className="flex items-center justify-between border-b-2 border-violet-700 px-4 sm:px-0">
         <span
           id="progress-bar"
           style={{
@@ -118,7 +118,7 @@ const SubNavbar: React.FC = () => {
               className={classNames(
                 item.current
                   ? "text-white "
-                  : "text-neutral-400 transition duration-200 hover:bg-neutral-800 hover:text-white",
+                  : "text-theme-200 transition duration-200 hover:bg-theme-800 hover:text-white",
                 "font-small rounded-md px-3 py-2 text-sm"
               )}
               aria-current={item.current ? "page" : undefined}
@@ -142,7 +142,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     }
   });
   return (
-    <div className="flex min-h-screen flex-col bg-neutral-900  ">
+    <div className="flex min-h-screen flex-col bg-theme-900  ">
       <PrimaryNavbar />
       <SubNavbar />
       {children}
