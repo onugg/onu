@@ -20,6 +20,16 @@ variable postgres-password {
   sensitve = true
 }
 
+variable aws-access-key {
+  type = string
+  sensitve = true
+}
+
+variable aws-secret-key {
+  type = string
+  sensitve = true
+}
+
 terraform {
   cloud {
     organization = "onu"
@@ -41,6 +51,8 @@ terraform {
 
 provider "aws" {
   region     = var.aws-region
+  access_key = var.aws-access-key
+  secret_key = var.aws-access-secret
 }
 
 data "aws_caller_identity" "current" {}
