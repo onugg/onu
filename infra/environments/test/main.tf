@@ -8,7 +8,7 @@ variable environment {
 
 variable discord-token {
   type = string
-  sensitve = true
+  sensitive = true
 }
 
 variable kafka-brokers {
@@ -17,17 +17,17 @@ variable kafka-brokers {
 
 variable postgres-password {
   type = string
-  sensitve = true
+  sensitive = true
 }
 
 variable aws-access-key {
   type = string
-  sensitve = true
+  sensitive = true
 }
 
-variable aws-secret-key {
+variable aws-access-secret {
   type = string
-  sensitve = true
+  sensitive = true
 }
 
 terraform {
@@ -257,7 +257,7 @@ resource "aws_db_instance" "postgres" {
   instance_class = "db.t3.micro"
   allocated_storage = 20
   username = "onu-admin-${var.environment}"
-  password = "${postgres-password}"
+  password = "${var.postgres-password}"
   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
   skip_final_snapshot = true
