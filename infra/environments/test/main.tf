@@ -11,10 +11,6 @@ variable discord_token {
   sensitive = true
 }
 
-variable kafka_brokers {
-  type = string
-}
-
 variable postgres_password {
   type = string
   sensitive = true
@@ -314,7 +310,7 @@ resource "aws_ecs_task_definition" "discord-bot-service-task-definition" {
         },
         {
           name: "KAFKA_BROKERS",
-          value: var.kafka_brokers
+          value: "TO DO!!!"
         },
         {
           name: "KAFKA_CLIENT",
