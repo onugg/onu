@@ -54,7 +54,7 @@ jobs:
       - name: get variables from json
         id: output-vars
         run: |
-          echo "::set-output name=aws-ecr-repository-name::$(jq -r '.aws-ecr-repository-name.value' output.json)"
+          echo "aws-ecr-repository-name=$(jq -r '."aws-ecr-repository-name.value' output".json)" >> $GITHUB_OUTPUT
         
   docker-build:
     permissions:
@@ -70,7 +70,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::739240036333:role/github-actions
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ap-southeast-2
       - name: Login to Amazon ECR
         id: login-ecr
@@ -79,7 +79,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ needs.infra-test.outputs.aws-ecr-repository-name }}
-          IMAGE_TAG: nodejs_demo_image
+          IMAGE_TAG: discord-bot:test
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
