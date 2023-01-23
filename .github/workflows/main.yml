@@ -14,13 +14,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - name: set env variables
+        run: | 
+          export TF_VAR_discord-token=${{ secrets.DISCORD_TOKEN }} 
+          export TF_VAR_postgres-password=${{ secrets.POSTGRES_PASSWORD }} 
+          export TF_VAR_aws-access-key=${{ secrets.AWS_TOKEN_USERNAME }} 
+          export TF_VAR_aws-access-secret=${{ secrets.AWS_TOKEN_PASSWORD }} 
       - uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
       - run: terraform init
-      - run: terraform plan -no-color \ 
-              -var "discord-token=${{ secrets.DISCORD_TOKEN }}" \
-              -var "discord-postgres-password=${{ secrets.POSTGRES_PASSWORD }}" \
-              -var "discord-aws-access-key=${{ secrets.AWS_TOKEN_USERNAME }}" \
-              -var "discord-aws-access-secret=${{ secrets.AWS_TOKEN_PASSWORD }}" \
+      - run: terraform plan -no-color
         
