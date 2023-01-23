@@ -53,10 +53,6 @@ terraform {
   }
   
   required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "3.0.1"
-    }
 
     upstash = {
       source = "upstash/upstash"
@@ -77,14 +73,6 @@ provider "upstash" {
 }
 
 data "aws_caller_identity" "current" {}
-
-provider "docker" {
-  registry_auth {
-    address = aws_ecr_repository.ecr.repository_url
-    username = data.aws_ecr_authorization_token.token.user_name
-    password = data.aws_ecr_authorization_token.token.password
-  }
-}
 
 resource "upstash_kafka_cluster" "cluster" {
   cluster_name = "onu-${var.environment}-cluster"
@@ -315,34 +303,38 @@ resource "aws_db_instance" "postgres" {
   }
 }
 
-resource "aws_ecr_repository" "ecr" {
-  name = "onu-${var.environment}-ecr"
+# resource "aws_ecr_repository" "ecr" {
+#   name = "onu-${var.environment}-ecr-services"
 
-  tags = {
-    Environment = var.environment
-    Name = "onu-${var.environment}-ecr"
-  }
-}
-
-data "aws_ecr_authorization_token" "token" {
-  registry_id = aws_ecr_repository.ecr.registry_id
-}
+#   tags = {
+#     Environment = var.environment
+#     Name = "onu-${var.environment}-ecr-services"
+#   }
+# }
 
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "onu-${var.environment}-ecs-cluster"
+
 
   tags = {
     Environment = var.environment
     Name = "onu-${var.environment}-ecs-cluster"
   }
 }
+ 
+module "discord-bot-service" {
+  source = "../../modules/service"
 
-resource "aws_ecs_task_definition" "discord-bot-service-task-definition" {
-  family = "discord-bot"
-  container_definitions = jsonencode([
+  aws_access_key = var.aws_access_key
+  aws_access_secret = var.aws_access_secret
+  aws_region = var.aws_region
+  service_name = "discord-bot"
+  ecs_cluster_id = aws_ecs_cluster.ecs_cluster.id
+  environment = var.environment
+  task_definition = jsonencode([
     {
       name      = "discord-bot"
-      image     = "discord-bot"
+      image     = "[[IMAGE_NAME]]" # This is replaced inside the module with the ECR image name
       cpu       = 1
       memory    = 512
       essential = true
@@ -356,29 +348,46 @@ resource "aws_ecs_task_definition" "discord-bot-service-task-definition" {
         {
           name: "DISCORD_TOKEN",
           value: var.discord_token
-        },
-        {
-          name: "KAFKA_BROKERS",
-          value: "TO DO!!!"
-        },
-        {
-          name: "KAFKA_CLIENT",
-          value: "discord-bot"
         }
       ]
     }
   ])
 }
 
-resource "aws_ecs_service" "ecs_service-discord-bot" {
-  name = "discord-bot"
-  cluster = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.discord-bot-service-task-definition.arn
-  desired_count = 1
+# resource "aws_ecs_task_definition" "discord-bot-service-task-definition" {
+#   family = "discord-bot"
+#   container_definitions = jsonencode([
+#     {
+#       name      = var.service_name
+#       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/onu-${var.environment}-${service_name}-ecr:latest"
+#       cpu       = 1
+#       memory    = 512
+#       essential = true
+#       portMappings = [
+#         {
+#           containerPort = 80
+#           hostPort      = 80
+#         }
+#       ]
+#       environment = [
+#         {
+#           name: "DISCORD_TOKEN",
+#           value: var.discord_token
+#         }
+#       ]
+#     }
+#   ])
+# }
 
-  tags = {
-    Environment = var.environment
-    Name = "onu-${var.environment}-ecs_service-discord-bot"
-  }
-}
+# resource "aws_ecs_service" "ecs_service-discord-bot" {
+#   name = "discord-bot"
+#   cluster = aws_ecs_cluster.ecs_cluster.id
+#   task_definition = aws_ecs_task_definition.discord-bot-service-task-definition.arn
+#   desired_count = 1
+
+#   tags = {
+#     Environment = var.environment
+#     Name = "onu-${var.environment}-ecs_service-discord-bot"
+#   }
+# }
 

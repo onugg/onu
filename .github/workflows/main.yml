@@ -76,11 +76,38 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, tag, and push image to Amazon ECR
+
+      - name: Discord Bot - Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ needs.infra-test.outputs.aws-ecr-repository-name }}
-          IMAGE_TAG: discord-bot
+          ECR_REPOSITORY: ${{ needs.infra-test.outputs.discord-bot-aws-ecr-repository-name }}
+          IMAGE_NAME: discord-bot-latest
+          SHA: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.discord-bot
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t ${{ needs.infra-test.outputs.image-name }} . -f Dockerfile.discord-bot
+          docker push ${{ needs.infra-test.outputs.image-name }}
+  
+  # deploy-to-test:
+  #   needs: docker-build
+  #   name: Deploy to Test
+  #   environment: test
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   steps:
+  #     - name : Check out code
+  #       uses: actions/checkout@v3
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+  #         aws-region: ap-southeast-2
+  #     - name: Render Amazon ECS task definition
+  #       id: render-discord-bot-container
+  #       uses: aws-actions/amazon-ecs-render-task-definition@v1
+  #       with:
+  #         task-definition: ecs-task-definition-discord-bot.json
+  #         container-name: discord-bot
+  #         image: onu/discord-bot:latest
+  #         environment-variables: "LOG_LEVEL=info"
+
