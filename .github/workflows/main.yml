@@ -30,5 +30,10 @@ jobs:
             aws_access_key="${{ vars.AWS_TOKEN_USERNAME }}"
             aws_access_secret="${{ secrets.AWS_TOKEN_PASSWORD }}"
 
-      - run: terraform plan -no-color -var-file="test.tfvars"
+      - name: terraform plan
+        run: terraform plan -no-color -var-file="test.tfvars"
+
+      - name: terraform apply
+        if: ${{ steps.plan.outputs.exitcode }} = 2
+        run: terraform apply -no-color -var-file="test.tfvars"
         
