@@ -6,14 +6,7 @@ on:
     
 jobs: 
   infra-test-environment: 
-    runs-on: ubuntu-latest
-    environment: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Infra Test
-        uses: ./.github/workflows/terraform.yml
-        with:
-          environment: ${{ vars.ENV_NAME }}
+    uses: ./.github/workflows/terraform.yml
+    with:
+      environment: test
     
