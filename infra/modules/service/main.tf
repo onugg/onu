@@ -65,7 +65,7 @@ locals {
 
 resource "aws_ecs_task_definition" "current" {
   family = var.service_name
-  container_definitions = replace(var.task_definition, local.image_name)
+  container_definitions = replace(var.task_definition, "[[IMAGE_NAME]]", local.image_name)
 }
 
 resource "aws_ecs_service" "ecs_service-discord-bot" {
