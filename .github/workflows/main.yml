@@ -6,8 +6,11 @@ on:
     
 jobs: 
   infra-test-environment: 
-    name: Infra Test
-    uses: ./.github/workflows/terraform.yml
-    with:
-      environment: ${{ vars.ENV_NAME }}
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Infra Test
+        uses: ./.github/workflows/terraform.yml
+        with:
+          environment: ${{ vars.ENV_NAME }}
     
