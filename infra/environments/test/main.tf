@@ -1,4 +1,4 @@
-variable aws-region {
+variable aws_region {
   default = "ap-southeast-2"
 }
 
@@ -6,26 +6,26 @@ variable environment {
   default = "test"
 }
 
-variable discord-token {
+variable discord_token {
   type = string
   sensitive = true
 }
 
-variable kafka-brokers {
+variable kafka_brokers {
   type = string
 }
 
-variable postgres-password {
-  type = string
-  sensitive = true
-}
-
-variable aws-access-key {
+variable postgres_password {
   type = string
   sensitive = true
 }
 
-variable aws-access-secret {
+variable aws_access_key {
+  type = string
+  sensitive = true
+}
+
+variable aws_access_secret {
   type = string
   sensitive = true
 }
@@ -50,9 +50,9 @@ terraform {
 }
 
 provider "aws" {
-  region     = var.aws-region
-  access_key = var.aws-access-key
-  secret_key = var.aws-access-secret
+  region     = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_access_secret
 }
 
 data "aws_caller_identity" "current" {}
@@ -88,7 +88,7 @@ resource "aws_internet_gateway" "aws_internet_gateway" {
 resource "aws_subnet" "aws_pub_subnet_1" {
   vpc_id = aws_vpc.aws_vpc.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "${var.aws-region}a"
+  availability_zone = "${var.aws_region}a"
 
   tags = {
     Environment = var.environment
@@ -99,7 +99,7 @@ resource "aws_subnet" "aws_pub_subnet_1" {
 resource "aws_subnet" "aws_pub_subnet_2" {
   vpc_id = aws_vpc.aws_vpc.id
   cidr_block = "10.0.2.0/24"
-  availability_zone = "${var.aws-region}b"
+  availability_zone = "${var.aws_region}b"
 
   tags = {
     Environment = var.environment
@@ -257,7 +257,7 @@ resource "aws_db_instance" "postgres" {
   instance_class = "db.t3.micro"
   allocated_storage = 20
   username = "onu-admin-${var.environment}"
-  password = "${var.postgres-password}"
+  password = "${var.postgres_password}"
   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
   skip_final_snapshot = true
@@ -310,11 +310,11 @@ resource "aws_ecs_task_definition" "discord-bot-service-task-definition" {
       environment = [
         {
           name: "DISCORD_TOKEN",
-          value: var.discord-token
+          value: var.discord_token
         },
         {
           name: "KAFKA_BROKERS",
-          value: var.kafka-brokers
+          value: var.kafka_brokers
         },
         {
           name: "KAFKA_CLIENT",
