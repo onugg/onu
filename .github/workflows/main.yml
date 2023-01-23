@@ -22,7 +22,7 @@ jobs:
       - name: create tfvars file
         uses: DamianReeves/write-file-action@master
         with:
-          path: ${{ env.home}}/environments/test/test.tfvars
+          path: ${{ env.home}}/infra/environments/test/test.tfvars
           write-mode: overwrite
           contents: |
             discord_token="${{ secrets.DISCORD_TOKEN }}"
