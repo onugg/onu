@@ -53,6 +53,8 @@ jobs:
         id: tf-outputs
         with:
           path: ./infra/environments/test
+        env:
+          TERRAFORM_CLOUD_TOKENS: app.terraform.io=${{ secrets.TERRAFORM_CLOUD_TOKEN }}
         
   docker-build:
     permissions:
