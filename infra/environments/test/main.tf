@@ -258,7 +258,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   instance_type = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   security_groups = [aws_security_group.ecs_sg.id]
-  user_data = "#!/bin/bash\necho ECS_CLUSTER=onu-${var.environment}-ecs-cluster >> /etc/ecs/ecs.config"
+  user_data = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.ecs_cluster.name} > /etc/ecs/ecs.config"
 }
 
 resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
@@ -267,7 +267,7 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
   vpc_zone_identifier = [aws_subnet.aws_pub_subnet_1.id]
   
   min_size = 1
-  max_size = 10
+  max_size = 2
   health_check_grace_period = 300
   desired_capacity = 1
   health_check_type = "EC2"
@@ -322,25 +322,25 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   }
 }
 
-resource "aws_ecs_capacity_provider" "ecs_capacity_provider_1" {
-  name = "onu-${var.environment}-ecs-capacity-provider-1"
+# resource "aws_ecs_capacity_provider" "ecs_capacity_provider_1" {
+#   name = "onu-${var.environment}-ecs-capacity-provider-1"
 
-  auto_scaling_group_provider {
-    auto_scaling_group_arn = aws_autoscaling_group.failure_analysis_ecs_asg.arn
-  }
-}
+#   auto_scaling_group_provider {
+#     auto_scaling_group_arn = aws_autoscaling_group.failure_analysis_ecs_asg.arn
+#   }
+# }
 
-resource "aws_ecs_cluster_capacity_providers" "ecs_cluster" {
-  cluster_name = aws_ecs_cluster.ecs_cluster.name
+# resource "aws_ecs_cluster_capacity_providers" "ecs_cluster" {
+#   cluster_name = aws_ecs_cluster.ecs_cluster.name
 
-  capacity_providers = [aws_ecs_capacity_provider.ecs_capacity_provider_1.name]
+#   capacity_providers = [aws_ecs_capacity_provider.ecs_capacity_provider_1.name]
 
-  default_capacity_provider_strategy {
-    base              = 1
-    weight            = 100
-    capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider_1.name
-  }
-}
+#   default_capacity_provider_strategy {
+#     base              = 1
+#     weight            = 100
+#     capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider_1.name
+#   }
+# }
  
 module "discord-bot-service" {
   source = "../../modules/service"
