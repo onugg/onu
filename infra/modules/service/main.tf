@@ -68,11 +68,11 @@ resource "aws_ecs_task_definition" "current" {
   container_definitions = replace(var.task_definition, "[[IMAGE_NAME]]", local.image_name)
 }
 
-resource "aws_ecs_service" "ecs_service-discord-bot" {
-  name = var.service_name
-  cluster = var.ecs_cluster_id
+resource "aws_ecs_service" "current" {
+  name            = var.service_name
+  cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.current.arn
-  desired_count = 1
+  desired_count   = 1
 
   tags = {
     Environment = var.environment
