@@ -9,8 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: test
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@master
+        
       - name: Infra Test
         uses: ./.github/workflows/terraform.yml
         with:
