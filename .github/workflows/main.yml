@@ -80,7 +80,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ needs.infra-test.outputs.aws-ecr-repository-name }}
-          IMAGE_TAG: discord-bot:test
+          IMAGE_TAG: discord-bot
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
