@@ -79,13 +79,10 @@ jobs:
 
       - name: Discord Bot - Build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ needs.infra-test.outputs.discord-bot-aws-ecr-repository-name }}
-          IMAGE_NAME: discord-bot-latest
-          SHA: ${{ github.sha }}
+          IMAGE_NAME: ${{ needs.infra-test.outputs.discord-bot-image-name }}
         run: |
-          docker build -t ${{ needs.infra-test.outputs.image-name }} . -f Dockerfile.discord-bot
-          docker push ${{ needs.infra-test.outputs.image-name }}
+          docker build -t $IMAGE_NAME . -f Dockerfile.discord-bot
+          docker push $IMAGE_NAME
   
   # deploy-to-test:
   #   needs: docker-build
