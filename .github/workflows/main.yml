@@ -1,0 +1,86 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+    
+jobs: 
+  infra-test: 
+    outputs:
+      aws-ecr-repository-name: ${{ steps.tf-outputs.outputs.aws-ecr-repository-name }}
+    name: Infrastructure Test
+    concurrency: test-environment
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: './infra/environments/test'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: get kafka topic config
+        working-directory: './packages/kafka'
+        run: |
+          yarn
+          yarn export-topics
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+      - run: terraform init
+      - name: create tfvars file
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: ./infra/environments/test/test.tfvars
+          write-mode: overwrite
+          contents: |
+            discord_token="${{ secrets.DISCORD_TOKEN }}"
+            postgres_password="${{ secrets.POSTGRES_PASSWORD }}"
+            aws_access_key="${{ vars.AWS_TOKEN_USERNAME }}"
+            aws_access_secret="${{ secrets.AWS_TOKEN_PASSWORD }}"
+            upstash_api_key="${{ secrets.UPSTASH_API_KEY }}"
+            upstash_email="${{ secrets.UPSTASH_EMAIL }}"
+
+      - name: terraform plan
+        run: terraform plan -no-color -var-file="test.tfvars"
+
+      - name: terraform apply
+        if: ${{ steps.plan.outputs.exitcode }} = 2
+        run: terraform apply -no-color -auto-approve -var-file="test.tfvars"
+
+      - name: get terraform output
+        uses: dflook/terraform-output@v1
+        id: tf-outputs
+        with:
+          path: ./infra/environments/test
+          workspace: onu-test
+        env:
+          TERRAFORM_CLOUD_TOKENS: app.terraform.io=${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+        
+  docker-build:
+    permissions:
+      id-token: write
+      contents: read
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: infra-test
+    environment: test
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ap-southeast-2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ needs.infra-test.outputs.aws-ecr-repository-name }}
+          IMAGE_TAG: discord-bot
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.discord-bot
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

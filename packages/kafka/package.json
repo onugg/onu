@@ -3,16 +3,22 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "lint": "TIMING=1 eslint \"**/*.ts*\""
+    "lint": "TIMING=1 eslint \"**/*.ts*\"",
+    "export-topics": "ts-node ./topic-generator.ts --out-file-path ./topics.json"
   },
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
     "tsconfig": "*",
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "@types/node": "^18.11.18",
+    "commander": "^10.0.0",
     "dotenv": "^16.0.3",
-    "kafkajs": "^2.2.3"
+    "fs": "^0.0.1-security",
+    "kafkajs": "^2.2.3",
+    "ts-node": "^10.9.1"
   }
 }
