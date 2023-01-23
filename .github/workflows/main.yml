@@ -10,7 +10,7 @@ jobs:
     environment: test
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         
       - name: Infra Test
         uses: ./.github/workflows/terraform.yml
