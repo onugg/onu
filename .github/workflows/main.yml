@@ -54,6 +54,7 @@ jobs:
       - name: get variables from json
         id: output-vars
         run: |
+          echo < output.json
           echo "aws-ecr-repository-name=$(jq -r '."aws-ecr-repository-name".value' output.json)" >> $GITHUB_OUTPUT
         
   docker-build:
