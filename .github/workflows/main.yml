@@ -1,0 +1,28 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+    
+jobs: 
+  infra-test-environment: 
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: './infra/environments/test'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: set env variables
+        run: | 
+          export TF_VAR_discord_token=${{ secrets.DISCORD_TOKEN }} 
+          export TF_VAR_postgres_password=${{ secrets.POSTGRES_PASSWORD }} 
+          export TF_VAR_aws_access_key=${{ secrets.AWS_TOKEN_USERNAME }} 
+          export TF_VAR_aws_access_secret=${{ secrets.AWS_TOKEN_PASSWORD }} 
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+      - run: terraform init
+      - run: terraform plan -no-color
+        
