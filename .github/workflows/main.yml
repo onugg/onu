@@ -50,6 +50,7 @@ jobs:
 
       - name: terraform output json
         run: terraform output -json > output.json
+        run: terraform output -json
 
       - name: get variables from json
         id: output-vars
