@@ -4,9 +4,6 @@ on:
       environment:
         required: true
         type: string
-      kafka-brokers:
-        type: string
-        required: true
         
 jobs:
   terraform-apply:
@@ -23,7 +20,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_VAR_discord-token: ${{ secrets.DISCORD_TOKEN }}
-        TF_VAR_kafka-brokers: ${{ var.kafka-brokers }}
         TF_VAR_postgres-password: ${{ secrets.POSTGRES_PASSWORD }}
         TF_VAR_aws-access-key: ${{ var.AWS_TOKEN_USERNAME }}
         TF_VAR_aws-access-secret: ${{ secrets.AWS_TOKEN_PASSWORD }}
