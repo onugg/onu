@@ -5,8 +5,17 @@ on:
     branches: [ "master" ]
     
 jobs: 
-  infra-test-environment: 
-    uses: ./.github/workflows/terraform.yml
-    with: 
+  set-vars:
+    name: Set Variables
+    runs-on: ubuntu-latest
+    outputs:
       environment: test
+    steps:
+      - run: echo "Exposing env vars"
+
+  infra-test-environment: 
+    name: Infra Test
+    uses: ./.github/workflows/terraform.yml
+    with:
+      environment: ${{ needs.vars.outputs.environment }}
     
