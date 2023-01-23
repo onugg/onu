@@ -35,5 +35,5 @@ jobs:
 
       - name: terraform apply
         if: ${{ steps.plan.outputs.exitcode }} = 2
-        run: terraform apply -no-color -input=false -var-file="test.tfvars"
+        run: terraform apply -no-color -auto-approve -var-file="test.tfvars"
         
