@@ -1,5 +1,9 @@
 name: Full Pipeline
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches: [ "master" ]
