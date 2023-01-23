@@ -6,6 +6,7 @@ on:
     
 jobs: 
   infra-test-environment: 
+    concurrency: test-environment
     runs-on: ubuntu-latest
     environment: test
     defaults:
@@ -14,15 +15,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: set env variables
-        run: | 
-          export TF_VAR_discord_token=${{ secrets.DISCORD_TOKEN }} 
-          export TF_VAR_postgres_password=${{ secrets.POSTGRES_PASSWORD }} 
-          export TF_VAR_aws_access_key=${{ secrets.AWS_TOKEN_USERNAME }} 
-          export TF_VAR_aws_access_secret=${{ secrets.AWS_TOKEN_PASSWORD }} 
       - uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
       - run: terraform init
-      - run: terraform plan -no-color
+      - name: create tfvars file
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: ./infra/environments/test/test.tfvars
+          write-mode: overwrite
+          contents: |
+            discord_token="${{ secrets.DISCORD_TOKEN }}"
+            postgres_password="${{ secrets.POSTGRES_PASSWORD }}"
+            aws_access_key="${{ secrets.AWS_TOKEN_USERNAME }}"
+            aws_access_secret="${{ secrets.AWS_TOKEN_PASSWORD }}"
+
+      - run: terraform plan -no-color -var-file="test.tfvars"
         
