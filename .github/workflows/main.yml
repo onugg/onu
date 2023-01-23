@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
       - name: set env variables
         run: | 
-          export TF_VAR_discord-token=${{ secrets.DISCORD_TOKEN }} 
+          export TF_VAR_discord-token=123
           export TF_VAR_postgres-password=${{ secrets.POSTGRES_PASSWORD }} 
           export TF_VAR_aws-access-key=${{ secrets.AWS_TOKEN_USERNAME }} 
           export TF_VAR_aws-access-secret=${{ secrets.AWS_TOKEN_PASSWORD }} 
