@@ -1,0 +1,12 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+    
+jobs: 
+  infra-test-environment: 
+    uses: ./.github/workflows/terraform.yml
+    with: 
+      environment: test
+    
