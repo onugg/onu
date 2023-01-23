@@ -59,7 +59,7 @@ const CommunityCard: React.FC<CommunityCardProps> = ({
           </div>
           <Link
             className="flex h-10 w-full justify-center items-center text-sm font-bold rounded-lg bg-violet-500 text-white hover:bg-violet-700 hover:scale-105 duration-300"
-            href={`/c/${slug}`}
+            href={slug}
           >
             {`Go to ${name}`}
           </Link>

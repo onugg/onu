@@ -90,8 +90,12 @@ const PrimaryNavbar: React.FC = () => {
 const SubNavbar: React.FC = () => {
 
   // Feature toggles
+  const communitiesEnabled = useFeatureIsOn("communities");
+  const trendingEnabled = useFeatureIsOn("trending");
   const leaderboardEnabled = useFeatureIsOn("leaderboard");
   const profileEnabled = useFeatureIsOn("profile");
+  const activityEnabled = useFeatureIsOn("activity");
+  const settingsEnabled = useFeatureIsOn("settings");
 
 
   const router = useRouter();
@@ -108,8 +112,13 @@ const SubNavbar: React.FC = () => {
   ];
 
   const filteredNav = SubNavigation
+  .filter(item => (item.name !== "Communities" || communitiesEnabled))
+  .filter(item => (item.name !== "Trending" || trendingEnabled))
   .filter(item => (item.name !== "Leaderboards" || leaderboardEnabled))
   .filter(item => (item.name !== "Profile" || profileEnabled))
+  .filter(item => (item.name !== "Activity" || activityEnabled))
+  .filter(item => (item.name !== "Settings" || settingsEnabled))
+  
 
   const completion = useReadingProgress();
   return (
