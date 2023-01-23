@@ -17,7 +17,7 @@ jobs:
       with:
         tf_actions_version: 0.12.13
         tf_actions_subcommand: 'init'
-        tf_actions_working_dir: './infra/${{ inputs.environment }}'
+        tf_actions_working_dir: './infra/environments/${{ inputs.environment }}'
         tf_actions_comment: true
         
     - name: Terraform Plan
@@ -25,7 +25,7 @@ jobs:
       with:
         tf_actions_version: 0.12.13
         tf_actions_subcommand: 'plan'
-        tf_actions_working_dir: './infra/${{ inputs.environment }}'
+        tf_actions_working_dir: './infra/environments/${{ inputs.environment }}'
         tf_actions_comment: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
