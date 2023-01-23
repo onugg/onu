@@ -6,7 +6,13 @@ on:
     
 jobs: 
   infra-test-environment: 
-    uses: ./.github/workflows/terraform.yml
-    with:
-      environment: test
-    
+    runs-on: ubuntu-latest
+    environment: test
+    defaults:
+      run:
+        working-directory: './infra/environments/test'
+    steps:
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+      - run: terraform init
