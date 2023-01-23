@@ -7,7 +7,8 @@ on:
 jobs: 
   infra-test: 
     outputs:
-      aws-ecr-repository-name: ${{ steps.tf-outputs.outputs.aws-ecr-repository-name }}
+      discord-bot-aws-ecr-repository-name: ${{ steps.tf-outputs.outputs.discord-bot-aws-ecr-repository-name }}
+      discord-bot-image-name: ${{ steps.tf-outputs.outputs.discord-bot-image-name }}
     name: Infrastructure Test
     concurrency: test-environment
     runs-on: ubuntu-latest
