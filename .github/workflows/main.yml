@@ -6,6 +6,7 @@ on:
     
 jobs: 
   infra-test-environment: 
+    concurrency: test-environment
     runs-on: ubuntu-latest
     environment: test
     defaults:
