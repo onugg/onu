@@ -27,6 +27,12 @@ const config = {
         port: '',
         pathname: '/avatars/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 }

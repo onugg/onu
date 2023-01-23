@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useFeatureValue, useFeatureIsOn } from "@growthbook/growthbook-react";
 
 import LogoLight from "@/assets/OnuLogoLight.svg";
 import { trpc } from "@/utils/trpc";
@@ -87,6 +88,16 @@ const PrimaryNavbar: React.FC = () => {
 };
 
 const SubNavbar: React.FC = () => {
+
+  // Feature toggles
+  const communitiesEnabled = useFeatureIsOn("communities");
+  const trendingEnabled = useFeatureIsOn("trending");
+  const leaderboardEnabled = useFeatureIsOn("leaderboard");
+  const profileEnabled = useFeatureIsOn("profile");
+  const activityEnabled = useFeatureIsOn("activity");
+  const settingsEnabled = useFeatureIsOn("settings");
+
+
   const router = useRouter();
   const currentPath = router.pathname;
   const pathStart = currentPath.split("/")[1];
@@ -99,6 +110,16 @@ const SubNavbar: React.FC = () => {
     { name: "Activity", href: "/activity", current: currentPath === "/activity"},
     { name: "Settings", href: "/settings", current: currentPath === "/settings"},
   ];
+
+  const filteredNav = SubNavigation
+  .filter(item => (item.name !== "Communities" || communitiesEnabled))
+  .filter(item => (item.name !== "Trending" || trendingEnabled))
+  .filter(item => (item.name !== "Leaderboards" || leaderboardEnabled))
+  .filter(item => (item.name !== "Profile" || profileEnabled))
+  .filter(item => (item.name !== "Activity" || activityEnabled))
+  .filter(item => (item.name !== "Settings" || settingsEnabled))
+  
+
   const completion = useReadingProgress();
   return (
     <div className="sticky top-0 z-40 bg-theme-900">
@@ -111,7 +132,7 @@ const SubNavbar: React.FC = () => {
           className={`absolute bottom-0 h-0.5 w-full bg-blue-500 transition-transform`}
         />
         <div className="mx-4 flex items-baseline py-2">
-          {SubNavigation.map((item) => (
+          {filteredNav.map((item) => (
             <Link
               key={item.name}
               href={item.href}

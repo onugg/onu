@@ -139,7 +139,7 @@ const LeaderboardRightSidebar: React.FC = () => {
 
 const LeaderboardLayout: React.FC<LeaderboardProps> = ({ children }) => {
   return (
-    <div className="flex h-screen min-h-max flex-col">
+    <div className="flex max-h-screen min-h-max flex-col">
       <RootLayout>
         <div className="relative flex flex-1">
           <LeaderboardLeftSidebar />

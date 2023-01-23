@@ -53,7 +53,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   communities   Member[]
-  discordUser  DiscordUser?
+  discordUser   DiscordUser?
+  level         Int       @default(1)  
 }
 
 model VerificationToken {

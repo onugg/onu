@@ -3,7 +3,12 @@ import CommunityAddCard from "@/components/ui/community/communityAddCard";
 import CommunityCard from "@/components/ui/community/communityCard";
 import { trpc } from "@/utils/trpc";
 import { Dialog, Transition } from "@headlessui/react";
-import { AdjustmentsHorizontalIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  AdjustmentsHorizontalIcon,
+  ArrowUturnLeftIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -42,7 +47,7 @@ const AddCommunityModal: React.FC<{
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-neutral-200 border-2 border-black px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg border-2 border-black bg-neutral-200 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <button
                   className="absolute top-2 left-2 text-black"
                   onClick={() => setOpen(false)}
@@ -149,16 +154,14 @@ const OwnedCommunities: React.FC = () => {
       <div className="grid grid-cols-1 justify-center gap-y-8 sm:grid-cols-2 sm:gap-x-8 lg:mx-24 lg:grid-cols-3 2xl:mx-72 ">
         {ownedCommunities.data?.map((community) => (
           <div key={community.name}>
-            <Link href={community.id}>
-              <CommunityCard
-                image={community.image}
-                name={community.name}
-                slug={community.slug}
-                description={community.description}
-                totalMembers={community.totalMembers}
-                activeMembers={community.activeMembers}
-              />
-            </Link>
+            <CommunityCard
+              image={community.image}
+              name={community.name}
+              slug={`/c/${community.slug}/admin/discord/general`}
+              description={community.description}
+              totalMembers={community.totalMembers}
+              activeMembers={community.activeMembers}
+            />
           </div>
         ))}
       </div>
@@ -182,16 +185,14 @@ const MemberCommunities: React.FC = () => {
         <div className="grid grid-cols-1 justify-center gap-y-8 sm:grid-cols-2 sm:gap-x-8 lg:mx-24 lg:grid-cols-3 2xl:mx-72 ">
           {memberCommunities.data?.map((community) => (
             <div key={community.name}>
-              <Link href={community.id}>
-                <CommunityCard
-                  image={community.image}
-                  name={community.name}
-                  slug={community.slug}
-                  description={community.description}
-                  totalMembers={community.totalMembers}
-                  activeMembers={community.activeMembers}
-                />
-              </Link>
+              <CommunityCard
+                image={community.image}
+                name={community.name}
+                slug={community.slug}
+                description={community.description}
+                totalMembers={community.totalMembers}
+                activeMembers={community.activeMembers}
+              />
             </div>
           ))}
         </div>

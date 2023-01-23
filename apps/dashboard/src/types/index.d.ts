@@ -12,8 +12,9 @@ interface StarProps {
 
 export interface User {
   name: string;
+  avatar: string;
   level: number;
-  change: 'up' | 'down';
+  change: number;
 }
 
 export interface MenuSection {
