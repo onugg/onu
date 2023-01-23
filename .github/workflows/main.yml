@@ -82,5 +82,5 @@ jobs:
           ECR_REPOSITORY: ${{ needs.infra-test.outputs.aws-ecr-repository-name }}
           IMAGE_TAG: discord-bot
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.discord-bot
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
