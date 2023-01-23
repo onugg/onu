@@ -67,8 +67,8 @@ provider "aws" {
 }
 
 provider "upstash" {
-  email = "FILL_HERE"
-  api_key  = "FILL_HERE"
+  email = var.upstash_email
+  api_key = var.upstash_api_key
 }
 
 data "aws_caller_identity" "current" {}
