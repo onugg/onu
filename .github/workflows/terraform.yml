@@ -4,7 +4,6 @@ on:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
-    environment: ${{ secrets.GITHUB_ENV }}
     steps:
     - name: 'Checkout'
       uses: actions/checkout@master
