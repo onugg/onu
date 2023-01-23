@@ -6,6 +6,8 @@ on:
     
 jobs: 
   infra-test: 
+    outputs:
+      aws-ecr-repository-name: ${{ steps.output-vars.outputs.aws-ecr-repository-name }}
     name: Infrastructure Test
     concurrency: test-environment
     runs-on: ubuntu-latest
@@ -45,4 +47,36 @@ jobs:
       - name: terraform apply
         if: ${{ steps.plan.outputs.exitcode }} = 2
         run: terraform apply -no-color -auto-approve -var-file="test.tfvars"
+
+      - name: terraform output json
+        run: terraform output -json > output.json
+
+      - name: get variables from json
+        id: output-vars
+        run: |
+          echo "::set-output name=aws-ecr-repository-name::$(jq -r '.aws-ecr-repository-name.value' output.json)"
         
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: infra-test
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_TOKEN_USERNAME }}
+          aws-secret-access-key: ${{ secrets.AWS_TOKEN_PASSWORD }}
+          aws-region: ap-southeast-2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ steps. }}
+          IMAGE_TAG: discord-bot
+        run: |
+          docker build -t $ECR_REGISTRY/${{ needs.infra-test.outputs.aws-ecr-repository-name }}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/${{ needs.infra-test.outputs.aws-ecr-repository-name }}:$IMAGE_TAG
