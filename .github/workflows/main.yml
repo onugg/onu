@@ -8,4 +8,6 @@ jobs:
   infra-test-environment: 
     name: Infra Test
     uses: ./.github/workflows/terraform.yml
+    with:
+      environment: ${{ vars.ENV_NAME }}
     
