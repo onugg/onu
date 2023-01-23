@@ -26,6 +26,16 @@ variable aws_access_secret {
   sensitive = true
 }
 
+variable upstash_api_key {
+  type = string
+  sensitive = true
+}
+
+variable upstash_email {
+  type = string
+  sensitive = true
+}
+
 terraform {
   cloud {
     organization = "onu"
@@ -51,6 +61,11 @@ provider "aws" {
   secret_key = var.aws_access_secret
 }
 
+provider "upstash" {
+  email = "FILL_HERE"
+  api_key  = "FILL_HERE"
+}
+
 data "aws_caller_identity" "current" {}
 
 provider "docker" {
@@ -59,6 +74,12 @@ provider "docker" {
     username = data.aws_ecr_authorization_token.token.user_name
     password = data.aws_ecr_authorization_token.token.password
   }
+}
+
+resource "upstash_kafka_cluster" "cluster" {
+  cluster_name = "onu-${var.environment}-cluster"
+  region = "us-east-1"
+  multizone = false
 }
 
 resource "aws_vpc" "aws_vpc" {

@@ -29,6 +29,7 @@ jobs:
             postgres_password="${{ secrets.POSTGRES_PASSWORD }}"
             aws_access_key="${{ vars.AWS_TOKEN_USERNAME }}"
             aws_access_secret="${{ secrets.AWS_TOKEN_PASSWORD }}"
+            upstash_api_key="${{ secrets.UPSTASH_API_KEY }}"
 
       - name: terraform plan
         run: terraform plan -no-color -var-file="test.tfvars"
