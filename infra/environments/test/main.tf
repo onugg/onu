@@ -52,6 +52,11 @@ terraform {
       source  = "kreuzwerker/docker"
       version = "3.0.1"
     }
+
+    upstash = {
+      source = "upstash/upstash"
+      version = "1.2.5"
+    }
   }
 }
 
