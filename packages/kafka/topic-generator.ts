@@ -21,7 +21,7 @@ async function start(outFilePath: string) {
   }
 
   // write to file
-  await writeFile(outFilePath, JSON.stringify(topics), err => console.log(err))
+  await writeFile(outFilePath, JSON.stringify({topics: topics}), err => console.log(err))
 }
 
 start(options['outFilePath'])

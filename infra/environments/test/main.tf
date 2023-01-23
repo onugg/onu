@@ -36,6 +36,11 @@ variable upstash_email {
   sensitive = true
 }
 
+variable upstash_topics_path {
+  type = string
+  default = "../../../packages/kafka/topics.json"
+}
+
 terraform {
   cloud {
     organization = "onu"
@@ -85,6 +90,24 @@ resource "upstash_kafka_cluster" "cluster" {
   cluster_name = "onu-${var.environment}-cluster"
   region = "us-east-1"
   multizone = false
+}
+
+locals {
+  topics = jsondecode(file(var.upstash_topics_path))
+}
+
+resource "upstash_kafka_topic" "kafka_topic" {
+
+  for_each = {for idx, topic in local.topics.topics: idx => topic}
+
+  topic_name =each.value.name
+  partitions = 1
+  retention_time = 625135
+  retention_size = 725124
+  max_message_size = 829213
+  cleanup_policy = "delete"
+
+  cluster_id = resource.upstash_kafka_cluster.cluster.cluster_id
 }
 
 resource "aws_vpc" "aws_vpc" {
