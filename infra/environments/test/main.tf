@@ -255,7 +255,7 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 resource "aws_launch_configuration" "ecs_launch_config" {
   name_prefix = "onu-${var.environment}-ecs-"
   image_id = "ami-02d1d818f19a85542"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   security_groups = [aws_security_group.ecs_sg.id]
   user_data = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.ecs_cluster.name} > /etc/ecs/ecs.config"
