@@ -258,7 +258,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   instance_type = "t2.medium"
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   security_groups = [aws_security_group.ecs_sg.id]
-  user_data = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.ecs_cluster.name} > /etc/ecs/ecs.config"
+  user_data = "#!/bin/bash\necho \"ECS_CLUSTER=${aws_ecs_cluster.ecs_cluster.name}\" >> /etc/ecs/ecs.config"
 }
 
 resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
@@ -283,25 +283,25 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   }
 }
 
-resource "aws_db_instance" "postgres" {
-  identifier = "onu-${var.environment}-rds"
-  engine = "postgres"
-  engine_version = "14.5"
-  instance_class = "db.t3.micro"
-  allocated_storage = 20
-  username = "onu_admin_${var.environment}"
-  password = "${var.postgres_password}"
-  db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
-  vpc_security_group_ids = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
-  skip_final_snapshot = true
-  publicly_accessible = true
-  port = 5432
+# resource "aws_db_instance" "postgres" {
+#   identifier = "onu-${var.environment}-rds"
+#   engine = "postgres"
+#   engine_version = "14.5"
+#   instance_class = "db.t3.micro"
+#   allocated_storage = 20
+#   username = "onu_admin_${var.environment}"
+#   password = "${var.postgres_password}"
+#   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
+#   vpc_security_group_ids = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
+#   skip_final_snapshot = true
+#   publicly_accessible = true
+#   port = 5432
 
-  tags = {
-    Environment = var.environment
-    Name = "onu-${var.environment}-rds-postgres"
-  }
-}
+#   tags = {
+#     Environment = var.environment
+#     Name = "onu-${var.environment}-rds-postgres"
+#   }
+# }
 
 # resource "aws_ecr_repository" "ecr" {
 #   name = "onu-${var.environment}-ecr-services"
@@ -358,12 +358,6 @@ module "discord-bot-service" {
       cpu       = 1
       memory    = 512
       essential = true
-      portMappings = [
-        {
-          containerPort = 80
-          hostPort      = 80
-        }
-      ]
       environment = [
         {
           name: "DISCORD_TOKEN",
