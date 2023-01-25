@@ -13,7 +13,6 @@ jobs:
     concurrency: test-environment
     runs-on: ubuntu-latest
     environment: test
-    condition: 1 = 2
     defaults:
       run:
         working-directory: './infra/environments/test'
