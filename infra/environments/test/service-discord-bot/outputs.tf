@@ -5,5 +5,5 @@ output "ecr-repository-name" {
 
 output "image-name" {
   description = "Name of the image"
-  value       = "${aws_ecr_repository.ecr.repository_url}/${local.service-name}:latest"
+  value       = local.image-name
 }

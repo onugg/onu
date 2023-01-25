@@ -1,5 +1,6 @@
 locals {
   service-name = "discord-bot"
+  image-name = "${aws_ecr_repository.ecr.repository_url}:latest"
 }
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -25,7 +26,7 @@ resource "aws_ecs_task_definition" "this" {
 [
   {
     "name": "${local.service-name}",
-    "image": "${aws_ecr_repository.ecr.repository_url}/${local.service-name}:latest",
+    "image": "${local.image-name}",
     "cpu": 0,
     "memory": 128,
     "logConfiguration": {
