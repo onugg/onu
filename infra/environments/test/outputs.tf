@@ -1,3 +1,7 @@
-output "aws-ecr-repository-name" {
-  value = aws_ecr_repository.ecr.name
+output "discord-bot-aws-ecr-repository-name" {
+  value = module.service-discord-bot.ecr-repository-name
+}
+
+output "discord-bot-image-name" {
+  value = module.service-discord-bot.image-name
 }
