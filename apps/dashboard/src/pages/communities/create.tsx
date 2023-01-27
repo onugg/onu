@@ -173,14 +173,14 @@ const Form: React.FC = () => {
             </label>
             <div className="mt-1 sm:col-span-3 sm:mt-0">
               <div className="flex max-w-lg rounded-md">
-                <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-700 bg-neutral-900 px-3 text-neutral-400 sm:text-sm">
+                <span className="inline-flex items-center rounded-l-md border border-r-0 border-violet-500 bg-theme-800 px-3 text-neutral-200 sm:text-sm">
                   onu.gg/c/
                 </span>
                 <input
                   type="text"
                   id="slug"
                   placeholder={slugPlaceholder}
-                  className={`block w-full rounded-r-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
+                  className={`block w-full rounded-r-md border border-violet-500 bg-theme-800 py-2 leading-5 text-neutral-300 placeholder-neutral-300 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
                     errors.slug && "btn-input-error"
                   }`}
                   {...register("slug")}
@@ -218,7 +218,7 @@ const Form: React.FC = () => {
 
               <label
                 htmlFor="file-upload"
-                className="group relative flex h-48 cursor-pointer justify-center rounded-xl border border-neutral-700 bg-black bg-cover bg-center text-sm duration-300"
+                className="group relative flex h-48 cursor-pointer justify-center rounded-xl border border-violet-700 bg-black bg-cover bg-center text-sm duration-300"
                 style={{
                   backgroundImage: `url(${localImageUrl})`,
                 }}
@@ -256,7 +256,7 @@ const Form: React.FC = () => {
               </label>
               <label
                 htmlFor="file-upload"
-                className="mt-1 flex h-48 cursor-pointer justify-center rounded-md border-2 border-dashed border-neutral-700 bg-black px-6 pt-10 pb-6 duration-300 hover:border-neutral-400 focus:border-neutral-400"
+                className="mt-1 flex h-48 cursor-pointer justify-center rounded-md border-2 border-dashed border-violet-500 bg-theme-800 px-6 pt-10 pb-6 duration-300 hover:border-violet-700 focus:border-violet-700"
               >
                 <input
                   id="file-upload"
@@ -266,7 +266,7 @@ const Form: React.FC = () => {
                 />
                 <div className="space-y-1 text-center">
                   <svg
-                    className="mx-auto h-12 w-12 text-neutral-400"
+                    className="mx-auto h-12 w-12 text-white"
                     stroke="currentColor"
                     fill="none"
                     viewBox="0 0 48 48"
@@ -280,10 +280,10 @@ const Form: React.FC = () => {
                     />
                   </svg>
 
-                  <div className="flex text-sm text-neutral-500">
+                  <div className="flex text-sm text-neutral-200">
                     <span>Upload a file by clicking here</span>
                   </div>
-                  <p className="text-sm text-neutral-500">
+                  <p className="text-sm text-neutral-200">
                     PNG, JPG, GIF up to 10MB
                   </p>
                 </div>

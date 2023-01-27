@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { Fragment, useState } from "react";
 
 import type { NextPage } from "next";
+
+// To Do: Put in module
 const AddCommunityModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -75,7 +77,7 @@ const AddCommunityModal: React.FC<{
                     <Link href="/trending">
                       <button
                         type="button"
-                        className="btn-1 border-2 border-black drop-shadow-lg"
+                        className="btn-1 drop-shadow-lg"
                       >
                         Join Community
                       </button>
@@ -83,7 +85,7 @@ const AddCommunityModal: React.FC<{
                     <Link href="/communities/create">
                       <button
                         type="button"
-                        className="btn-1 border-2 border-black drop-shadow-lg"
+                        className="btn-1 drop-shadow-lg"
                       >
                         Create Community
                       </button>
@@ -114,7 +116,7 @@ const SearchBar: React.FC = () => {
           <div>
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <MagnifyingGlassIcon
-                className="h-5 w-5 text-neutral-500"
+                className="h-5 w-5 text-violet-600"
                 aria-hidden="true"
               />
             </div>

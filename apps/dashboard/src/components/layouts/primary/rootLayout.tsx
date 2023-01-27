@@ -56,7 +56,7 @@ const PrimaryNavbar: React.FC = () => {
           <Link
             key="feedback"
             href="/"
-            className="rounded-md border border-theme-700 px-3 py-2 text-sm hover:border-neutral-100"
+            className="rounded-md border border-theme-700 px-3 py-2 text-sm font-semibold hover:border-violet-700 duration-300"
           >
             Feedback
           </Link>
@@ -65,12 +65,12 @@ const PrimaryNavbar: React.FC = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm hover:text-neutral-100"
+              className="rounded-md px-3 py-2 text-sm font-semibold hover:text-violet-700 duration-300"
             >
               {item.name}
             </Link>
           ))}
-          <BellIcon className="mx-2 w-8 cursor-pointer rounded-full border border-neutral-700 p-1 hover:text-neutral-100 " />
+          <BellIcon className="mx-2 w-8 cursor-pointer rounded-full border border-theme-700 p-1 hover:text-violet-700 duration-300 " />
           <button className="mx-2 cursor-pointer">
             <Image
               src={profileImage}
@@ -118,7 +118,7 @@ const SubNavbar: React.FC = () => {
   .filter(item => (item.name !== "Profile" || profileEnabled))
   .filter(item => (item.name !== "Activity" || activityEnabled))
   .filter(item => (item.name !== "Settings" || settingsEnabled))
-  
+
 
   const completion = useReadingProgress();
   return (
