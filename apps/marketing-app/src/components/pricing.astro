@@ -1,438 +1,145 @@
-<div class="bg-white">
-  <div class="mx-auto max-w-7xl py-24 px-6 lg:px-8">
-    <div class="sm:align-center sm:flex sm:flex-col">
-      <h1
-        class="text-5xl font-bold tracking-tight text-gray-900 sm:text-center"
-      >
-        Pricing Plans
-      </h1>
-      <p class="mt-5 text-xl text-gray-500 sm:text-center">
-        Start building for free, then add a site plan to go live. Account plans
-        unlock additional features.
-      </p>
-      <div
-        class="relative mt-6 flex self-center rounded-lg bg-gray-100 p-0.5 sm:mt-8"
-      >
-        <button
-          type="button"
-          class="relative w-1/2 whitespace-nowrap rounded-md border-gray-200 bg-white py-2 text-sm font-medium text-gray-900 shadow-sm focus:z-10 focus:outline-none focus:ring-2 focus:ring-violet-500 sm:w-auto sm:px-8"
-          >Monthly billing</button
-        >
-        <button
-          type="button"
-          class="relative ml-0.5 w-1/2 whitespace-nowrap rounded-md border border-transparent py-2 text-sm font-medium text-gray-700 focus:z-10 focus:outline-none focus:ring-2 focus:ring-violet-500 sm:w-auto sm:px-8"
-          >Yearly billing</button
-        >
+---
+import { CheckIcon } from "@heroicons/react/24/outline";
+
+const PricingCards = [
+  {
+    name: "The Freebie",
+    description: "For small discord communities and personal use",
+    priceMonthly: 0,
+    priceAnnually: 0,
+    benefits: [
+      "A Web-based Dashboard",
+      "Free Discord Intergration",
+      "Community Support",
+    ],
+  },
+  {
+    name: "The Hobbyist",
+    description:
+      "For Communities that are just starting out and want some extra features",
+    priceMonthly: 24,
+    priceAnnually: 19,
+    benefits: [
+      "A Web-based Dashboard",
+      "Full Discord Intergration",
+      "Full Twitter Integration",
+      "Community Analytics",
+      "Specialised Support",
+    ],
+  },
+  {
+    name: "The Content Creator",
+    description:
+      "For Content Creators who want to grow their audience and boost engagement",
+    priceMonthly: 69,
+    priceAnnually: 59,
+    benefits: [
+      "A Web-based Dashboard",
+      "Full Discord Intergration",
+      "Full Twitter Integration",
+      "Full Youtube Integration",
+      "Full Twitch Integration",
+      "In-depth Community Analytics",
+      "Specialised Support",
+    ],
+  },
+  {
+    name: "The Blockchain Business",
+    description:
+      "For established businesses that want to unlock all features and get priority support",
+    priceMonthly: 109,
+    priceAnnually: 89,
+    benefits: [
+      "A Web-based Dashboard",
+      "Full Discord Intergration",
+      "Full Twitter Integration",
+      "Full Youtube Integration",
+      "Full Twitch Integration",
+      "Full Blockchain Integration",
+      "In-depth Blockchain Analytics",
+      "Specialised Support",
+    ],
+  },
+];
+---
+
+<!-- This example requires Tailwind CSS v3.0+ -->
+<div class="bg-gray-900">
+  <div class="relative overflow-hidden pt-32 pb-96 lg:pt-40">
+    <div>
+      <img
+        class="absolute bottom-0 left-1/2 w-[1440px] max-w-none -translate-x-1/2"
+        src="https://tailwindui.com/img/component-images/grid-blur-purple-on-black.jpg"
+        alt=""
+      />
+    </div>
+    <div class="relative mx-auto max-w-7xl px-6 text-center lg:px-8">
+      <div class="mx-auto max-w-2xl lg:max-w-4xl">
+        <h2 class="text-lg font-semibold leading-8 text-violet-500">Pricing</h2>
+        <p class="mt-2 text-4xl font-bold tracking-tight text-white">
+          The right price for you, <br
+            class="hidden sm:inline lg:hidden"
+          />whoever you are
+        </p>
+        <p class="mt-6 text-lg leading-8 text-white/60">
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit
+          numquam eligendi quos odit doloribus molestiae voluptatum.
+        </p>
       </div>
     </div>
-    <div
-      class="mt-12 space-y-4 sm:mt-16 sm:grid sm:grid-cols-2 sm:gap-6 sm:space-y-0 lg:mx-auto lg:max-w-4xl xl:mx-0 xl:max-w-none xl:grid-cols-4"
-    >
-      <div
-        class="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm"
-      >
-        <div class="p-6">
-          <h2 class="text-lg font-medium leading-6 text-gray-900">Hobby</h2>
-          <p class="mt-4 text-sm text-gray-500">
-            All the basics for starting a new business
-          </p>
-          <p class="mt-8">
-            <span class="text-4xl font-bold tracking-tight text-gray-900"
-              >$12</span
-            >
-            <span class="text-base font-medium text-gray-500">/mo</span>
-          </p>
-          <a
-            href="#"
-            class="mt-8 block w-full rounded-md border border-gray-800 bg-gray-800 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
-            >Buy Hobby</a
-          >
-        </div>
-        <div class="px-6 pt-6 pb-8">
-          <h3 class="text-sm font-medium text-gray-900">What's included</h3>
-          <ul role="list" class="mt-6 space-y-4">
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Potenti felis, in cras at at ligula nunc.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Orci neque eget pellentesque.</span
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div
-        class="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm"
-      >
-        <div class="p-6">
-          <h2 class="text-lg font-medium leading-6 text-gray-900">
-            Freelancer
-          </h2>
-          <p class="mt-4 text-sm text-gray-500">
-            All the basics for starting a new business
-          </p>
-          <p class="mt-8">
-            <span class="text-4xl font-bold tracking-tight text-gray-900"
-              >$24</span
-            >
-            <span class="text-base font-medium text-gray-500">/mo</span>
-          </p>
-          <a
-            href="#"
-            class="mt-8 block w-full rounded-md border border-gray-800 bg-gray-800 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
-            >Buy Freelancer</a
-          >
-        </div>
-        <div class="px-6 pt-6 pb-8">
-          <h3 class="text-sm font-medium text-gray-900">What's included</h3>
-          <ul role="list" class="mt-6 space-y-4">
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Potenti felis, in cras at at ligula nunc.
-              </span>
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Orci neque eget pellentesque.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Donec mauris sit in eu tincidunt etiam.</span
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div
-        class="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm"
-      >
-        <div class="p-6">
-          <h2 class="text-lg font-medium leading-6 text-gray-900">Startup</h2>
-          <p class="mt-4 text-sm text-gray-500">
-            All the basics for starting a new business
-          </p>
-          <p class="mt-8">
-            <span class="text-4xl font-bold tracking-tight text-gray-900"
-              >$32</span
-            >
-            <span class="text-base font-medium text-gray-500">/mo</span>
-          </p>
-          <a
-            href="#"
-            class="mt-8 block w-full rounded-md border border-gray-800 bg-gray-800 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
-            >Buy Startup</a
-          >
-        </div>
-        <div class="px-6 pt-6 pb-8">
-          <h3 class="text-sm font-medium text-gray-900">What's included</h3>
-          <ul role="list" class="mt-6 space-y-4">
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Potenti felis, in cras at at ligula nunc.
-              </span>
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Orci neque eget pellentesque.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Donec mauris sit in eu tincidunt etiam.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500">Faucibus volutpat magna.</span
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div
-        class="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm"
-      >
-        <div class="p-6">
-          <h2 class="text-lg font-medium leading-6 text-gray-900">
-            Enterprise
-          </h2>
-          <p class="mt-4 text-sm text-gray-500">
-            All the basics for starting a new business
-          </p>
-          <p class="mt-8">
-            <span class="text-4xl font-bold tracking-tight text-gray-900"
-              >$48</span
-            >
-            <span class="text-base font-medium text-gray-500">/mo</span>
-          </p>
-          <a
-            href="#"
-            class="mt-8 block w-full rounded-md border border-gray-800 bg-gray-800 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
-            >Buy Enterprise</a
-          >
-        </div>
-        <div class="px-6 pt-6 pb-8">
-          <h3 class="text-sm font-medium text-gray-900">What's included</h3>
-          <ul role="list" class="mt-6 space-y-4">
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Potenti felis, in cras at at ligula nunc.
-              </span>
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Orci neque eget pellentesque.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Donec mauris sit in eu tincidunt etiam.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500">Faucibus volutpat magna.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Id sed tellus in varius quisque.</span
-              >
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500">Risus egestas faucibus.</span>
-            </li>
-
-            <li class="flex space-x-3">
-              <!-- Heroicon name: mini/check -->
-              <svg
-                class="h-5 w-5 flex-shrink-0 text-green-500"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="text-sm text-gray-500"
-                >Risus cursus ullamcorper.</span
-              >
-            </li>
-          </ul>
+  </div>
+  <div class="flow-root bg-gray-900 pb-32 lg:pb-40">
+    <div class="relative -mt-80">
+      <div class="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+        <div
+          class="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-7xl lg:grid-cols-4 lg:gap-8"
+        >
+          {
+            PricingCards.map((card) => (
+              <div class="flex flex-col rounded-3xl bg-white shadow-xl ring-1 ring-black/10">
+                <div class="p-8 sm:p-10">
+                  <h3
+                    class="text-lg font-semibold leading-8 tracking-tight text-violet-500"
+                    id="tier-hobby"
+                  >
+                    {card.name}
+                  </h3>
+                  <div class="mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-900">
+                    ${card.priceAnnually}
+                    <span class="text-lg font-semibold leading-8 tracking-normal text-gray-500">
+                      /mo
+                    </span>
+                  </div>
+                  <p class="mt-6 text-base leading-7 text-gray-600">
+                    {card.description}
+                  </p>
+                </div>
+                <div class="flex flex-1 flex-col justify-between rounded-2xl bg-gray-50 p-6 sm:p-8">
+                  <ul role="list" class="space-y-4">
+                    {card.benefits.map((benefit) => (
+                      <li class="flex items-center">
+                        <div class="flex-shrink-0">
+                          <CheckIcon className="h-6 w-6 text-violet-500" />
+                        </div>
+                        <p class="ml-3 text-sm leading-6 text-gray-600">
+                          {benefit}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <div class="mt-8">
+                    <a
+                      href="#"
+                      class="inline-block w-full rounded-lg bg-violet-500 px-4 py-2.5 text-center text-sm font-semibold leading-5 text-white shadow-md duration-300 hover:bg-violet-700"
+                      aria-describedby="tier-hobby"
+                    >
+                      Get started today
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))
+          };
         </div>
       </div>
     </div>
