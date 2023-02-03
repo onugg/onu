@@ -15,8 +15,10 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useEffect } from "react";
 import { Fragment, useState } from "react";
+import Button1 from "@/components/ui/common/buttons/button1";
 
 import type { NextPage } from "next";
+import ButtonInput from "@/components/ui/common/buttons/buttonInput";
 
 // To Do: Put in module
 const AddCommunityModal: React.FC<{
@@ -35,7 +37,7 @@ const AddCommunityModal: React.FC<{
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-neutral-700 bg-opacity-50 transition-opacity" />
+          <div className="fixed inset-0 bg-neutral-700/50 bg-opacity-50 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -49,9 +51,9 @@ const AddCommunityModal: React.FC<{
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg border-2 border-black bg-neutral-200 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <button
-                  className="absolute top-2 left-2 text-black"
+                  className="absolute top-2 left-2 text-gray-200"
                   onClick={() => setOpen(false)}
                 >
                   <ArrowUturnLeftIcon className="h-6 w-6" aria-hidden="true" />
@@ -60,12 +62,12 @@ const AddCommunityModal: React.FC<{
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-neutral-900"
+                      className="text-lg font-semibold leading-6 text-gray-100"
                     >
                       Join or Create Community
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-neutral-600">
+                      <p className="text-sm text-gray-300">
                         Would you like to join an existing community, or create
                         a new one?
                       </p>
@@ -74,22 +76,11 @@ const AddCommunityModal: React.FC<{
                 </div>
                 <div className="mt-5 sm:mt-6">
                   <div className="inline-flex w-full justify-center gap-4">
-                    <Link href="/trending">
-                      <button
-                        type="button"
-                        className="btn-1 drop-shadow-lg"
-                      >
-                        Join Community
-                      </button>
-                    </Link>
-                    <Link href="/communities/create">
-                      <button
-                        type="button"
-                        className="btn-1 drop-shadow-lg"
-                      >
-                        Create Community
-                      </button>
-                    </Link>
+                    <Button1 href={"/trending"} text={"Join Community"} />
+                    <Button1
+                      href="/communities/create"
+                      text={"Create Community"}
+                    />
                   </div>
                 </div>
               </Dialog.Panel>
@@ -110,33 +101,16 @@ const SearchBar: React.FC = () => {
     <div className="relative z-10 my-12 mx-12">
       <div className="flex gap-x-4 md:mx-24 2xl:mx-72">
         <div className="relative grow">
-          <label htmlFor="search" className="sr-only">
-            Search
-          </label>
-          <div>
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <MagnifyingGlassIcon
-                className="h-5 w-5 text-violet-600"
-                aria-hidden="true"
-              />
-            </div>
-            <input
-              id="search"
-              name="search"
-              className="btn-input pl-10 pr-3"
-              placeholder="Search"
-              type="search"
-            />
-          </div>
+          <ButtonInput placeholder="Search Communities..." />
         </div>
         <button onClick={handleOpenModal}>
-          <div className="btn-1 px-4">
+          <div className="flex rounded-md border border-violet-500 bg-violet-500 py-2 px-4 text-sm font-medium text-gray-200 duration-300 hover:border-violet-700 hover:bg-violet-700 hover:text-white">
             <PlusIcon className="h-5 w-5" aria-hidden="true" />
             <div className="hidden md:flex">Add Community</div>
             <AddCommunityModal open={openModal} setOpen={setOpenModal} />
           </div>
         </button>
-        <button className="btn-1">
+        <button className="flex rounded-md border border-violet-500 bg-violet-500 py-2 px-2 text-sm font-medium text-gray-200 duration-300 hover:border-violet-700 hover:bg-violet-700 hover:text-white">
           <AdjustmentsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>
