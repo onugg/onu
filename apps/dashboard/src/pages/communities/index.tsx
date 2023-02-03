@@ -126,7 +126,9 @@ const OwnedCommunities: React.FC = () => {
   });
   return ownedCommunities.data?.[0] ? (
     <div className="relative z-10 mx-12 my-12">
-      <div className="heading-1">Owned Communities</div>
+      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
+        Owned Communities
+      </div>
       <div className="grid grid-cols-1 justify-center gap-y-8 sm:grid-cols-2 sm:gap-x-8 lg:mx-24 lg:grid-cols-3 2xl:mx-72 ">
         {ownedCommunities.data?.map((community) => (
           <div key={community.name}>
@@ -156,7 +158,9 @@ const MemberCommunities: React.FC = () => {
     });
   return (
     <div className="relative z-10 mx-12 my-12">
-      <div className="heading-1">Communities</div>
+      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
+        Communities
+      </div>
       {memberCommunities.data?.[0] ? (
         <div className="grid grid-cols-1 justify-center gap-y-8 sm:grid-cols-2 sm:gap-x-8 lg:mx-24 lg:grid-cols-3 2xl:mx-72 ">
           {memberCommunities.data?.map((community) => (

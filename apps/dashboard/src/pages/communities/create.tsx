@@ -147,7 +147,9 @@ const Form: React.FC = () => {
 
   return (
     <form className="mx-12 space-y-8" onSubmit={onSubmit}>
-      <div className="heading-1">Create Community</div>
+      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
+        Create Community
+      </div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-2">
