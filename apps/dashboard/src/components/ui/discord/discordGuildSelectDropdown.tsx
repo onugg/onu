@@ -28,7 +28,10 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
 
   return (
     <div>
-      <label htmlFor="server" className="form-label">
+      <label
+        htmlFor="server"
+        className="mb-1 block text-sm font-medium text-neutral-200"
+      >
         {title}
       </label>
 

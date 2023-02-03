@@ -151,7 +151,10 @@ const Form: React.FC = () => {
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-2">
-            <label htmlFor="name" className="form-label">
+            <label
+              htmlFor="name"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               Name
             </label>
             <input
@@ -170,7 +173,10 @@ const Form: React.FC = () => {
             )}
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="name" className="form-label">
+            <label
+              htmlFor="name"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               URL
             </label>
             <div className="mt-1 sm:col-span-3 sm:mt-0">
@@ -196,7 +202,10 @@ const Form: React.FC = () => {
             </div>
           </div>
           <div className="sm:col-span-6">
-            <label htmlFor="description" className="form-label">
+            <label
+              htmlFor="description"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               Description
             </label>
             <textarea
@@ -216,7 +225,10 @@ const Form: React.FC = () => {
           </div>
           {localImageUrl ? (
             <div className="sm:col-span-2">
-              <label htmlFor="cover-photo" className="form-label">
+              <label
+                htmlFor="cover-photo"
+                className="mb-1 block text-sm font-medium text-neutral-200"
+              >
                 Cover photo
               </label>
 
@@ -243,7 +255,7 @@ const Form: React.FC = () => {
                 />
               </label>
 
-              <p className="form-label mt-2">
+              <p className="mb-1 mt-2 block text-sm font-medium text-neutral-200">
                 Tip: Click again to change image
               </p>
 
@@ -255,7 +267,10 @@ const Form: React.FC = () => {
             </div>
           ) : (
             <div className="sm:col-span-2">
-              <label htmlFor="cover-photo" className="form-label">
+              <label
+                htmlFor="cover-photo"
+                className="mb-1 block text-sm font-medium text-neutral-200"
+              >
                 Cover photo
               </label>
               <label
