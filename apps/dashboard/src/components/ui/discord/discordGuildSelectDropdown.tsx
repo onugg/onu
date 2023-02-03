@@ -18,7 +18,6 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
   discordGuilds: DiscordGuild[];
   title: string;
   onSelection: (guild: DiscordGuild) => void;
-
 }) => {
   const [selected, setSelected] = useState(discordGuilds?.[0]);
   useEffect(() => {
@@ -26,7 +25,7 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
       onSelection(selected);
     }
   }, [onSelection, selected]);
-  
+
   return (
     <div>
       <label htmlFor="server" className="form-label">
@@ -37,10 +36,10 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
         <Listbox value={selected} onChange={setSelected} name="guild">
           <div className="relative ">
             <Listbox.Button
-              className={`btn-input flex flex-row justify-between py-2 pl-3 pr-3 text-left ${
+              className={`focus:bg-gray-600-50 flex w-full flex-row justify-between rounded border border-gray-700 bg-gray-700/50 py-2 pl-3 pr-3 text-left leading-5 text-gray-300 placeholder-gray-400 duration-300 focus:border-gray-600 focus:bg-gray-600/50 focus:text-white focus:ring-transparent sm:text-sm ${
                 selected?.name
                   ? ""
-                  : "btn-input-error flex flex-row justify-between py-2 pl-3 pr-3 text-left"
+                  : "flex flex-row justify-between border-red-500 pl-3 pr-3 text-left"
               }`}
             >
               <span className="block truncate text-neutral-200">
@@ -60,15 +59,13 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-violet-700 bg-theme-800 py-2 leading-5 text-neutral-200 placeholder-neutral-500 duration-300 focus:text-gray-300 focus:placeholder-transparent focus:outline-none sm:text-sm">
+              <Listbox.Options className="bg-theme-800 absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-violet-500 py-2 leading-5 text-neutral-200 placeholder-neutral-500 duration-300 focus:text-gray-300 focus:placeholder-transparent focus:outline-none sm:text-sm">
                 {discordGuilds.map((guild: DiscordGuild) => (
                   <Listbox.Option
                     key={guild.id}
                     className={({ active }) =>
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                        active
-                          ? "bg-violet-700 text-white"
-                          : "text-neutral-300"
+                        active ? "bg-violet-500 text-white" : "text-neutral-300"
                       }`
                     }
                     value={guild}
