@@ -1,0 +1,92 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import {
+  Astronav,
+  MenuItems,
+  MenuIcon,
+  DropdownItems,
+  Dropdown,
+  OpenIcon,
+  CloseIcon,
+} from "astro-navbar";
+
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+
+const menuitems = [
+  {
+    title: "Features",
+    path: "/features",
+  },
+  {
+    title: "Pricing",
+    path: "/pricing",
+  },
+  {
+    title: "Docs",
+    path: "/docs",
+  },
+  {
+    title: "Github",
+    path: "/github",
+  },
+];
+---
+
+<Layout>
+  <header class="flex items-center justify-end py-6 px-6 gap-6">
+    <Astronav>
+      <div class="absolute top-5 left-5 lg:hidden">
+        <MenuIcon>
+          <OpenIcon>
+            <Bars3Icon className="w-7 h-7 text-gray-300 " />
+          </OpenIcon>
+          <CloseIcon>
+            <XMarkIcon className="w-7 h-7 text-gray-300 " />
+          </CloseIcon>
+        </MenuIcon>
+      </div>
+      <MenuItems class="top-7 w-full my-10 hidden">
+        <div
+          class="flex flex-col text-center items-center text-gray-300 font-semibold"
+        >
+          {
+            menuitems.map((item) => (
+              <button class="w-full rounded-lg py-4 duration-300 hover:bg-gray-800 hover:text-white ">
+                {item.title}
+              </button>
+            ))
+          }
+        </div>
+      </MenuItems>
+      <div class="hidden w-full lg:w-auto mt-2 lg:flex lg:mt-0">
+        <ul class="flex flex-col lg:flex-row lg:gap-3">
+          {
+            menuitems.map((item) => (
+              <>
+                <button>
+                  <a
+                    href={item.path}
+                    class="flex flex-1 py-2 text-sm font-semibold text-gray-300 hover:text-white lg:px-3"
+                  >
+                    {item.title}
+                  </a>
+                </button>
+              </>
+            ))
+          }
+        </ul>
+      </div>
+    </Astronav>
+
+    <div
+      class="absolute top-5 right-5 lg:top-0 lg:right-0 lg:relative lg:flex lg:items-center"
+    >
+      <button
+        type="button"
+        class="relative inline-flex items-center rounded-md border border-transparent duration-300 bg-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+      >
+        <span>Dashboard</span>
+      </button>
+    </div>
+  </header>
+</Layout>
