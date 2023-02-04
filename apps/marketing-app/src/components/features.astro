@@ -1,5 +1,6 @@
 ---
-import BackgroundBlur from "@/components/common/backgroundBlur.astro";
+import BackgroundBlurLeft from "@/components/common/backgroundBlurLeft.astro";
+import BackgroundBlurRight from "@/components/common/backgroundBlurRight.astro";
 import {
   ArrowPathIcon,
   ComputerDesktopIcon,
@@ -57,7 +58,7 @@ const MicroFeatures: MicroFeature[] = [
 ---
 
 <div class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
-  <BackgroundBlur />
+  <BackgroundBlurLeft />
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto max-w-2xl sm:text-center">
       <h2
@@ -96,22 +97,38 @@ const MicroFeatures: MicroFeature[] = [
       </div>
     </div>
   </div>
-  <div class="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 md:mt-24 lg:px-8">
-    <dl
-      class="mx-auto grid max-w-2xl grid-cols-1 gap-x-6 gap-y-10 text-base leading-7 text-gray-300 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16"
+  <div
+    class="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32"
+  >
+    <BackgroundBlurRight />
+    <div
+      class="mx-auto max-w-md px-6 text-center sm:max-w-3xl lg:max-w-7xl lg:px-8"
     >
-      {
-        MicroFeatures.map((feature) => (
-          <div class="text-whit relative flex h-40 flex-col items-center justify-center gap-2 rounded-lg text-center font-semibold duration-300 hover:bg-gray-700">
-            <feature.icon
-              className="h-5 w-5 text-violet-500"
-              aria-hidden="true"
-            />
-            {feature.title}
-            <dd class="text-center font-light">{feature.description}</dd>
-          </div>
-        ))
-      }
-    </dl>
+      <div class="mt-12">
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            MicroFeatures.map((feature) => (
+              <div class="pt-6">
+                <div class="flow-root h-52 rounded-lg bg-gray-800 px-6 pb-8 duration-300 hover:bg-gray-700">
+                  <div class="-mt-6">
+                    <div>
+                      <span class="inline-flex items-center justify-center rounded-md bg-gradient-to-tr from-violet-500 to-violet-700 p-3 shadow-lg">
+                        <feature.icon className="h-6 w-6 text-white" />
+                      </span>
+                    </div>
+                    <h3 class="mt-8 text-lg font-semibold tracking-tight text-gray-100">
+                      {feature.title}
+                    </h3>
+                    <p class="text-medium mt-5 text-gray-300">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </div>

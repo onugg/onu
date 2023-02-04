@@ -96,7 +96,7 @@ const PricingCards = [
         >
           {
             PricingCards.map((card) => (
-              <div class="flex flex-col rounded-3xl bg-white shadow-xl ring-1 ring-black/10">
+              <div class="flex flex-col rounded-3xl bg-gray-800 shadow-xl">
                 <div class="p-8 sm:p-10">
                   <h3
                     class="text-lg font-semibold leading-8 tracking-tight text-violet-500"
@@ -104,24 +104,24 @@ const PricingCards = [
                   >
                     {card.name}
                   </h3>
-                  <div class="mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-900">
+                  <div class="mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-100">
                     ${card.priceAnnually}
-                    <span class="text-lg font-semibold leading-8 tracking-normal text-gray-500">
+                    <span class="text-lg font-semibold leading-8 tracking-normal text-gray-400">
                       /mo
                     </span>
                   </div>
-                  <p class="mt-6 text-base leading-7 text-gray-600">
+                  <p class="mt-6 text-base leading-7 text-gray-200">
                     {card.description}
                   </p>
                 </div>
-                <div class="flex flex-1 flex-col justify-between rounded-2xl bg-gray-50 p-6 sm:p-8">
+                <div class="flex flex-1 flex-col justify-between rounded-2xl bg-gray-800 p-6 sm:p-8">
                   <ul role="list" class="space-y-4">
                     {card.benefits.map((benefit) => (
                       <li class="flex items-center">
                         <div class="flex-shrink-0">
                           <CheckIcon className="h-6 w-6 text-violet-500" />
                         </div>
-                        <p class="ml-3 text-sm leading-6 text-gray-600">
+                        <p class="ml-3 text-sm leading-6 text-gray-200">
                           {benefit}
                         </p>
                       </li>
