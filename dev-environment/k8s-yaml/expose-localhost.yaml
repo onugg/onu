@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: discordbot-service
+spec:
+   clusterIP: None
+   ports:
+   - protocol: TCP
+     port: 3000
+     targetPort: 3000
+   selector:  
+     name:  example
+   type: ClusterIP
+---
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: discordbot-service
+subsets:
+  - addresses:
+    - ip: 10.62.176.1
+    ports:
+      - port: <multipass-port-you-are-using>
