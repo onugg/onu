@@ -1,8 +1,7 @@
 import { z } from "zod";
-import { router, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-
-export const accountRouter = router({
+export const accountRouter = createTRPCRouter({
   // get account by userId, type, and provider
   getAccountByUserIdAndProvider: protectedProcedure
     .input(
