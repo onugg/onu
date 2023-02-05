@@ -26,6 +26,8 @@
     "KNATIVE_BROKER_URL",
     "DATABASE_URL",
     "DISCORD_TOKEN",
-    "NODE_ENV"
+    "NODE_ENV",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET"
   ]
 }
