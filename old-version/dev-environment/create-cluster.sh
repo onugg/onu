@@ -10,7 +10,8 @@
 # 5 - Create a knative cluster in kind using the knative quickstart script
 # 6 - Export the service account
 
-projectid=$(cat config.yaml | yq | jq -r '.gcloud.project_id')
+# set a variable called project using the config.json file. The project is in gcloud.projectId path
+projectid=$(jq -r '.gcloud.projectId' config.json)
 
 # Check if a google cloud project exists with the google cloud cli
 if gcloud projects describe $projectid > /dev/null 2>&1; then
@@ -56,15 +57,8 @@ gcloud projects add-iam-policy-binding $projectid \
     --member=serviceAccount:k8s-registry-account@$projectid.iam.gserviceaccount.com \
     --role=roles/storage.admin
 
-# check if key.json file already exists
-if [ -f ./key.json ]; then
-    echo "key.json already exists"
-    echo "Note: if you need a new key.json please delete the exisiting key.json file"
-else
-    echo "key.json does not exist. Creating..."
-    gcloud iam service-accounts keys create --iam-account k8s-registry-account@$projectid.iam.gserviceaccount.com key.json
-    echo "Created key.json"
-fi
+
+gcloud iam service-accounts keys create --iam-account k8s-registry-account@$projectid.iam.gserviceaccount.com key.json
 
 # create knative cluster in kind
 
@@ -89,28 +83,5 @@ else
       --docker-email not@val.id \
       --docker-password="$(cat ./key.json)"
 fi
-
-# create trigger proxies to local machine
-#ytt -f ./k8s-yaml/kn-quest-broker-trigger-localhost-discord-bot.yaml -f config.yaml | kubectl apply -f -
-#ytt -f ./k8s-yaml/kn-example-broker-trigger-localhost-discord-bot.yaml.yaml -f config.yaml | kubectl apply -f -
-
-for file in $(find ./k8s-yaml -type f); do
-    # create a variable with the file name without the extension
-    filename=$(basename -- "$file")
-    filename="${filename%.*}"
-    ytt -f $file -f config.yaml | kubectl apply -f -
-done
-
-# create dashboard
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
-
-kubectl apply -f ./k8s-yaml/dashboard-service-account.yaml
-
-echo "Creating bearer token to access dashboard"
-kubectl -n kubernetes-dashboard create token admin-user
-
-echo "Dashboard available at: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/."
-kubectl proxy
-
 
 echo "Done"

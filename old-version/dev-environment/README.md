@@ -8,8 +8,6 @@
 4. Install postgres
 5. Install gcloud plugin
 6. Install kubectl
-7. Install ytt
-8. Install yq
 
 ## Glcoud
 1. Log in
