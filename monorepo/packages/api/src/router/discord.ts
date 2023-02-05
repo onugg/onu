@@ -1,8 +1,7 @@
 import { z } from "zod";
-import { router, protectedProcedure } from "../trpc";
-import type { DiscordGuild, DiscordGuildChannel } from "@/types";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const discordRouter = router({
+export const discordRouter = createTRPCRouter({
   createDiscordGuild: protectedProcedure
     .input(
       z.object({
@@ -24,27 +23,28 @@ export const discordRouter = router({
         console.log("No Community ID in createDiscordGuild");
         return;
       } else {
-        const guild = await ctx.prisma.discordGuild.createIfNotExistsAndEmitEvent({
-          where: { discordId: input.discordId},
-          update: {
-            name: input.name,
-            discordId: input.discordId,
-            community: {
-              connect: {
-                id: input.communityId,
+        const guild =
+          await ctx.prisma.discordGuild.createIfNotExistsAndEmitEvent({
+            where: { discordId: input.discordId },
+            update: {
+              name: input.name,
+              discordId: input.discordId,
+              community: {
+                connect: {
+                  id: input.communityId,
+                },
               },
             },
-          },
-          create: {
-            name: input.name,
-            discordId: input.discordId,
-            community: {
-              connect: {
-                id: input.communityId,
+            create: {
+              name: input.name,
+              discordId: input.discordId,
+              community: {
+                connect: {
+                  id: input.communityId,
+                },
               },
             },
-          }
-        });
+          });
         return guild;
       }
     }),
@@ -155,17 +155,17 @@ export const discordRouter = router({
             },
             where: {
               AND: [
-                {NOT: {communityId: null}},
+                { NOT: { communityId: null } },
                 {
                   discordId: {
                     in: ownedGuildIds,
-                  }
-                }
+                  },
+                },
               ],
             },
           });
 
-          console.log(ownedGuildIdsUsed)
+          console.log(ownedGuildIdsUsed);
 
           const ownedGuildsThatAreNotBeingUsed = ownedGuilds.filter(
             (guild: DiscordGuild) =>
