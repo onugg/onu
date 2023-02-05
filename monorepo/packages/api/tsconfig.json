@@ -6,6 +6,7 @@
     "declaration": true, // this is temporary while waiting for a prisma fix
     "declarationMap": true, // this is temporary while waiting for a prisma fix
     "target": "ESNext",
+    "lib": ["ES2019", "dom"],
     "module": "ESNext",
     "outDir": "build",
     "moduleResolution": "node"
