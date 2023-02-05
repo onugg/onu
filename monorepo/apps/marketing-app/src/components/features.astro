@@ -1,0 +1,130 @@
+---
+import BackgroundBlurLeft from "@/components/common/backgroundBlurLeft.astro";
+import BackgroundBlurRight from "@/components/common/backgroundBlurRight.astro";
+import {
+  ArrowPathIcon,
+  ComputerDesktopIcon,
+  LockClosedIcon,
+  Cog6ToothIcon,
+  CircleStackIcon,
+  ChartPieIcon,
+} from "@heroicons/react/24/outline";
+import React from "react";
+
+interface MicroFeature {
+  title: string;
+  description: string;
+  icon: React.FC<{ className?: string }>;
+}
+
+const MicroFeatures: MicroFeature[] = [
+  {
+    title: "Easy to use Dashboard.",
+    description:
+      "A dashboard that is easy to use and understand. No more switching between platforms.",
+    icon: ComputerDesktopIcon,
+  },
+  {
+    title: "Automated Discord Integration",
+    description:
+      "Automatically sync your Discord server with your Onu dashboard. No more manual work.",
+    icon: ArrowPathIcon,
+  },
+  {
+    title: "In-depth Analytics.",
+    description:
+      "Onu provides in-depth analytics to help you understand your community better.",
+    icon: ChartPieIcon,
+  },
+  {
+    title: "Advanced Event Management.",
+    description:
+      "An advanced event manager that makes sure you never miss an event within your community.",
+    icon: Cog6ToothIcon,
+  },
+  {
+    title: "Built-in Authentication",
+    description:
+      "Connect your accounts to Onu safely and securely. No more worrying about your data being stolen.",
+    icon: LockClosedIcon,
+  },
+  {
+    title: "Database Backups",
+    description:
+      "Onu automatically backs up your data to ensure that you never lose your data.",
+    icon: CircleStackIcon,
+  },
+];
+---
+
+<div class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
+  <BackgroundBlurLeft />
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl sm:text-center">
+      <h2
+        class="text-lg font-semibold leading-8 tracking-tight text-violet-400"
+      >
+        Everything Your Community Needs
+      </h2>
+      <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        Use Multiple Social Media Platforms?
+      </p>
+      <p class="mt-6 text-lg leading-8 text-gray-300">
+        Onu not only supports, but interconnects multiple social media platforms
+        into one centralized dashboard. No more switching between platforms to
+        manage your community.
+      </p>
+    </div>
+  </div>
+  <div class="relative overflow-hidden pt-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <img
+        src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+        alt="App screenshot"
+        class="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-white/10"
+        width="2432"
+        height="1442"
+      />
+      <div class="relative" aria-hidden="true">
+        <div
+          class="absolute -inset-x-20 bottom-0 bg-gradient-to-t from-gray-900 pt-[7%]"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32"
+  >
+    <BackgroundBlurRight />
+    <div
+      class="mx-auto max-w-md px-6 text-center sm:max-w-3xl lg:max-w-7xl lg:px-8"
+    >
+      <div class="mt-12">
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            MicroFeatures.map((feature) => (
+              <div class="pt-6">
+                <div class="flow-root h-52 rounded-lg bg-gray-800 px-6 pb-8 duration-300 hover:bg-gray-700">
+                  <div class="-mt-6">
+                    <div>
+                      <span class="inline-flex items-center justify-center rounded-md bg-gradient-to-tr from-violet-500 to-violet-700 p-3 shadow-lg">
+                        <feature.icon className="h-6 w-6 text-white" />
+                      </span>
+                    </div>
+                    <h3 class="mt-8 text-lg font-semibold tracking-tight text-gray-100">
+                      {feature.title}
+                    </h3>
+                    <p class="text-medium mt-5 text-gray-300">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
