@@ -1,0 +1,26 @@
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+ name: main-discord-bot
+
+---
+
+apiVersion: networking.internal.knative.dev/v1alpha1
+kind: ClusterDomainClaim
+metadata:
+  name: broker-ingress.knative-eventing.127.0.0.1.sslip.io
+spec:
+  namespace: knative-eventing
+
+---
+
+apiVersion: serving.knative.dev/v1alpha1
+kind: DomainMapping
+metadata:
+  name: broker-ingress.knative-eventing.127.0.0.1.sslip.io
+  namespace: knative-eventing
+spec:
+  ref:
+    name: broker-ingress
+    kind: Service
+    apiVersion: v1

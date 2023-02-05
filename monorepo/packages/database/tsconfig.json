@@ -1,0 +1,14 @@
+{
+  "extends": "tsconfig/base.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "build"],
+  "compilerOptions": {
+    "declaration": true, // this is temporary while waiting for a prisma fix
+    "declarationMap": true, // this is temporary while waiting for a prisma fix
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": "src",
+    "outDir": "build",
+    "moduleResolution": "node",
+  }
+}

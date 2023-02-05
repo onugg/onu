@@ -1,0 +1,13 @@
+{
+  "extends": "tsconfig/typescript.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "build"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": "src",
+    "outDir": "build",
+    "moduleResolution": "node",
+    "declaration": true
+  }
+}

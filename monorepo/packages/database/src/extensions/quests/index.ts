@@ -1,0 +1,1 @@
+export * as memberQuestRecord from './memberQuestRecord'

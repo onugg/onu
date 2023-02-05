@@ -1,0 +1,30 @@
+{
+  "name": "onu-gg-revision",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "functions/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "dotenv-mono": "^1.3.9",
+    "eslint-config-custom": "*",
+    "node-env-run": "^4.0.2",
+    "prettier": "latest",
+    "rimraf": "^4.1.2",
+    "turbo": "^1.7.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "packageManager": "yarn@1.22.19"
+}

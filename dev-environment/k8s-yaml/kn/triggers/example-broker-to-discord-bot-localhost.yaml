@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: example-broker-trigger-localhost-discord-bot
+spec:
+  broker: example-broker
+  subscriber:
+    uri: #@ data.values.docker.localhost + ":" + str(data.values.discord_bot.localhost.port)

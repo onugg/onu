@@ -1,0 +1,24 @@
+{
+  "name": "@onu/database",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "db:generate": "prisma generate --schema=./src/prisma/schema.prisma",
+    "db:push": "prisma db push --skip-generate",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "*",
+    "tsconfig": "*",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.7.1",
+    "@prisma/internals": "^4.8.0",
+    "prisma": "^4.8.0",
+    "zod": "^3.20.2"
+  }
+}

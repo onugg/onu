@@ -1,0 +1,249 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String     @id @default(cuid())
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?    @db.Text
+  access_token       String?    @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?    @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String     @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessionToken String     @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  communities   Member[]
+  discordUser   DiscordUser?
+  level         Int       @default(1)  
+}
+
+model VerificationToken {
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  identifier    String
+  token         String   @unique
+  expires       DateTime
+
+  @@unique([identifier, token])
+}
+
+model Community {
+  id                          String    @id @default(cuid())
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+  name                        String
+  slug                        String    @unique
+  description                 String
+  image                       String
+  totalMembers                Int       @default(0)
+  activeMembers               Int       @default(0)
+  weeklyStreakStartDayNumber  Int       @default(1)   // 1 = Monday, 0 = Sunday
+  
+  members       Member[]
+  discordGuild  DiscordGuild?
+}
+
+model Member {
+  id            String    @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  communityId   String
+
+  role          String // valid values owner, admin, member
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  community     Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  MemberQuestRecord MemberQuestRecord?
+  MemberQuestLogs MemberQuestLog[]
+  MemberQuestRecordDailySnapshots MemberQuestRecordDailySnapshot[]
+  MemberWeeklyStreak MemberWeeklyStreak?
+
+  @@unique([userId, communityId])
+}
+
+// DISCORD
+model DiscordGuild {
+  id              String    @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  communityId     String? @unique           // when community isn't linked we won't setup the guild completely
+
+  name            String?
+  discordId       String   @unique
+  botInstallDate  DateTime?
+  botInstalled    Boolean @default(false)
+  communityUnlinkedMessageSent  Boolean?  @default(false) // when community is unlinked we send a message to the guild
+  guildInitialSetupRun          Boolean?  @default(false) // when community is linked we run the initial setup
+  welcomeChannelId              String?
+  questChannelId                String?
+
+  members       DiscordMember[]
+  questConfig   DiscordQuestConfig?
+  community     Community? @relation(fields: [communityId], references: [id])
+}
+
+model DiscordUser {
+  id            String          @id @default(cuid())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  userId        String          @unique
+  discordId     String          @unique
+  name          String
+  discriminator String
+
+  user          User            @relation(fields: [userId], references: [id])
+  guilds        DiscordMember[]
+}
+
+model DiscordMember {
+  id                String    @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  discordUserId     String
+  discordGuildId    String
+
+  nickname          String?
+
+  discordUser       DiscordUser @relation(fields: [discordUserId], references: [id], onDelete: Cascade)
+  discordGuild      DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
+
+  DiscordMemberTracker DiscordMemberTracker?
+
+  @@unique([discordUserId, discordGuildId])
+}
+
+// Metric tracking
+
+model DiscordMemberTracker {
+  id                String    @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  discordMemberId   String @unique
+
+  discordMember     DiscordMember @relation(fields: [discordMemberId], references: [id], onDelete: Cascade)
+
+  messagesSent              Int
+}
+
+// QUESTS
+model DiscordQuestConfig {
+  id               String    @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  discordGuildId   String @unique
+  discordGuild     DiscordGuild @relation(fields: [discordGuildId], references: [id], onDelete: Cascade)
+
+  discordQuestsEnabled                      Boolean   @default(true)
+
+  communityCanToggleQuests                  Boolean   @default(true)  // default true because in free version enabled
+  communityCanModifyQuests                  Boolean   @default(false) // default false because in free version disabled
+
+  // messages sent
+  messagesSentEnabled                       Boolean   @default(true)
+  messagesSentIncrementByLevel              Int       @default(50)
+  messagesSentRewardMultiplierByLevel       Int       @default(50)
+  messagesSentMaxLevels                     Int       @default(999)
+}
+
+model MemberQuestRecord {
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  memberId   String    @unique
+  member     Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
+  totalExp          Int       @default(0)
+  level             Int       @default(0)
+  rank              Int       @default(0)
+
+  discordMessagesSentLevel Int      @default(0)
+}
+
+model MemberQuestLog {
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  memberId          String
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  questDate         DateTime
+  domain            String
+  type              String      // valid values messages-sent
+  increment         Int?        // some quests will increment by a value
+  expAwarded        Int
+  details           Json?       // any extra details to be stored with the completed quest
+}
+
+model MemberWeeklyStreak {
+  id                String    @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  memberId          String @unique
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  lastSeenDateTime  DateTime                    // used to log how often they're seen each day
+  day1              Boolean? @default(false)
+  day2              Boolean? @default(false)
+  day3              Boolean? @default(false)
+  day4              Boolean? @default(false)
+  day5              Boolean? @default(false)
+  day6              Boolean? @default(false)
+  day7              Boolean? @default(false)
+}
+
+// ANALYTICS
+
+model MemberQuestRecordDailySnapshot {
+  memberId          String
+  snapshotDate      DateTime
+  updatedAt         DateTime @updatedAt
+
+  totalExp          Int
+  level             Int
+
+  discordMessagesSentLevel Int
+
+  member            Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, snapshotDate])
+}
