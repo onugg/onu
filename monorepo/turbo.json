@@ -1,8 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    ".env"
-  ],
+  "globalDependencies": [".env"],
   "pipeline": {
     "db:generate": {
       "cache": false
@@ -12,6 +10,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
+      "env": ["DISCORD_CLIENT_ID", "DISCORD_CLIENT_SECRET"],
       "outputs": ["build/**", ".next/**"]
     },
     "lint": {
