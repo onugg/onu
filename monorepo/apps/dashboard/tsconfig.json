@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "extends": "tsconfig/nextjs.json",
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+  "exclude": ["node_modules"]
+}
