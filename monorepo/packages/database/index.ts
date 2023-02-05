@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import * as extensions from "./extensions";
+import * as extensions from "./src/extensions";
 import { eventEmitter } from "@onu/events";
 export * from "@prisma/client";
 

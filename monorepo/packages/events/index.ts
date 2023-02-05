@@ -5,10 +5,10 @@ import express, {
   Application,
   ErrorRequestHandler,
 } from "express";
-import { httpReceiverOptions, Event } from "./types";
-import * as brokers from "./brokers";
-export * as brokers from "./brokers";
-export * as common from "./common";
+import { httpReceiverOptions, Event } from "./src/types";
+import * as brokers from "./src/brokers";
+export * as brokers from "./src/brokers";
+export * as common from "./src/common";
 import { CloudEvent, httpTransport, emitterFor } from "cloudevents";
 
 const defaultPort = 3000;
