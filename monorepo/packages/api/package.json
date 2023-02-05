@@ -14,6 +14,7 @@
     "@onu/database": "*",
     "@trpc/client": "^10.9.0",
     "@trpc/server": "^10.9.0",
+    "@types/node-fetch": "^2.6.2",
     "superjson": "1.12.2",
     "zod": "^3.20.2"
   },
