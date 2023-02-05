@@ -10,7 +10,6 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "env": ["DISCORD_CLIENT_ID", "DISCORD_CLIENT_SECRET"],
       "outputs": ["build/**", ".next/**"]
     },
     "lint": {
