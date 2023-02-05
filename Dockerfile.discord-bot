@@ -1,6 +1,10 @@
 FROM node:alpine AS builder
+
+ENV NODE_ENV=production
+
 RUN apk add --no-cache libc6-compat
 RUN apk update
+
 # Set working directory
 WORKDIR /app
 RUN yarn global add "turbo@1.6.3"
@@ -22,16 +26,11 @@ RUN yarn install
 # Build the project
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
-RUN yarn turbo run build --filter=web...
+RUN yarn turbo run build
  
 FROM node:alpine AS runner
 WORKDIR /app
  
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 discordbot
-USER discordbot
- 
 COPY --from=installer /app/apps/discord-bot/package.json .
  
-CMD yarn start
+CMD ["node", "./dist/shard-manager/index.js"]

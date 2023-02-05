@@ -23,10 +23,8 @@ export function createShardManager(shardManagerOptions: ShardManagerOptions) {
       execArgv: ['-r', 'ts-node/register']
     }
   );
-
   
   manager.on('shardCreate', (shard) => {
-
     shard.on("ready", () => {
       console.log(`Shard ${shard.id} ready`)
     });

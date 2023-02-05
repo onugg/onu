@@ -8,7 +8,7 @@ export async function AddOrUpdateMemberAndUser (member: GuildMember) {
 
   var guild = member.guild
 
-  var dbGuild = (await prisma.discordGuild.findUnique({where: {discordId: guild.id}}))!
+  var dbGuild: DiscordGuild = (await prisma.discordGuild.findUnique({where: {discordId: guild.id}}))!
 
   if (!dbGuild) {return}
   if (!dbGuild.communityId) {return}

@@ -4,16 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "@onu/prisma": "*",
-    "@onu/trpcclient": "*",
-    "@trpc/server": "^10.5.0",
+    "cloudevents": "^6.0.3",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "kafkajs": "^2.2.3",
-    "zod": "^3.20.2"
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

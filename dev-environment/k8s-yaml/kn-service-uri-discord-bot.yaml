@@ -1,0 +1,8 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: discord-bot-trigger-2
+spec:
+  broker: example-broker
+  subscriber:
+    uri: hhttp://docker.for.mac.localhost:3000/

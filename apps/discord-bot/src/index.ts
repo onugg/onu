@@ -1,6 +1,9 @@
-import { shardManagerOptions } from '@onu/config';
-import { createShardManager } from './shard-manager';
+//import { shardManagerOptions } from '@onu/config';
+//import { createShardManager } from './shard-manager';
+import { startEventHttpServer } from './event-express-server'
 
-const shardManager = createShardManager(shardManagerOptions);
+//const shardManager = createShardManager(shardManagerOptions);
 
-shardManager.spawnShards();
+startEventHttpServer();
+
+//shardManager.spawnShards();
