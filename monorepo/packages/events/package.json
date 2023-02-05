@@ -10,7 +10,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@onu/database": "*",
     "@types/express": "^4.17.17",
     "body-parser": "^1.20.1",
     "cloudevents": "^6.0.3",

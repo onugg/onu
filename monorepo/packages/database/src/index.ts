@@ -1,7 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import * as extensions from "./extensions";
-// import { startEventReceivingWebServer, eventEmitter } from "@onu/events";
-//import * as analytics from './analytics';
 import { eventEmitter } from "@onu/events";
 export * from "@prisma/client";
 
