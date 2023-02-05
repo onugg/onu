@@ -1,0 +1,49 @@
+---
+const FooterLinks = [
+  {
+    title: "Features",
+    href: "#",
+  },
+  {
+    title: "Pricing",
+    href: "#",
+  },
+  {
+    title: "Docs",
+    href: "#",
+  },
+  {
+    title: "Github",
+    href: "#",
+  },
+  {
+    title: "Dashboard",
+    href: "#",
+  },
+];
+---
+
+<footer class="bg-gray-900">
+  <div class="mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-24 lg:px-8">
+    <nav
+      class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
+      aria-label="Footer"
+    >
+      {
+        FooterLinks.map((link) => (
+          <div class="pb-6">
+            <a
+              href={link.href}
+              class="text-sm leading-6 text-gray-300 hover:text-white"
+            >
+              {link.title}
+            </a>
+          </div>
+        ))
+      }
+    </nav>
+    <p class="mt-10 text-center text-xs leading-5 text-gray-300">
+      &copy; 2023 Onu, Pty Ltd. All rights reserved.
+    </p>
+  </div>
+</footer>

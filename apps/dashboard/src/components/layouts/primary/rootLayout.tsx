@@ -49,14 +49,14 @@ const PrimaryNavbar: React.FC = () => {
   const profileImage = user?.image as string;
 
   return (
-    <div className="relative z-40 h-12 scroll-smooth bg-theme-900">
+    <div className="relative z-40 h-12 scroll-smooth bg-gray-900">
       <div className="flex items-center justify-between px-6 ">
         <Image src={LogoLight} alt="Logo" className="my-3 w-28" />
-        <div className="font-sm mx-4 hidden flex-row items-center py-2 text-theme-200 md:flex">
+        <div className="font-sm hidden flex-row items-center gap-1.5 py-2 text-gray-300 md:flex">
           <Link
             key="feedback"
             href="/"
-            className="rounded-md border border-theme-700 px-3 py-2 text-sm hover:border-neutral-100"
+            className="rounded-md border border-gray-300 px-3 py-2 text-sm duration-300 hover:border-white hover:bg-gray-800"
           >
             Feedback
           </Link>
@@ -65,12 +65,12 @@ const PrimaryNavbar: React.FC = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm hover:text-neutral-100"
+              className="rounded-md px-3 py-2 text-sm duration-300 hover:bg-gray-800 hover:text-white"
             >
               {item.name}
             </Link>
           ))}
-          <BellIcon className="mx-2 w-8 cursor-pointer rounded-full border border-neutral-700 p-1 hover:text-neutral-100 " />
+          <BellIcon className="mx-2 w-8 cursor-pointer rounded-full border border-gray-300 p-1 duration-300 hover:border-white hover:text-white " />
           <button className="mx-2 cursor-pointer">
             <Image
               src={profileImage}
@@ -88,7 +88,6 @@ const PrimaryNavbar: React.FC = () => {
 };
 
 const SubNavbar: React.FC = () => {
-
   // Feature toggles
   const communitiesEnabled = useFeatureIsOn("communities");
   const trendingEnabled = useFeatureIsOn("trending");
@@ -97,33 +96,52 @@ const SubNavbar: React.FC = () => {
   const activityEnabled = useFeatureIsOn("activity");
   const settingsEnabled = useFeatureIsOn("settings");
 
-
   const router = useRouter();
   const currentPath = router.pathname;
   const pathStart = currentPath.split("/")[1];
 
   const SubNavigation = [
-    { name: "Communities", href: "/communities", current: (currentPath === "/communities") || (pathStart === "c") },
-    { name: "Trending", href: "/trending", current: currentPath === "/trending"},
-    { name: "Leaderboards", href: "/leaderboards", current: currentPath === "/leaderboards"},
-    { name: "Profile", href: "/profile", current: currentPath === "/profile"},
-    { name: "Activity", href: "/activity", current: currentPath === "/activity"},
-    { name: "Settings", href: "/settings", current: currentPath === "/settings"},
+    {
+      name: "Communities",
+      href: "/communities",
+      current: currentPath === "/communities" || pathStart === "c",
+    },
+    {
+      name: "Trending",
+      href: "/trending",
+      current: currentPath === "/trending",
+    },
+    {
+      name: "Leaderboards",
+      href: "/leaderboards",
+      current: currentPath === "/leaderboards",
+    },
+    { name: "Profile", href: "/profile", current: currentPath === "/profile" },
+    {
+      name: "Activity",
+      href: "/activity",
+      current: currentPath === "/activity",
+    },
+    {
+      name: "Settings",
+      href: "/settings",
+      current: currentPath === "/settings",
+    },
   ];
 
-  const filteredNav = SubNavigation
-  .filter(item => (item.name !== "Communities" || communitiesEnabled))
-  .filter(item => (item.name !== "Trending" || trendingEnabled))
-  .filter(item => (item.name !== "Leaderboards" || leaderboardEnabled))
-  .filter(item => (item.name !== "Profile" || profileEnabled))
-  .filter(item => (item.name !== "Activity" || activityEnabled))
-  .filter(item => (item.name !== "Settings" || settingsEnabled))
-  
+  const filteredNav = SubNavigation.filter(
+    (item) => item.name !== "Communities" || communitiesEnabled
+  )
+    .filter((item) => item.name !== "Trending" || trendingEnabled)
+    .filter((item) => item.name !== "Leaderboards" || leaderboardEnabled)
+    .filter((item) => item.name !== "Profile" || profileEnabled)
+    .filter((item) => item.name !== "Activity" || activityEnabled)
+    .filter((item) => item.name !== "Settings" || settingsEnabled);
 
   const completion = useReadingProgress();
   return (
-    <div className="sticky top-0 z-40 bg-theme-900">
-      <div className="flex items-center justify-between border-b-2 border-violet-700 px-4 sm:px-0">
+    <div className="sticky top-0 z-40 bg-gray-900">
+      <div className="flex items-center justify-between border-b border-gray-700 px-4 sm:px-0">
         <span
           id="progress-bar"
           style={{
@@ -137,10 +155,8 @@ const SubNavbar: React.FC = () => {
               key={item.name}
               href={item.href}
               className={classNames(
-                item.current
-                  ? "text-white "
-                  : "text-theme-200 transition duration-200 hover:bg-theme-800 hover:text-white",
-                "font-small rounded-md px-3 py-2 text-sm"
+                item.current ? "text-white " : "text-gray-200",
+                "font-small rounded-md px-3 py-2 text-sm duration-300 hover:bg-gray-800 hover:text-white"
               )}
               aria-current={item.current ? "page" : undefined}
             >
@@ -163,7 +179,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     }
   });
   return (
-    <div className="flex min-h-screen flex-col bg-theme-900  ">
+    <div className="flex min-h-screen flex-col bg-gray-500/10  ">
       <PrimaryNavbar />
       <SubNavbar />
       {children}

@@ -147,17 +147,24 @@ const Form: React.FC = () => {
 
   return (
     <form className="mx-12 space-y-8" onSubmit={onSubmit}>
-      <div className="heading-1">Create Community</div>
+      <div className="my-8 grid grid-cols-1 justify-center text-lg font-semibold text-neutral-100 md:mx-24 md:grid-cols-3 md:gap-x-8 2xl:mx-72">
+        Create Community
+      </div>
       <div className="md:mx-24 2xl:mx-72">
         <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-2">
-            <label htmlFor="name" className="form-label">
+            <label
+              htmlFor="name"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               Name
             </label>
             <input
               type="text"
               id="name"
-              className={`btn-input ${errors.name && "btn-input-error"}`}
+              className={`block w-full rounded-md border border-gray-700 bg-gray-700/50 py-2 pr-3 leading-5 text-gray-300 placeholder-gray-400 duration-300 focus:border-gray-600 focus:bg-gray-600/50 focus:text-white focus:ring-transparent sm:text-sm ${
+                errors.name && "border-red-500 "
+              }`}
               placeholder={namePlaceholder}
               {...register("name")}
             />
@@ -168,20 +175,23 @@ const Form: React.FC = () => {
             )}
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="name" className="form-label">
+            <label
+              htmlFor="name"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               URL
             </label>
             <div className="mt-1 sm:col-span-3 sm:mt-0">
               <div className="flex max-w-lg rounded-md">
-                <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-700 bg-neutral-900 px-3 text-neutral-400 sm:text-sm">
+                <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-900 bg-gray-900 px-3 text-gray-400 sm:text-sm">
                   onu.gg/c/
                 </span>
                 <input
                   type="text"
                   id="slug"
                   placeholder={slugPlaceholder}
-                  className={`block w-full rounded-r-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm ${
-                    errors.slug && "btn-input-error"
+                  className={`focus:bg-gray-600-50 block w-full rounded-r-md border border-gray-700 bg-gray-700/50 py-2 leading-5 text-gray-300 placeholder-gray-400 duration-300 focus:border-gray-600 focus:bg-gray-600/50 focus:text-white focus:ring-transparent sm:text-sm ${
+                    errors.slug && "border-red-500"
                   }`}
                   {...register("slug")}
                 />
@@ -194,13 +204,18 @@ const Form: React.FC = () => {
             </div>
           </div>
           <div className="sm:col-span-6">
-            <label htmlFor="description" className="form-label">
+            <label
+              htmlFor="description"
+              className="mb-1 block text-sm font-medium text-neutral-200"
+            >
               Description
             </label>
             <textarea
               id="description"
               rows={3}
-              className={`btn-input ${errors.description && "btn-input-error"}`}
+              className={`block w-full rounded-md border border-gray-700 bg-gray-700/50 py-2 pr-3 leading-5 text-gray-300 placeholder-gray-400 duration-300 focus:border-gray-600 focus:bg-gray-600/50 focus:text-white focus:ring-transparent sm:text-sm ${
+                errors.description && "border-red-500"
+              }`}
               placeholder={descriptionPlaceholder}
               {...register("description")}
             />
@@ -212,13 +227,16 @@ const Form: React.FC = () => {
           </div>
           {localImageUrl ? (
             <div className="sm:col-span-2">
-              <label htmlFor="cover-photo" className="form-label">
+              <label
+                htmlFor="cover-photo"
+                className="mb-1 block text-sm font-medium text-neutral-200"
+              >
                 Cover photo
               </label>
 
               <label
                 htmlFor="file-upload"
-                className="group relative flex h-48 cursor-pointer justify-center rounded-xl border border-neutral-700 bg-black bg-cover bg-center text-sm duration-300"
+                className="group relative flex h-48 cursor-pointer justify-center rounded-xl border border-gray-700 bg-black bg-cover bg-center text-sm duration-300"
                 style={{
                   backgroundImage: `url(${localImageUrl})`,
                 }}
@@ -233,13 +251,13 @@ const Form: React.FC = () => {
                 <Image
                   src={localImageUrl}
                   alt="Community Profile"
-                  className="relative z-10 flex h-[110px] w-[110px] self-center overflow-hidden rounded-full border border-neutral-700 object-cover"
+                  className="relative z-10 flex h-[110px] w-[110px] self-center overflow-hidden rounded-full border border-gray-700 object-cover"
                   width="128"
                   height="128"
                 />
               </label>
 
-              <p className="form-label mt-2">
+              <p className="mb-1 mt-2 block text-sm font-medium text-neutral-200">
                 Tip: Click again to change image
               </p>
 
@@ -251,12 +269,15 @@ const Form: React.FC = () => {
             </div>
           ) : (
             <div className="sm:col-span-2">
-              <label htmlFor="cover-photo" className="form-label">
+              <label
+                htmlFor="cover-photo"
+                className="mb-1 block text-sm font-medium text-neutral-200"
+              >
                 Cover photo
               </label>
               <label
                 htmlFor="file-upload"
-                className="mt-1 flex h-48 cursor-pointer justify-center rounded-md border-2 border-dashed border-neutral-700 bg-black px-6 pt-10 pb-6 duration-300 hover:border-neutral-400 focus:border-neutral-400"
+                className="mt-1 flex h-48 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-700 bg-gray-700/50 px-6 pt-10 pb-6 duration-300 focus:border-gray-600 focus:bg-gray-600/50"
               >
                 <input
                   id="file-upload"
@@ -266,7 +287,7 @@ const Form: React.FC = () => {
                 />
                 <div className="space-y-1 text-center">
                   <svg
-                    className="mx-auto h-12 w-12 text-neutral-400"
+                    className="mx-auto h-12 w-12 text-white"
                     stroke="currentColor"
                     fill="none"
                     viewBox="0 0 48 48"
@@ -280,10 +301,10 @@ const Form: React.FC = () => {
                     />
                   </svg>
 
-                  <div className="flex text-sm text-neutral-500">
+                  <div className="flex text-sm text-gray-400">
                     <span>Upload a file by clicking here</span>
                   </div>
-                  <p className="text-sm text-neutral-500">
+                  <p className="text-sm text-gray-400">
                     PNG, JPG, GIF up to 10MB
                   </p>
                 </div>
@@ -304,12 +325,15 @@ const Form: React.FC = () => {
           </div>
         </div>
         <div className="my-6 flex gap-x-4">
-          <Link className="btn-1" href="/">
+          <Link
+            className="flex rounded-md bg-violet-500 py-2 px-2 text-sm font-medium text-gray-200 duration-300 hover:bg-violet-700 hover:text-white"
+            href="/"
+          >
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
           <button
             type="submit"
-            className="btn-1 px-4"
+            className="flex rounded-md bg-violet-500 py-2 px-6 text-sm font-medium text-gray-200 duration-300 hover:bg-violet-700 hover:text-white"
             disabled={selectedGuild?.name ? false : true}
           >
             Create
