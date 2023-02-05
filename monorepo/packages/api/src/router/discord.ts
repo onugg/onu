@@ -1,6 +1,38 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+export const discordGuild = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string(),
+  owner: z.boolean(),
+  permissions: z.number(),
+  icon_url: z.string(),
+  botInGuild: z.boolean(),
+  memberType: z.string(),
+});
+
+export const discordGuildChannel = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.number(),
+  position: z.number(),
+  permission_overwrites: z.array(
+    z.object({
+      id: z.string(),
+      type: z.string(),
+      allow: z.string(),
+      deny: z.string(),
+    })
+  ),
+  parent_id: z.string().nullable(),
+  guild_id: z.string(),
+});
+
+export type DiscordGuildChannel = z.infer<typeof discordGuildChannel>;
+
+export type DiscordGuild = z.infer<typeof discordGuild>;
+
 export const discordRouter = createTRPCRouter({
   createDiscordGuild: protectedProcedure
     .input(
@@ -23,28 +55,13 @@ export const discordRouter = createTRPCRouter({
         console.log("No Community ID in createDiscordGuild");
         return;
       } else {
-        const guild =
-          await ctx.prisma.discordGuild.createIfNotExistsAndEmitEvent({
-            where: { discordId: input.discordId },
-            update: {
-              name: input.name,
-              discordId: input.discordId,
-              community: {
-                connect: {
-                  id: input.communityId,
-                },
-              },
-            },
-            create: {
-              name: input.name,
-              discordId: input.discordId,
-              community: {
-                connect: {
-                  id: input.communityId,
-                },
-              },
-            },
-          });
+        const guild = await ctx.prisma.discordGuild.create({
+          data: {
+            name: input.name,
+            discordId: input.discordId,
+            communityId: input.communityId,
+          },
+        });
         return guild;
       }
     }),
@@ -70,7 +87,7 @@ export const discordRouter = createTRPCRouter({
           `https://discord.com/api/guilds/${input.guildId}/channels`,
           {
             headers: {
-              authorization: `Bot ${process.env.DISCORD_CLIENT_TOKEN}`,
+              authorization: `Bot ${process.env.DISCORD_CLIENT_ID}`,
             },
           }
         );

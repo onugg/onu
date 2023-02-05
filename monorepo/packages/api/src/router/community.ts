@@ -13,15 +13,14 @@ export const communityRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const community =
-        await ctx.prisma.community.createIfNotExistsAndEmitEvent({
-          data: {
-            name: input.name,
-            slug: input.slug,
-            description: input.description,
-            image: input.imageUrl,
-          },
-        });
+      const community = await ctx.prisma.community.create({
+        data: {
+          name: input.name,
+          slug: input.slug,
+          description: input.description,
+          image: input.imageUrl,
+        },
+      });
       return community;
     }),
 
