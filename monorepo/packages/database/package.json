@@ -18,6 +18,8 @@
   "dependencies": {
     "@prisma/client": "^4.7.1",
     "@prisma/internals": "^4.8.0",
+    "@onu/database": "*",
+    "@onu/events": "*",
     "prisma": "^4.8.0",
     "zod": "^3.20.2"
   }

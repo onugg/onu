@@ -1,9 +1,22 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import * as extensions from "./extensions";
-import { startEventReceivingWebServer, eventEmitter } from "@onu/events";
+// import { startEventReceivingWebServer, eventEmitter } from "@onu/events";
 //import * as analytics from './analytics';
-a;
+import { eventEmitter } from "@onu/events";
 export * from "@prisma/client";
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "error", "warn"]
+        : ["error"],
+  });
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 var eventEmitFunction: Function = eventEmitter({
   brokerUrl: `${process.env.KNATIVE_BROKER_URL!}${process.env
