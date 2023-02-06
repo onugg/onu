@@ -11,7 +11,7 @@ export const methods = (options: { emit: Function, prisma: typeof prisma }) => {
     communityId: string,
   }) {
     var { name, discordId, communityId } = options;
-
+    
     const guild = await prisma.discordGuild.create({
       data: {
         name: name,
@@ -26,7 +26,8 @@ export const methods = (options: { emit: Function, prisma: typeof prisma }) => {
       name: name
     }
 
-    var sourceName, type, event = brokers.onuDatabase.discordGuildCreated_v1.EventLoader(dbDiscordGuild)
+    var [sourceName, type, event] = brokers.onuDatabase.discordGuildCreated_v1.EventLoader(dbDiscordGuild)
+
     emit({sourcename: sourceName, type: type, event: event})
 
     return guild;
