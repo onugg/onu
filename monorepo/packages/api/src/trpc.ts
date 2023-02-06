@@ -109,7 +109,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const sessionProtectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 function enforceAPIKeyIsAuthed(apiKey?: string) {
   if (!apiKey) {
@@ -124,6 +124,6 @@ function enforceAPIKeyIsAuthed(apiKey?: string) {
   }
 }
 
-export const enforceBotIsAuthed = enforceAPIKeyIsAuthed(
+export const apiKeyProtectedProcedure = enforceAPIKeyIsAuthed(
   process.env.TRPC_API_KEY
 );
