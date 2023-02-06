@@ -1,6 +1,7 @@
 export { appRouter, type AppRouter } from "./src/root";
 export {
-  protectedProcedure,
+  apiKeyProtectedProcedure,
+  sessionProtectedProcedure,
   publicProcedure,
   createTRPCContext,
 } from "./src/trpc";

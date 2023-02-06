@@ -124,6 +124,6 @@ function enforceAPIKeyIsAuthed(apiKey?: string) {
   }
 }
 
-export const apiKeyProtectedProcedure = enforceAPIKeyIsAuthed(
+export const apiKeyProtectedProcedure = t.procedure.use(enforceAPIKeyIsAuthed(
   process.env.TRPC_API_KEY
-);
+))
