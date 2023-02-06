@@ -7,6 +7,7 @@
   "scripts": {
     "db:generate": "prisma generate --schema=./src/prisma/schema.prisma",
     "db:push": "prisma db push --skip-generate",
+    "db:migrate": "prisma migrate dev --skip-generate --schema=./src/prisma/schema.prisma",
     "build": "tsc"
   },
   "devDependencies": {
