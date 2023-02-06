@@ -10,11 +10,11 @@ interface StarProps {
   color: string;
 }
 
-export interface User {
+export interface Person {
   name: string;
-  avatar: string;
-  level: number;
-  change: number;
+  id: string;
+  email: string;
+  image: string;
 }
 
 export interface MenuSection {
@@ -42,4 +42,3 @@ export interface DiscordGuildChannel {
   parent_id: string;
   nsfw: boolean;
 }
-
