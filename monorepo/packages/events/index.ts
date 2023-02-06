@@ -110,7 +110,11 @@ export const eventEmitter = (options: { brokerUrl: string }) => {
       `Emitting event id ${ce.id} from source ${sourcename} with type ${type}`
     );
 
-    emit(ce);
+    try {
+      emit(ce)
+    } catch (e) {
+      console.log(`Error calling broker ${brokerUrl} for event: ${ce.id} from source ${sourcename} with type ${type}`)
+    }
   }
 
   return { emitEvent };
