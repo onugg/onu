@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import type { Person } from "@/types";
 import Image from "next/image";
+import { z } from "zod";
 
+const UserSchema = z.object({
+  name: z.string(),
+  image: z.string(),
+});
+
+type UserSchema = z.infer<typeof UserSchema>;
 type Props = {
-  users: Person[];
+  users: UserSchema[];
 };
 
 const Leaderboard: React.FC<Props> = ({ users }) => {

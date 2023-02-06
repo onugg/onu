@@ -10,7 +10,8 @@ import { useEffect } from "react";
 import { trpc } from "@/utils/trpc";
 import "@/styles/globals.css";
 
-const FEATURES_ENDPOINT = "https://cdn.growthbook.io/api/features/prod_qvbdG816DboYGtrbod75milcSpqF38CwKpp4xUxs";
+const FEATURES_ENDPOINT =
+  "https://cdn.growthbook.io/api/features/prod_qvbdG816DboYGtrbod75milcSpqF38CwKpp4xUxs";
 
 const growthbook = new GrowthBook({
   // enableDevMode: true allows you to use the Chrome DevTools Extension to test/debug.
@@ -40,7 +41,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       loggedIn: true,
       deviceId: "abcdef123456",
       employee: true,
-      company: "acme",
+      company: "onu",
       country: "US",
       browser: navigator.userAgent,
       url: router.pathname,

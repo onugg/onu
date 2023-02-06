@@ -1,15 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { z } from "zod";
 
-type CommunityCardProps = {
-  image: string;
-  name: string;
-  slug: string;
-  description: string;
-  totalMembers: number;
-  activeMembers: number;
-};
+const CommunityCardSchema = z.object({
+  image: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  totalMembers: z.number(),
+  activeMembers: z.number(),
+});
+
+type CommunityCardProps = z.infer<typeof CommunityCardSchema>;
 
 const GreyDot: React.FC = () => {
   return (

@@ -1,6 +1,5 @@
 import RootLayout from "@/components/layouts/primary/rootLayout";
 import SidebarMenuOption from "@/components/ui/common/sidebarMenuOption";
-import type { MenuSection } from "@/types";
 import Link from "next/link";
 import {
   HeartIcon,
@@ -10,6 +9,21 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import React from "react";
+import { z } from "zod";
+
+const MenuSection = z.object({
+  title: z.string(),
+  options: z.array(
+    z.object({
+      name: z.string(),
+      href: z.string(),
+      icon: z.any(),
+      current: z.boolean(),
+    })
+  ),
+});
+
+type MenuSection = z.infer<typeof MenuSection>;
 
 type LeaderboardMenuOptions = MenuSection[];
 type LeaderboardProps = {
@@ -47,12 +61,12 @@ const LeaderboardLeftSidebar: React.FC = () => {
   ];
 
   return (
-    <div className="relative h-full w-64 shrink-0 border-neutral-600 bg-theme-900">
+    <div className="bg-theme-900 relative h-full w-64 shrink-0 border-neutral-600">
       <div className="mx-4 mt-2 space-y-2">
         <Link className="group my-1 flex flex-col" href={"/leaderboards"}>
           <div
-            className={`font-small w-full rounded-t-lg bg-theme-800 px-3 py-6 text-sm font-bold
-            transition duration-300 hover:text-white border-x-2 border-t-2 text-white group-hover:border-violet-500 ${
+            className={`font-small bg-theme-800 w-full rounded-t-lg border-x-2 border-t-2 px-3 py-6
+            text-sm font-bold text-white transition duration-300 hover:text-white group-hover:border-violet-500 ${
               currentPath === "/leaderboards"
                 ? ` border-violet-700 `
                 : `text-theme-200 border-theme-800`
@@ -68,7 +82,7 @@ const LeaderboardLeftSidebar: React.FC = () => {
             </div>
           </div>
           <div
-            className={`flex duration-300 w-full items-center justify-between rounded-b-lg border-x-2 border-b-2 group-hover:border-violet-500 bg-theme-900 py-2 px-3 text-sm font-medium text-theme-100
+            className={`bg-theme-900 text-theme-100 flex w-full items-center justify-between rounded-b-lg border-x-2 border-b-2 py-2 px-3 text-sm font-medium duration-300 group-hover:border-violet-500
           ${
             currentPath === "/leaderboards"
               ? `border-violet-700`
@@ -85,7 +99,7 @@ const LeaderboardLeftSidebar: React.FC = () => {
 
         {LeaderboardMenuOptions.map((section) => (
           <div key={section.title}>
-            <p className="mx-1 mb-1 py-1 pt-2 text-xs font-semibold uppercase text-theme-700">
+            <p className="text-theme-700 mx-1 mb-1 py-1 pt-2 text-xs font-semibold uppercase">
               {section.title}
             </p>
             {section.options.map((option) => (
@@ -129,10 +143,8 @@ const LeaderboardRightSidebar: React.FC = () => {
   ];
 
   return (
-    <div className="relative h-full w-64 shrink-0 border-neutral-600 bg-theme-900 justify-self-end">
-      <div className="mx-4 mt-2 space-y-2">
-
-      </div>
+    <div className="bg-theme-900 relative h-full w-64 shrink-0 justify-self-end border-neutral-600">
+      <div className="mx-4 mt-2 space-y-2"></div>
     </div>
   );
 };

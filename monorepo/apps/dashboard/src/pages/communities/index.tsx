@@ -6,11 +6,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import {
   AdjustmentsHorizontalIcon,
   ArrowUturnLeftIcon,
-  MagnifyingGlassIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useEffect } from "react";

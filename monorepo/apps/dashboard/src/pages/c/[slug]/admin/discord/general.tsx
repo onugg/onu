@@ -5,7 +5,19 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "@/utils/trpc";
 import DiscordChannelSelectDropdown from "@/components/ui/discord/discordChannelSelectDropdown";
-import { DiscordGuildChannel } from "@/types";
+import { z } from "zod";
+
+const DiscordGuildChannelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.number(),
+  position: z.number(),
+  permission_overwrites: z.unknown(),
+  parent_id: z.string(),
+  nsfw: z.boolean(),
+});
+
+type DiscordGuildChannelSchema = z.infer<typeof DiscordGuildChannelSchema>;
 
 const DiscordGeneral: React.FC = () => {
   const router = useRouter();
@@ -25,10 +37,11 @@ const DiscordGeneral: React.FC = () => {
     guildId: discordGuildId,
   });
 
-  function handleSelectedGuildChannel(guild: DiscordGuildChannel) {
-    setSelectedGuild(guild);
+  function handleSelectedGuildChannel(guildChannel: DiscordGuildChannelSchema) {
+    setSelectedGuild(guildChannel);
   }
-  const [selectedGuild, setSelectedGuild] = useState<DiscordGuildChannel>();
+  const [selectedGuild, setSelectedGuild] =
+    useState<DiscordGuildChannelSchema>();
 
   return (
     <AdminLayout>

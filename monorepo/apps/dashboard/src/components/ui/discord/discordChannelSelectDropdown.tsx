@@ -1,13 +1,24 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import React, { Fragment, useEffect, useState } from "react";
+import { z } from "zod";
 
-import type { DiscordGuildChannel } from "@/types";
+const DiscordGuildChannelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.number(),
+  position: z.number(),
+  permission_overwrites: z.unknown(),
+  parent_id: z.string(),
+  nsfw: z.boolean(),
+});
+
+type DiscordGuildChannelSchema = z.infer<typeof DiscordGuildChannelSchema>;
 
 type channelSelectDropdownProps = {
-  discordGuildChannels: DiscordGuildChannel[];
+  discordGuildChannels: DiscordGuildChannelSchema[];
   title: string;
-  onSelection: (channel: DiscordGuildChannel) => void;
+  onSelection: (channel: DiscordGuildChannelSchema) => void;
 };
 
 const DiscordChannelSelectDropdown: React.FC<channelSelectDropdownProps> = ({
@@ -15,9 +26,9 @@ const DiscordChannelSelectDropdown: React.FC<channelSelectDropdownProps> = ({
   title,
   onSelection,
 }: {
-  discordGuildChannels: DiscordGuildChannel[];
+  discordGuildChannels: DiscordGuildChannelSchema[];
   title: string;
-  onSelection: (channel: DiscordGuildChannel) => void;
+  onSelection: (channel: DiscordGuildChannelSchema) => void;
 }) => {
   const [selected, setSelected] = useState(discordGuildChannels?.[0]);
   useEffect(() => {
@@ -64,7 +75,7 @@ const DiscordChannelSelectDropdown: React.FC<channelSelectDropdownProps> = ({
             >
               <Listbox.Options className="absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-neutral-700 bg-black py-2 leading-5 text-neutral-500 placeholder-neutral-500 duration-300 hover:border-neutral-400 focus:border-neutral-400 focus:text-gray-300 focus:placeholder-transparent focus:outline-none focus:ring-neutral-400 sm:text-sm">
                 {discordGuildChannels.map(
-                  (guildChannel: DiscordGuildChannel) => (
+                  (guildChannel: DiscordGuildChannelSchema) => (
                     <Listbox.Option
                       key={guildChannel.id}
                       className={({ active }) =>

@@ -1,13 +1,25 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import React, { Fragment, useEffect, useState } from "react";
+import { z } from "zod";
 
-import type { DiscordGuild } from "@/types";
+const DiscordGuildSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string(),
+  owner: z.boolean(),
+  permissions: z.number(),
+  icon_url: z.string(),
+  botInGuild: z.boolean(),
+  memberType: z.string(),
+});
+
+type DiscordGuildSchema = z.infer<typeof DiscordGuildSchema>;
 
 type guildSelectDropdownProps = {
-  discordGuilds: DiscordGuild[];
+  discordGuilds: DiscordGuildSchema[];
   title: string;
-  onSelection: (guild: DiscordGuild) => void;
+  onSelection: (guild: DiscordGuildSchema) => void;
 };
 
 const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
@@ -15,9 +27,9 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
   title,
   onSelection,
 }: {
-  discordGuilds: DiscordGuild[];
+  discordGuilds: DiscordGuildSchema[];
   title: string;
-  onSelection: (guild: DiscordGuild) => void;
+  onSelection: (guild: DiscordGuildSchema) => void;
 }) => {
   const [selected, setSelected] = useState(discordGuilds?.[0]);
   useEffect(() => {
@@ -63,7 +75,7 @@ const DiscordGuildSelectDropdown: React.FC<guildSelectDropdownProps> = ({
               leaveTo="opacity-0"
             >
               <Listbox.Options className="bg-theme-800 absolute mt-1 max-h-36 w-full overflow-auto rounded-md border border-violet-500 py-2 leading-5 text-neutral-200 placeholder-neutral-500 duration-300 focus:text-gray-300 focus:placeholder-transparent focus:outline-none sm:text-sm">
-                {discordGuilds.map((guild: DiscordGuild) => (
+                {discordGuilds.map((guild: DiscordGuildSchema) => (
                   <Listbox.Option
                     key={guild.id}
                     className={({ active }) =>

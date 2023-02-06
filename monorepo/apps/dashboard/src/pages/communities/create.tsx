@@ -14,9 +14,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import type { NextPage } from "next";
-import type { DiscordGuild } from "@/types";
-
-type ValidationSchema = z.infer<typeof validationSchema>;
 
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -55,6 +52,20 @@ const validationSchema = z.object({
     ),
 });
 
+const DiscordGuildSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string(),
+  owner: z.boolean(),
+  permissions: z.number(),
+  icon_url: z.string(),
+  botInGuild: z.boolean(),
+  memberType: z.string(),
+});
+
+type ValidationSchema = z.infer<typeof validationSchema>;
+type DiscordGuildSchema = z.infer<typeof DiscordGuildSchema>;
+
 const Form: React.FC = () => {
   const router = useRouter();
   const {
@@ -88,17 +99,19 @@ const Form: React.FC = () => {
 
   const communityMutation = trpc.community.createCommunity.useMutation({
     onSuccess: (data: { id: string }) => {
-      if (user) {
+      if (user && selectedGuild) {
         memberMutation.mutate({
           communityId: data.id,
           userId: user.id,
         });
+        createDiscordGuildMutation.mutate({
+          name: selectedGuild.name,
+          discordId: selectedGuild.id,
+          communityId: data.id,
+        });
+      } else {
+        console.log("No user or selected guild");
       }
-      createDiscordGuildMutation.mutate({
-        name: selectedGuild?.name!,
-        discordId: selectedGuild?.id!,
-        communityId: data.id,
-      });
       router.push(
         `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=8&guild_id=${selectedGuild?.id}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
       );
@@ -116,10 +129,10 @@ const Form: React.FC = () => {
   });
   const ownedGuilds = ownedGuildsRoot?.data;
 
-  function handleSelectedGuild(guild: DiscordGuild) {
+  function handleSelectedGuild(guild: DiscordGuildSchema) {
     setSelectedGuild(guild);
   }
-  const [selectedGuild, setSelectedGuild] = useState<DiscordGuild>();
+  const [selectedGuild, setSelectedGuild] = useState<DiscordGuildSchema>();
 
   const username = user?.name;
   const namePlaceholder =

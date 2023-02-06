@@ -1,12 +1,14 @@
 import { z } from "zod";
 import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
-import { eventEmitter, brokers } from "@onu/events"
-import SharedDiscord from "../../shared/discord"
-import { prisma } from "@onu/database"
+import { eventEmitter, brokers } from "@onu/events";
+import SharedDiscord from "../../shared/discord";
+import { prisma } from "@onu/database";
 
-var emit: Function = eventEmitter({brokerUrl: `${process.env.KNATIVE_BROKER_URL!}${process.env.KUBERNETES_NAMESPACE!}/database`}).emitEvent
-var sharedDiscord: any = SharedDiscord({emit: emit, prisma: prisma})
-
+var emit: Function = eventEmitter({
+  brokerUrl: `${process.env.KNATIVE_BROKER_URL!}${process.env
+    .KUBERNETES_NAMESPACE!}/database`,
+}).emitEvent;
+var sharedDiscord: any = SharedDiscord({ emit: emit, prisma: prisma });
 
 export const discordGuild = z.object({
   id: z.string(),
@@ -49,14 +51,12 @@ export const discordRouter = createTRPCRouter({
         communityId: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
-
+    .mutation(async ({ input }) => {
       return sharedDiscord.createDiscordGuild({
         name: input.name,
         discordId: input.discordId,
         communityId: input.communityId,
-      })
-
+      });
     }),
 
   getDiscordGuildTextChannels: sessionProtectedProcedure
