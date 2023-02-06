@@ -1,10 +1,10 @@
 import { createTRPCRouter } from "./trpc";
 import { accountRouter } from "./router/sessionProtectedRoutes/account";
-import { authRouter } from "./router/auth";
-import { communityRouter } from "./router/community";
-import { discordRouter } from "./router/discord";
-import { memberRouter } from "./router/member";
-import { userRouter } from "./router/user";
+import { authRouter } from "./router/sessionProtectedRoutes/auth";
+import { communityRouter } from "./router/sessionProtectedRoutes/community";
+import { discordRouter } from "./router/sessionProtectedRoutes/discord";
+import { memberRouter } from "./router/sessionProtectedRoutes/member";
+import { userRouter } from "./router/sessionProtectedRoutes/user";
 
 export const appRouter = createTRPCRouter({
   account: accountRouter,

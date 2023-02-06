@@ -87,7 +87,7 @@ const Form: React.FC = () => {
     trpc.discord.createDiscordGuild.useMutation();
 
   const communityMutation = trpc.community.createCommunity.useMutation({
-    onSuccess: (data) => {
+    onSuccess: (data: { id: string }) => {
       if (user) {
         memberMutation.mutate({
           communityId: data.id,
