@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "./trpc";
-import { accountRouter } from "./router/account";
+import { accountRouter } from "./router/sessionProtectedRoutes/account";
 import { authRouter } from "./router/auth";
 import { communityRouter } from "./router/community";
 import { discordRouter } from "./router/discord";
