@@ -100,7 +100,7 @@ const Form: React.FC = () => {
         communityId: data.id,
       });
       router.push(
-        `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&permissions=8&guild_id=${selectedGuild?.id}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
+        `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&permissions=8&guild_id=${selectedGuild?.id}&disable_guild_select=true&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds%20bot%20applications.commands%20email`
       );
     },
   });
