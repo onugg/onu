@@ -6,7 +6,11 @@
   "types": "build/index.d.ts",
   "scripts": {
     "db:generate": "prisma generate --schema=./src/prisma/schema.prisma",
+    "db:migrate": "yarn with-env prisma migrate dev --schema=./src/prisma/schema.prisma",
     "db:push": "prisma db push --skip-generate",
+    "with-env": "dotenv -e ../../.env --",
+    "db:reset": "yarn with-env prisma migrate reset --schema=./src/prisma/schema.prisma",
+    "db:studio": "yarn with-env prisma studio --schema=./src/prisma/schema.prisma",
     "build": "tsc"
   },
   "devDependencies": {
