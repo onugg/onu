@@ -27,6 +27,7 @@
     "DATABASE_URL",
     "DISCORD_TOKEN",
     "NODE_ENV",
+    "TRPC_API_KEY",
     "NEXTAUTH_URL",
     "NEXTAUTH_SECRET",
     "VERCEL_URL",
