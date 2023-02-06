@@ -8,7 +8,6 @@
   "scripts": {
     "build-old": "../../node_modules/rimraf/dist/cjs/src/bin.js ./build && tsc",
     "build:changelog": "npx @discordx/changelog --root=src",
-    "dev-old": "turbo build && nodenv --env ../../.env --exec \"node ./build/shard.bot.js\"",
     "dev": "nodemon --exec ts-node -r dotenv-mono/load src/bot.ts",
     "start": "node .dist/main.js",
     "watch": "nodemon --exec ts-node-esm -r dotenv-mono/load --experimental-specifier-resolution=node src/main.ts"
