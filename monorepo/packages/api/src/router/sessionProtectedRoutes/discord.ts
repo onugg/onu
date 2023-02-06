@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
 
 export const discordGuild = z.object({
   id: z.string(),
@@ -34,7 +34,7 @@ export type DiscordGuildChannel = z.infer<typeof discordGuildChannel>;
 export type DiscordGuild = z.infer<typeof discordGuild>;
 
 export const discordRouter = createTRPCRouter({
-  createDiscordGuild: protectedProcedure
+  createDiscordGuild: sessionProtectedProcedure
     .input(
       z.object({
         name: z.string().optional(),
@@ -66,7 +66,7 @@ export const discordRouter = createTRPCRouter({
       }
     }),
 
-  getDiscordGuildTextChannels: protectedProcedure
+  getDiscordGuildTextChannels: sessionProtectedProcedure
     .input(
       z.object({
         accessToken: z.string().nullable().optional(),
@@ -104,7 +104,7 @@ export const discordRouter = createTRPCRouter({
       }
     }),
 
-  getDiscordOwnedGuilds: protectedProcedure
+  getDiscordOwnedGuilds: sessionProtectedProcedure
     .input(
       z.object({
         accessToken: z.string().nullable().optional(),
@@ -136,7 +136,7 @@ export const discordRouter = createTRPCRouter({
       }
     }),
 
-  getDiscordUnusedOwnedGuilds: protectedProcedure
+  getDiscordUnusedOwnedGuilds: sessionProtectedProcedure
     .input(
       z.object({
         accessToken: z.string().nullable().optional(),
@@ -197,7 +197,7 @@ export const discordRouter = createTRPCRouter({
       }
     }),
 
-  getDiscordBySlug: protectedProcedure
+  getDiscordBySlug: sessionProtectedProcedure
     .input(
       z.object({
         slug: z.string(),
@@ -215,7 +215,7 @@ export const discordRouter = createTRPCRouter({
       return community;
     }),
 
-  updateDiscordWelcomeChannelId: protectedProcedure
+  updateDiscordWelcomeChannelId: sessionProtectedProcedure
     .input(
       z.object({
         discordId: z.string(),

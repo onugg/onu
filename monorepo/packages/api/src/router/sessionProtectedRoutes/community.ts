@@ -1,9 +1,9 @@
 import { string, z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
 
 export const communityRouter = createTRPCRouter({
   // Create Community
-  createCommunity: protectedProcedure
+  createCommunity: sessionProtectedProcedure
     .input(
       z.object({
         name: z.string(),
@@ -25,7 +25,7 @@ export const communityRouter = createTRPCRouter({
     }),
 
   // Get Community By Slug
-  getCommunityBySlug: protectedProcedure
+  getCommunityBySlug: sessionProtectedProcedure
     .input(
       z.object({
         slug: z.string(),
@@ -41,7 +41,7 @@ export const communityRouter = createTRPCRouter({
     }),
 
   // Get Owned Communities
-  getOwnedCommunitiesByUserId: protectedProcedure
+  getOwnedCommunitiesByUserId: sessionProtectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -61,7 +61,7 @@ export const communityRouter = createTRPCRouter({
       return communities;
     }),
 
-  getMemberCommunitiesByUserId: protectedProcedure
+  getMemberCommunitiesByUserId: sessionProtectedProcedure
     .input(
       z.object({
         userId: z.string(),

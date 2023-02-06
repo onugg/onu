@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
 
 export const memberRouter = createTRPCRouter({
   // Create Member
-  createMember: protectedProcedure
+  createMember: sessionProtectedProcedure
     .input(
       z.object({
         communityId: z.string(),
@@ -21,7 +21,7 @@ export const memberRouter = createTRPCRouter({
       return member;
     }),
 
-  getMemberByCommunityIdAndUserId: protectedProcedure
+  getMemberByCommunityIdAndUserId: sessionProtectedProcedure
     .input(
       z.object({
         communityId: z.string(),

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
 
 export const accountRouter = createTRPCRouter({
   // get account by userId, type, and provider
-  getAccountByUserIdAndProvider: protectedProcedure
+  getAccountByUserIdAndProvider: sessionProtectedProcedure
     .input(
       z.object({
         userId: z.string().nullable().optional(),
