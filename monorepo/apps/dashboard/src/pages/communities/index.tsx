@@ -133,7 +133,7 @@ const OwnedCommunities: React.FC = () => {
             <CommunityCard
               image={community.image}
               name={community.name}
-              slug={`/c/${community.slug}/admin/discord/general`}
+              slug={`/c/${community.slug}/admin/discord/overview`}
               description={community.description}
               totalMembers={community.totalMembers}
               activeMembers={community.activeMembers}

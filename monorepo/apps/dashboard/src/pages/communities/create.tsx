@@ -1,19 +1,19 @@
-import RootLayout from "@/components/layouts/primary/rootLayout";
-import DiscordGuildSelectDropdown from "@/components/ui/discord/discordGuildSelectDropdown";
-import { trpc } from "@/utils/trpc";
+import React, { useEffect, useMemo } from "react";
+
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { useS3Upload } from "next-s3-upload";
+import DiscordGuildSelectDropdown from "@/components/ui/discord/discordGuildSelectDropdown";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useMemo } from "react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
 import type { NextPage } from "next";
+import RootLayout from "@/components/layouts/primary/rootLayout";
+import { trpc } from "@/utils/trpc";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useS3Upload } from "next-s3-upload";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -127,6 +127,7 @@ const Form: React.FC = () => {
     accessToken: account.data?.access_token,
     tokenType: account.data?.token_type,
   });
+
   const ownedGuilds = ownedGuildsRoot?.data;
 
   function handleSelectedGuild(guild: DiscordGuildSchema) {

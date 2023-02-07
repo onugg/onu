@@ -1,13 +1,12 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-
-import RootLayout from "./rootLayout";
-import { trpc } from "@/utils/trpc";
 
 import DiscordLogo from "@/assets/discord-mark-white.svg";
 import Image from "next/image";
 import Link from "next/link";
+import RootLayout from "./rootLayout";
+import { trpc } from "@/utils/trpc";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const PlusIcon: React.FC = () => {
   return (
@@ -36,20 +35,16 @@ const PluginSidebar: React.FC = () => {
   });
   return (
     // Sidebar
-    <div className="h-full w-24 space-y-6 border-r border-neutral-600 bg-black">
-
-      {/* Mandatory Discord Plugin  */}
+    <div className="h-full w-24 space-y-6 border-r border-neutral-600 bg-gray-900">
       <Link
         className={`mt-6 flex w-full justify-center`}
         key={community.data?.discordGuild?.discordId}
         href={`/c/${slug}/admin/discord/overview`}
       >
-        <div className={`relative flex aspect-square w-3/5 place-items-center justify-center rounded-xl border border-neutral-600 bg-discord duration-200 hover:scale-110`}>
-          <Image
-            src={DiscordLogo}
-            alt="Discord Logo"
-            className=" w-8"
-          />
+        <div
+          className={`relative flex aspect-square w-3/5 place-items-center justify-center rounded-xl border border-neutral-600 bg-discord duration-200 hover:scale-110`}
+        >
+          <Image src={DiscordLogo} alt="Discord Logo" className=" w-8" />
         </div>
       </Link>
 
@@ -101,7 +96,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   });
 
   return (
-    <div className="flex h-screen min-h-max flex-col bg-neutral-900">
+    <div className="flex h-screen min-h-max flex-col">
       <RootLayout>
         <div className="relative flex flex-1">
           <PluginSidebar />

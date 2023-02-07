@@ -1,8 +1,9 @@
-import { z } from "zod";
+import { brokers, eventEmitter } from "@onu/events";
 import { createTRPCRouter, sessionProtectedProcedure } from "../../trpc";
-import { eventEmitter, brokers } from "@onu/events";
+
 import SharedDiscord from "../../shared/discord";
 import { prisma } from "@onu/database";
+import { z } from "zod";
 
 var emit: Function = eventEmitter({
   brokerUrl: `${process.env.KNATIVE_BROKER_URL!}${process.env
@@ -62,39 +63,47 @@ export const discordRouter = createTRPCRouter({
   getDiscordGuildTextChannels: sessionProtectedProcedure
     .input(
       z.object({
-        accessToken: z.string().nullable().optional(),
-        tokenType: z.string().nullable().optional(),
+        guildId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const response = await fetch(
+        `https://discord.com/api/guilds/${input.guildId}/channels`,
+        {
+          headers: {
+            authorization: `Bot ${process.env.DISCORD_CLIENT_ID}`,
+          },
+        }
+      );
+      const channels = await response.json();
+
+      if (channels) {
+        const textChannels = channels.filter(
+          (channel: DiscordGuildChannel) => channel.type === 0
+        );
+        return textChannels;
+      } else {
+        console.log("No Channels Found");
+      }
+    }),
+
+  getDiscordGuildFromDiscordAPI: sessionProtectedProcedure
+    .input(
+      z.object({
         guildId: z.string().optional(),
       })
     )
     .query(async ({ input }) => {
-      if (!input.accessToken || !input.tokenType) {
-        console.log("No Access Token or Token Type");
-        return [];
-      }
-      if (!input.guildId) {
-        console.log("No Guild ID");
-        return [];
-      } else {
-        const response = await fetch(
-          `https://discord.com/api/guilds/${input.guildId}/channels`,
-          {
-            headers: {
-              authorization: `Bot ${process.env.DISCORD_CLIENT_ID}`,
-            },
-          }
-        );
-        const channels = await response.json();
-
-        if (channels) {
-          const textChannels = channels.filter(
-            (channel: DiscordGuildChannel) => channel.type === 0
-          );
-          return textChannels;
-        } else {
-          console.log("No Channels Found");
+      const response = await fetch(
+        `https://discord.com/api/guilds/${input.guildId}`,
+        {
+          headers: {
+            authorization: `Bot ${process.env.DISCORD_CLIENT_ID}`,
+          },
         }
-      }
+      );
+      const guild = await response.json();
+      return guild;
     }),
 
   getDiscordOwnedGuilds: sessionProtectedProcedure
@@ -175,8 +184,6 @@ export const discordRouter = createTRPCRouter({
             },
           });
 
-          console.log(ownedGuildIdsUsed);
-
           const ownedGuildsThatAreNotBeingUsed = ownedGuilds.filter(
             (guild: DiscordGuild) =>
               !ownedGuildIdsUsed.some(
@@ -197,6 +204,7 @@ export const discordRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
+      console.log(input.slug);
       const community = await ctx.prisma.community.findUnique({
         where: {
           slug: input.slug,
@@ -205,6 +213,7 @@ export const discordRouter = createTRPCRouter({
           discordGuild: true,
         },
       });
+      console.log(community?.discordGuild);
       return community;
     }),
 

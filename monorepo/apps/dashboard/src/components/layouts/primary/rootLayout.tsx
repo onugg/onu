@@ -1,48 +1,19 @@
+import React, { useEffect, useState } from "react";
+import { useFeatureIsOn, useFeatureValue } from "@growthbook/growthbook-react";
+
 import { BellIcon } from "@heroicons/react/24/outline";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useFeatureValue, useFeatureIsOn } from "@growthbook/growthbook-react";
-
 import LogoLight from "@/assets/OnuLogoLight.svg";
 import { trpc } from "@/utils/trpc";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const PrimaryNavigation = [
   { name: "Support", href: "#" },
   { name: "News", href: "#" },
   { name: "Docs", href: "#" },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-// Scroll Bar Progress
-export function useReadingProgress() {
-  const [completion, setCompletion] = useState(0);
-  useEffect(() => {
-    function updateScrollCompletion() {
-      const currentProgress = window.scrollY;
-      const scrollHeight = document.body.scrollHeight - window.innerHeight;
-
-      if (scrollHeight) {
-        setCompletion(
-          Number((currentProgress / scrollHeight).toFixed(2)) * 100
-        );
-      }
-    }
-
-    window.addEventListener("scroll", updateScrollCompletion);
-
-    return () => {
-      window.removeEventListener("scroll", updateScrollCompletion);
-    };
-  }, []);
-
-  return completion;
-}
 
 const PrimaryNavbar: React.FC = () => {
   const { data: user } = trpc.user.getUserBySession.useQuery();
@@ -138,26 +109,16 @@ const SubNavbar: React.FC = () => {
     .filter((item) => item.name !== "Activity" || activityEnabled)
     .filter((item) => item.name !== "Settings" || settingsEnabled);
 
-  const completion = useReadingProgress();
   return (
     <div className="sticky top-0 z-40 bg-gray-900">
       <div className="flex items-center justify-between border-b border-gray-700 px-4 sm:px-0">
-        <span
-          id="progress-bar"
-          style={{
-            transform: `translateX(${completion - 100}%)`,
-          }}
-          className={`absolute bottom-0 h-0.5 w-full bg-blue-500 transition-transform`}
-        />
         <div className="mx-4 flex items-baseline py-2">
           {filteredNav.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className={classNames(
-                item.current ? "text-white " : "text-gray-200",
-                "font-small rounded-md px-3 py-2 text-sm duration-300 hover:bg-gray-800 hover:text-white"
-              )}
+              className={` font-small rounded-md px-3 py-2 text-sm duration-300 hover:bg-gray-800 hover:text-white
+                ${item.current ? "text-white " : "text-gray-200"}`}
               aria-current={item.current ? "page" : undefined}
             >
               {item.name}
@@ -179,7 +140,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     }
   });
   return (
-    <div className="flex min-h-screen flex-col bg-gray-500/10  ">
+    <div className="flex min-h-screen flex-col bg-gray-800/50 ">
       <PrimaryNavbar />
       <SubNavbar />
       {children}
